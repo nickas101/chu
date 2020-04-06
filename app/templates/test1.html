@@ -42,99 +42,109 @@
     <form class="form-horizontal" id="form1" action="/chu/test1" method="POST" enctype="multipart/form-data">
 
       <div class="form-group">
-        <label for="folder" class="col-sm-2 control-label">Folder</label>
-        <div class="col-sm-8">
+        <label for="folder" class="col-sm-1 control-label">Folder</label>
+        <div class="col-sm-7">
           <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
         </div>
-        <div class="col-sm-2"></div>
+
+        <label for="freq" class="col-sm-1 control-label">Frequency</label>
+        <div class="col-sm-2">
+          <div class="input-group">
+          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">
+          <span class="input-group-addon">MHz</span>
+            </div>
+        </div>
+
+        <div class="col-sm-1"></div>
+
       </div>
 
 
       <div class="form-group">
-        <label for="card11" class="col-sm-2 control-label">Card-1</label>
-        <div class="col-sm-7">
+        <label for="card11" class="col-sm-1 control-label">Card-1</label>
+        <div class="col-sm-9">
           {% for card11 in cards11 %}
             <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %}>{{ card11 }}</label>
           {% endfor %}
 
         </div>
         <div class="col-sm-1">
-        <button type="button" class="btn btn-default btn-sm card11-check" aria-label="Left Align">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-          </button>
-          <button type="button" class="btn btn-default btn-sm card11-uncheck" aria-label="Left Align">
+          <button type="button" class="btn btn-default btn-sm card11-uncheck pull-right" aria-label="Left Align">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
+          <button type="button" class="btn btn-default btn-sm card11-check pull-right" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
           </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-1"></div>
       </div>
 
       <div class="form-group">
-        <label for="card12" class="col-sm-2 control-label"></label>
-        <div class="col-sm-7">
+        <label for="card12" class="col-sm-1 control-label"></label>
+        <div class="col-sm-9">
           {% for card12 in cards12 %}
             <label class="checkbox-inline"><input type="checkbox" class="card12" name="card12" value="{{ card12 }}" {% if cards12[card12] %} checked {% endif %}>{{ card12 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
-          <button type="button" class="btn btn-default btn-sm card12-check" aria-label="Left Align">
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-          </button>
-          <button type="button" class="btn btn-default btn-sm card12-uncheck" aria-label="Left Align">
+          <button type="button" class="btn btn-default btn-sm card12-uncheck pull-right" aria-label="Left Align">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
+          <button type="button" class="btn btn-default btn-sm card12-check pull-right" aria-label="Left Align">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-1"></div>
       </div>
 
 
       <div class="form-group">
-        <label for="card21" class="col-sm-2 control-label">Card-2</label>
-        <div class="col-sm-7">
+        <label for="card21" class="col-sm-1 control-label">Card-2</label>
+        <div class="col-sm-9">
           {% for card21 in cards21 %}
             <label class="checkbox-inline"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %}>{{ card21 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
-          <button type="button" class="btn btn-default btn-sm card21-check" aria-label="Left Align">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-          </button>
-          <button type="button" class="btn btn-default btn-sm card21-uncheck" aria-label="Left Align">
+          <button type="button" class="btn btn-default btn-sm card21-uncheck pull-right" aria-label="Left Align">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
+          <button type="button" class="btn btn-default btn-sm card21-check pull-right" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-1"></div>
       </div>
 
       <div class="form-group">
-        <label for="card22" class="col-sm-2 control-label"></label>
-        <div class="col-sm-7">
+        <label for="card22" class="col-sm-1 control-label"></label>
+        <div class="col-sm-9">
           {% for card22 in cards22 %}
             <label class="checkbox-inline"><input class="card22" type="checkbox" name="card22" value="{{ card22 }}" {% if cards22[card22] %} checked {% endif %}>{{ card22 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
-          <button type="button" class="btn btn-default btn-sm card22-check" aria-label="Left Align">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-          </button>
-          <button type="button" class="btn btn-default btn-sm card22-uncheck" aria-label="Left Align">
+          <button type="button" class="btn btn-default btn-sm card22-uncheck pull-right" aria-label="Left Align">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
+          <button type="button" class="btn btn-default btn-sm card22-check pull-right" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-1"></div>
       </div>
 
 
-      <div class="form-group">
-        <label for="freq" class="col-sm-2 control-label">Frequency</label>
-        <div class="col-sm-8">
-          <div class="input-group">
-          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">
-          <span class="input-group-addon">MHz</span>
-            </div>
-        </div>
-        <div class="col-sm-2"></div>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="freq" class="col-sm-2 control-label">Frequency</label>-->
+<!--        <div class="col-sm-8">-->
+<!--          <div class="input-group">-->
+<!--          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">-->
+<!--          <span class="input-group-addon">MHz</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-sm-2"></div>-->
+<!--      </div>-->
 
       <div class="form-group"></div>
       <hr class="style1">
