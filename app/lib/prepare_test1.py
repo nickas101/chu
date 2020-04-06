@@ -22,11 +22,11 @@ def prepare(folder, card1, card2, frequency):
     except:
         pass
 
-    duts_number = '_define nDUTs-' + str(int(card1) + int(card2)) + ";\t\t\t// N number of DUTs\n"
+    duts_number = '_define nDUTs-' + str(len(card1) + len(card2)) + ";\t\t\t// N number of DUTs\n"
 
-    if int(card1) > 0 and int(card2) > 0:
+    if len(card1) > 0 and len(card2) > 0:
         ncards = 2
-    elif int(card1) > 0 or int(card2) > 0:
+    elif len(card1) > 0 or len(card2) > 0:
         ncards = 1
     else:
         ncards = 0
@@ -37,18 +37,14 @@ def prepare(folder, card1, card2, frequency):
 
     define_cards = ""
 
-    if int(card1) > 0:
-        define_cards = define_cards + '_define TableForCrd-0 [' + str(card1) + ']'
-        for pos in range(int(card1)):
-            define_cards = define_cards + " " + str(pos+1)
-
+    if len(card1) > 0:
+        define_cards = define_cards + '_define TableForCrd-0 [' + str(len(card1)) + ']'
+        define_cards = define_cards + " " + " ".join(str(int(x)) for x in card1)
         define_cards = define_cards + ";\t\t\t// Card-0 Using these Duts\n"
 
-    if int(card2) > 0:
-        define_cards = define_cards + '_define TableForCrd-1 [' + str(card2) + ']'
-        for pos in range(int(card2)):
-            define_cards = define_cards + " " + str(pos+1)
-
+    if len(card2) > 0:
+        define_cards = define_cards + '_define TableForCrd-1 [' + str(len(card2)) + ']'
+        define_cards = define_cards + " " + " ".join(str(int(x)) for x in card2)
         define_cards = define_cards + ";\t\t\t// Card-1 Using these Duts\n"
 
     define_cards = define_cards + "// Note:- numbers are card position numbers starting at 1 (not 0)\n"

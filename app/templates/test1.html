@@ -12,6 +12,7 @@
 
   <ul class="nav nav-tabs">
     <li class="active"><a href="">Test-1</a></li>
+    <li><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
     <li><a href="{{ url_for('test2') }}">Test-2</a></li>
     <li><a href="{{ url_for('test3') }}">Test-3</a></li>
     <li><a href="{{ url_for('test4') }}">Test-4</a></li>
@@ -48,29 +49,81 @@
         <div class="col-sm-2"></div>
       </div>
 
+
       <div class="form-group">
-        <label for="card1" class="col-sm-2 control-label">Card-1</label>
-        <div class="col-sm-8">
-          <select id="card1" name="card1" class="form-control">
-            {% for card1 in cards1 %}
-              <option value="{{card1}}" {% if card1 == entered_card1 %} selected {% endif %}>{{card1}}</option>
-            {% endfor %}
-          </select>
+        <label for="card11" class="col-sm-2 control-label">Card-1</label>
+        <div class="col-sm-7">
+          {% for card11 in cards11 %}
+            <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %}>{{ card11 }}</label>
+          {% endfor %}
+
+        </div>
+        <div class="col-sm-1">
+        <button type="button" class="btn btn-default btn-sm card11-check" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm card11-uncheck" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+          </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="card12" class="col-sm-2 control-label"></label>
+        <div class="col-sm-7">
+          {% for card12 in cards12 %}
+            <label class="checkbox-inline"><input type="checkbox" class="card12" name="card12" value="{{ card12 }}" {% if cards12[card12] %} checked {% endif %}>{{ card12 }}</label>
+          {% endfor %}
+        </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-default btn-sm card12-check" aria-label="Left Align">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm card12-uncheck" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="card21" class="col-sm-2 control-label">Card-2</label>
+        <div class="col-sm-7">
+          {% for card21 in cards21 %}
+            <label class="checkbox-inline"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %}>{{ card21 }}</label>
+          {% endfor %}
+        </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-default btn-sm card21-check" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm card21-uncheck" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
         </div>
         <div class="col-sm-2"></div>
       </div>
 
       <div class="form-group">
-        <label for="card2" class="col-sm-2 control-label">Card-2</label>
-        <div class="col-sm-8">
-          <select id="card2" name="card2" class="form-control">
-            {% for card2 in cards2 %}
-              <option value="{{card2}}" {% if card2 == entered_card2 %} selected {% endif %}>{{card2}}</option>
-            {% endfor %}
-          </select>
+        <label for="card22" class="col-sm-2 control-label"></label>
+        <div class="col-sm-7">
+          {% for card22 in cards22 %}
+            <label class="checkbox-inline"><input class="card22" type="checkbox" name="card22" value="{{ card22 }}" {% if cards22[card22] %} checked {% endif %}>{{ card22 }}</label>
+          {% endfor %}
+        </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-default btn-sm card22-check" aria-label="Left Align">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm card22-uncheck" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
         </div>
         <div class="col-sm-2"></div>
       </div>
+
 
       <div class="form-group">
         <label for="freq" class="col-sm-2 control-label">Frequency</label>
