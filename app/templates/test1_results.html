@@ -61,6 +61,18 @@
         <p class="form-control-static">{{ folder }}</p>
       </div>
 
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">VReg: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">ppm: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>
+      </div>
+
 <!--        <div class="form-group">-->
 <!--    <label class="col-sm-2 control-label">Email</label>-->
 <!--    <div class="col-sm-10">-->
@@ -90,14 +102,14 @@
             {% for col, row_ in zip(column_names, row) %}
 
             {% if col == 'ppm' %}
-              {% if row_ > 0.2 or row_ < -0.2 %}
+              {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}
                 <td class="danger">{{row_}}</td>
               {% else %}
                 <td class="success">{{row_}}</td>
               {% endif %}
 
             {% elif col == 'VReg' %}
-              {% if row_ > 2.0 or row_ < 1.99 %}
+              {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}
                 <td class="danger">{{row_}}</td>
               {% else %}
                 <td class="success">{{row_}}</td>
@@ -129,28 +141,34 @@
         <div class="col-sm-2"></div>
       </div>
 
+      <div class="form-group">
+        <label for="vreg_threshold" class="col-sm-2 control-label">VReg threshold(+/-) </label>
+        <div class="col-sm-1">
+          <input type="text" class="form-control" id="vreg_threshold" name="vreg_threshold" value="{{ vreg_threshold }}" placeholder="Working folder">
+        </div>
+
+
+        <label for="ppm_threshold" class="col-sm-2 control-label">ppm threshold(+/-) </label>
+        <div class="col-sm-1">
+          <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">
+        </div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-1">
+          <button type="submit" class="btn btn-success">Re-check</button>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+
+<!--      <div class="form-group"></div>-->
+<!--      <hr class="style1">-->
 
 
 <!--      <div class="form-group">-->
-<!--        <label for="freq" class="col-sm-2 control-label">Frequency</label>-->
-<!--        <div class="col-sm-8">-->
-<!--          <div class="input-group">-->
-<!--          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">-->
-<!--          <span class="input-group-addon">MHz</span>-->
-<!--            </div>-->
+<!--        <div class="col-sm-offset-2 col-sm-10">-->
+<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
 <!--        </div>-->
-<!--        <div class="col-sm-2"></div>-->
 <!--      </div>-->
-
-      <div class="form-group"></div>
-      <hr class="style1">
-
-
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success">Re-check</button>
-        </div>
-      </div>
     </form>
 
 

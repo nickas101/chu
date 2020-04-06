@@ -23,6 +23,10 @@ cards12 = {'17': False, '18': False, '19': False, '20': False, '21': False, '22'
 cards21 = {'01': False, '02': False, '03': False, '04': False, '05': False, '06': False, '07': False, '08': False, '09': False, '10': False, '11': False, '12': False, '13': False, '14': False, '15': False, '16': False}
 cards22 = {'17': False, '18': False, '19': False, '20': False, '21': False, '22': False, '23': False, '24': False, '25': False, '26': False, '27': False, '28': False, '29': False, '30': False, '31': False, '32': False}
 
+vreg = 1.9
+vreg_threshold = 0.2
+ppm = 0
+ppm_threshold = 0.5
 
 
 
@@ -136,6 +140,17 @@ def test1_result():
     global card1
     global card2
     global frequency
+    global vreg
+    global vreg_threshold
+    global ppm
+    global ppm_threshold
+
+
+    if request.method == 'POST':
+        vreg_threshold = float(request.form.get('vreg_threshold'))
+        ppm_threshold = float(request.form.get('ppm_threshold'))
+
+
 
     message_success, message_text, file, time, result = read_results_test1.read(folder)
 
@@ -152,6 +167,10 @@ def test1_result():
                            message_text=message_text,
                            file=file,
                            time=time,
+                           vreg=vreg,
+                           vreg_threshold=vreg_threshold,
+                           ppm=ppm,
+                           ppm_threshold=ppm_threshold,
                            frequency=frequency)
 
 

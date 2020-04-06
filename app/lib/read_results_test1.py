@@ -18,7 +18,7 @@ def read(folder):
 
     full_path = folder + '\\' + test_1_results_file
 
-    print(full_path)
+    #print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** File not found!"
@@ -51,7 +51,7 @@ def read(folder):
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
 
-        print(result.info())
+        #print(result.info())
 
         message_success = True
         message_text = ""
