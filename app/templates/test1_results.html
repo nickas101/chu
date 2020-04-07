@@ -1,0 +1,182 @@
+{% extends "base_generic.html" %}
+{% block title %}Please select{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+  <ul class="nav nav-tabs">
+    <li><a href="{{ url_for('test1') }}">Test-1</a></li>
+    <li class="active"><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
+    <li><a href="{{ url_for('test2') }}">Test-2</a></li>
+    <li><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
+    <li><a href="{{ url_for('test3') }}">Test-3</a></li>
+    <li><a href="{{ url_for('test4') }}">Test-4</a></li>
+  </ul>
+
+
+
+
+  <div class="container-fluid">
+
+    <div style="padding-top: 30px;"></div>
+
+    {% if message_text %}
+      {% if message_success %}
+        <div class="alert alert-success" role="alert">
+          <strong>Success!</strong>{{ message_text }}
+        </div>
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+          <strong>Error!</strong>{{ message_text }}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div style="padding-top: 10px;"></div>
+
+
+    <div class="container">
+
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="exampleInputName2">File: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ file }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">File modified: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ time }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">Folder: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ folder }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">VReg: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">ppm: </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>
+      </div>
+
+<!--        <div class="form-group">-->
+<!--    <label class="col-sm-2 control-label">Email</label>-->
+<!--    <div class="col-sm-10">-->
+<!--      <p class="form-control-static">email@example.com</p>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <label for="exampleInputEmail2">Email</label>-->
+<!--    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">-->
+<!--  </div>-->
+<!--  <button type="submit" class="btn btn-default">Send invitation</button>-->
+</form>
+
+
+<div style="padding-top: 10px;"></div>
+
+
+    <table class="table table-bordered table-hover table-condensed text-center">
+        <tr>
+            {% for col in column_names %}
+                <th class="text-center">{{col}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in row_data %}
+        <tr>
+            {% for col, row_ in zip(column_names, row) %}
+
+            {% if col == 'ppm' %}
+              {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
+
+            {% elif col == 'VReg' %}
+              {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
+
+
+            {% else %}
+          <td>{{row_}}</td>
+           {% endif %}
+
+
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+    </div>
+
+
+
+    <form class="form-horizontal" id="form1" action="/chu/test1/result" method="POST" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="folder" class="col-sm-2 control-label">Folder</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="vreg_threshold" class="col-sm-2 control-label">VReg threshold(+/-) </label>
+        <div class="col-sm-1">
+          <input type="text" class="form-control" id="vreg_threshold" name="vreg_threshold" value="{{ vreg_threshold }}" placeholder="Working folder">
+        </div>
+
+
+        <label for="ppm_threshold" class="col-sm-2 control-label">ppm threshold(+/-) </label>
+        <div class="col-sm-1">
+          <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">
+        </div>
+        <div class="col-sm-3"></div>
+<!--        <div class="col-sm-1">-->
+<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
+<!--        </div>-->
+        <div class="col-sm-3"></div>
+      </div>
+
+
+<!--      <div class="form-group"></div>-->
+<!--      <hr class="style1">-->
+
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success">Re-check</button>
+        </div>
+      </div>
+    </form>
+
+
+
+  </div>
+
+
+{% endblock %}
+
+

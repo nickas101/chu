@@ -1,0 +1,62 @@
+
+
+// Any Tables from previous Scripts go here
+
+
+// Any Tables for what we are testing go here
+
+
+// Script BODY
+_start;
+//_click selectSpec;													// Select ChipSpec
+//_setSpec 31;
+//_click selectSpec;													// and Load it
+
+_setParam PSU1 3.3;												// Set PSU1
+_click PowerBtn;
+_timeDelay 1;
+
+_setVcxoDac 1.25;												// Set Vcontrol
+
+// Init each DUT
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{	
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		// any over rides go here
+		_setParam TestMux 1;										// TP = Vreg
+		_click varsToRamblock;
+		_click varsToDut;
+	}
+};
+
+// Here we go:-
+_fPrint "1-OvenLoad nDUTs";
+_fPrint [\nnDUTsOnTest,];
+_fPrint "DUT,VReg,ppm";											// Header
+
+// Check DUTs are working VReg & Frequency @ 25°C
+_setChamberTemp 25 stab 0;										// Chamber to 25°C
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{	
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		_click varsToRamblock;
+		_click varsToDut;
+		_measVolt V1 Channel-5;									// Chan 5 volts Vreg
+		_fPrint [\nDUT,measuredVoltV1,];		
+		_measFreq F1;
+		_fPrint [F1ppm,];										// ppm 
+	}
+};
+
+// Finished
+_setChamberTemp 25 stab 0;										// Leave Chamber at +25°C
+_scriptEnd ;
+

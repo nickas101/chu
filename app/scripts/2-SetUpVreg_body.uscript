@@ -1,0 +1,93 @@
+
+
+// Any Tables from previous Scripts go here
+
+
+// Any Tables for what we are testing go here
+_define Table-0 [3] 0 5 10;										// VReg_Trim
+_define Table-1 [2] 5 30;										// TcVReg_Trim
+
+
+// Script BODY
+_start;
+_click selectSpec;												// Select ChipSpec
+_setSpec 31;
+_click selectSpec;												// and Load it
+
+_setParam PSU1 3.3;												// Set PSU1
+_click PowerBtn;
+_timeDelay 1;
+
+_setVcxoDac 1.25;												// Set Vcontrol
+
+// Init each DUT
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{	
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		// any over rides go here
+		_setParam TestMux 1;										// TP = Vreg
+		_click varsToRamblock;
+		_click varsToDut;
+	}
+};
+
+// Here we go:-
+_fPrint "2-SetUpVreg nDUTs";
+_fPrint [\nnDUTsOnTest,];
+_fPrint "DUT,Temp,VReg_Trim,TcVReg_Trim,V";								// Header
+
+// Characterise VReg_Trim & TcVReg_Trim @ 25°C
+_setChamberTemp 25 stab 0;										// Chamber to 25°C
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		_loop Table-0;											//VReg_Trim
+		{
+			_setParam VReg_Trim Table-0;
+			_loop Table-1;										//TcVReg_Trim
+			{
+				_setParam TcVReg_Trim Table-1;
+				_click varsToRamblock;
+				_click varsToDut;
+				_measVolt V1 Channel-5;							// Chan 5 volts
+				_fPrint [\nDUT,Temp,VReg_Trim,TcVReg_Trim,measuredVoltV1,];
+			}
+		}
+	}
+};
+
+// Then Characterise VReg_Trim & TcVReg_Trim @ Tmax°C
+_setChamberTemp 95 stab 15;										// Chamber to 95°C
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		_loop Table-0;											//VReg_Trim
+		{
+			_setParam VReg_Trim Table-0;
+			_loop Table-1;										//TcVReg_Trim
+			{
+				_setParam TcVReg_Trim Table-1;
+				_click varsToRamblock;
+				_click varsToDut;
+				_measVolt V1 Channel-5;							// Chan 5 volts
+				_fPrint [\nDUT,Temp,VReg_Trim,TcVReg_Trim,measuredVoltV1,];
+			}
+		}
+	}
+};
+
+// Finished
+_setChamberTemp 105 stab 0;										// Leave Chamber at Tmax + 10°C
+_scriptEnd ;
