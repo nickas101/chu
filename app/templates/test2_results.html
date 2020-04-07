@@ -12,9 +12,9 @@
 
   <ul class="nav nav-tabs">
     <li><a href="{{ url_for('test1') }}">Test-1</a></li>
-    <li class="active"><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
+    <li><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
     <li><a href="{{ url_for('test2') }}">Test-2</a></li>
-    <li><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
+    <li class="active"><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
     <li><a href="{{ url_for('test3') }}">Test-3</a></li>
     <li><a href="{{ url_for('test4') }}">Test-4</a></li>
   </ul>
@@ -62,17 +62,17 @@
         <p class="form-control-static">{{ folder }}</p>
       </div>
 
-      <div class="form-group" style="padding-left: 20px;">
-        <label for="exampleInputName2">VReg: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>
-      </div>
+<!--      <div class="form-group" style="padding-left: 20px;">-->
+<!--        <label for="exampleInputName2">VReg: </label>-->
+<!--    &lt;!&ndash;    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">&ndash;&gt;-->
+<!--        <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>-->
+<!--      </div>-->
 
-      <div class="form-group" style="padding-left: 20px;">
-        <label for="exampleInputName2">ppm: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>
-      </div>
+<!--      <div class="form-group" style="padding-left: 20px;">-->
+<!--        <label for="exampleInputName2">ppm: </label>-->
+<!--    &lt;!&ndash;    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">&ndash;&gt;-->
+<!--        <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>-->
+<!--      </div>-->
 
 <!--        <div class="form-group">-->
 <!--    <label class="col-sm-2 control-label">Email</label>-->
@@ -132,7 +132,7 @@
 
 
 
-    <form class="form-horizontal" id="form1" action="/chu/test1/result" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" id="form1" action="/chu/test2/result" method="POST" enctype="multipart/form-data">
 
       <div class="form-group">
         <label for="folder" class="col-sm-2 control-label">Folder</label>
@@ -142,23 +142,20 @@
         <div class="col-sm-2"></div>
       </div>
 
-      <div class="form-group">
-        <label for="vreg_threshold" class="col-sm-2 control-label">VReg threshold(+/-) </label>
-        <div class="col-sm-1">
-          <input type="text" class="form-control" id="vreg_threshold" name="vreg_threshold" value="{{ vreg_threshold }}" placeholder="Working folder">
-        </div>
-
-
-        <label for="ppm_threshold" class="col-sm-2 control-label">ppm threshold(+/-) </label>
-        <div class="col-sm-1">
-          <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">
-        </div>
-        <div class="col-sm-3"></div>
+<!--      <div class="form-group">-->
+<!--        <label for="vreg_threshold" class="col-sm-2 control-label">VReg threshold(+/-) </label>-->
 <!--        <div class="col-sm-1">-->
-<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
+<!--          <input type="text" class="form-control" id="vreg_threshold" name="vreg_threshold" value="{{ vreg_threshold }}" placeholder="Working folder">-->
 <!--        </div>-->
-        <div class="col-sm-3"></div>
-      </div>
+
+
+<!--        <label for="ppm_threshold" class="col-sm-2 control-label">ppm threshold(+/-) </label>-->
+<!--        <div class="col-sm-1">-->
+<!--          <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">-->
+<!--        </div>-->
+<!--        <div class="col-sm-3"></div>-->
+<!--        <div class="col-sm-3"></div>-->
+<!--      </div>-->
 
 
 <!--      <div class="form-group"></div>-->

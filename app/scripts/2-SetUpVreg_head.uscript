@@ -1,0 +1,18 @@
+// 2-SetUpVreg.uScript												HP 3/09/2019
+// Kepler PG1.0
+// =============================================================================================
+// This script assumes the Kepler Chip spec is as per the default 
+// This script serves 1 purpose.
+// 1) Characterises the 2V Veg output from the Test Mux (TP) @ +25°C & Tmax°C
+// to find the best register values for VReg_Trim & TcVReg_Trim for each device
+// These values will be used in 3-Comp.uScript
+// The chamber is left at Tmax + 10°C ready for 3-Comp.uScript
+//
+// As always this Script assumes you have already manually selected and Initialised
+// all the Instruments & the Chamber COM Port
+//
+// ***** Make sure nDUTs and the Table lengths [N] are consistent *****
+// ***** Check all the temperatures are correct for your devices *****
+// =============================================================================================
+
+// Script DEFINES

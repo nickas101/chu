@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 
 
-test_results_file = "1-OvenLoad.txt"
+test_results_file = "2 -SetUpVreg.txt"
 
 
 def read(folder):
@@ -39,19 +39,19 @@ def read(folder):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                table[i] = [line_splitted[0], str(int(line_splitted[0]) + 1), float(line_splitted[1]), float(line_splitted[2])]
+                table[i] = [line_splitted[0], str(int(line_splitted[0]) + 1), float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
                 i = i + 1
                 #print(line_splitted)
 
-            if "DUT" in line and "VReg" in line and "ppm" in line and "_fPrint" not in line:
+            if "DUT" in line and "Temp" in line and "VReg_Trim" in line and "TcVReg_Trim" in line and "_fPrint" not in line:
                 start = True
 
-        columns = ['DUT', 'pos', 'VReg', 'ppm']
+        columns = ['DUT', 'pos', 'Temp', 'VReg_Trim', 'TcVReg_Trim', 'V']
 
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
 
-        #print(result.info())
+        #print(result)
 
         message_success = True
         message_text = ""

@@ -4,7 +4,7 @@ from datetime import datetime
 from . import conf_file
 from . import card_config
 
-script_file = "1-OvenLoad.uscript"
+script_file = "2- SetUpVreg.uscript"
 
 def prepare(folder, card1, card2, frequency):
 
@@ -49,10 +49,10 @@ def prepare(folder, card1, card2, frequency):
 
     define_cards = define_cards + "// Note:- numbers are card position numbers starting at 1 (not 0)\n"
 
-    with open('app/scripts/1-OvenLoad_head.uscript', 'r') as file:
+    with open('app/scripts/2-SetUpVreg_head.uscript', 'r') as file:
         data_head = file.read()
 
-    with open('app/scripts/1-OvenLoad_body.uscript', 'r') as file:
+    with open('app/scripts/2-SetUpVreg_body.uscript', 'r') as file:
         data_body = file.read()
 
     with open(folder + '/' + script_file, 'w') as output_file:

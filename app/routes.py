@@ -3,8 +3,10 @@ from flask import abort, redirect, url_for, render_template, Flask, request, fla
 from os import path
 
 from .lib import prepare_test1
+from .lib import prepare_test2
 from .lib import processing
 from .lib import read_results_test1
+from .lib import read_results_test2
 
 
 
@@ -150,8 +152,6 @@ def test1_result():
         vreg_threshold = float(request.form.get('vreg_threshold'))
         ppm_threshold = float(request.form.get('ppm_threshold'))
 
-
-
     message_success, message_text, file, time, result = read_results_test1.read(folder)
 
 
@@ -179,10 +179,128 @@ def test2():
     global folder
     global card1
     global card2
+    global cards11
+    global cards12
+    global cards21
+    global cards22
     global frequency
 
+    config_file = ""
+    script_file = ""
+    duts_number_string = ""
+    message_success = True
+    message_text = ""
+    entered_card1 = ""
+    entered_card2 = ""
 
-    return render_template('test2.html', folder = folder, card1 = card1, card2 = card2, frequency = frequency)
+
+    if request.method == 'POST':
+
+        card11 = request.form.getlist('card11')
+        card12 = request.form.getlist('card12')
+        card1 = card11 + card12
+
+        card21 = request.form.getlist('card21')
+        card22 = request.form.getlist('card22')
+        card2 = card21 + card22
+
+        card_total = card1 + card2
+
+        cards11 = processing.update_card(cards11, card11)
+        cards12 = processing.update_card(cards12, card12)
+        cards21 = processing.update_card(cards21, card21)
+        cards22 = processing.update_card(cards22, card22)
+
+        entered_card1 = processing.join_entered_cards(card11, card12)
+        entered_card2 = processing.join_entered_cards(card21, card22)
+
+        folder = request.form.get('folder')
+        frequency = request.form.get('freq')
+
+        print("Folder = " + str(folder))
+        print("Card-1 = " + str(card1))
+        print("Card-2 = " + str(card2))
+        print("Frequency = " + str(frequency))
+
+        duts_number = len(card_total)
+        if duts_number < 1:
+            message_text = message_text + " *** Number of DUTs can't be 0!"
+            message_success = False
+        else:
+            duts_number_string = str(duts_number)
+
+        try:
+            float(frequency)
+        except:
+            message_text = message_text + " *** Wrong frequency!"
+            frequency = ""
+            message_success = False
+
+        if not path.os.path.isdir(folder):
+            message_text = message_text + " *** Wrong folder!"
+            folder = ""
+            message_success = False
+
+
+        if message_success:
+            success, message, config_file, script_file = prepare_test2.prepare(folder, card1, card2, frequency)
+            if success:
+                message_text = " Now you can start Test-2"
+            else:
+                message_success = False
+                message_text = message
+
+
+    return render_template('test2.html',
+                           cards11=cards11,
+                           cards12=cards12,
+                           cards21=cards21,
+                           cards22=cards22,
+                           entered_folder=folder,
+                           entered_card1=entered_card1,
+                           entered_card2=entered_card2,
+                           entered_frequency=frequency,
+                           message_success=message_success,
+                           message_text=message_text,
+                           config_file=config_file,
+                           script_file=script_file,
+                           duts_number=duts_number_string
+                           )
+
+
+@app.route('/chu/test2/result', methods=['post', 'get'])
+def test2_result():
+    global folder
+    global card1
+    global card2
+    global frequency
+    global vreg
+    global vreg_threshold
+    global ppm
+    global ppm_threshold
+
+
+    if request.method == 'POST':
+        pass
+        # vreg_threshold = float(request.form.get('vreg_threshold'))
+        # ppm_threshold = float(request.form.get('ppm_threshold'))
+
+    message_success, message_text, file, time, result = read_results_test2.read(folder)
+
+
+    return render_template('test2_results.html',
+                           folder=folder,
+                           card1=card1,
+                           card2=card2,
+                           column_names=result.columns.values,
+                           row_data=list(result.values.tolist()),
+                           zip=zip,
+                           entered_folder=folder,
+                           message_success=message_success,
+                           message_text=message_text,
+                           file=file,
+                           time=time,
+                           frequency=frequency)
 
 
 @app.route('/chu/test3', methods=['post', 'get'])
