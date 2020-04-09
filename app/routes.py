@@ -298,6 +298,8 @@ def test2_result():
                            card2=card2,
                            column_names=result.columns.values,
                            row_data=list(result.values.tolist()),
+                           column_names_1=vregs_table.columns.values,
+                           row_data_1=list(vregs_table.values.tolist()),
                            zip=zip,
                            entered_folder=folder,
                            message_success=message_success,

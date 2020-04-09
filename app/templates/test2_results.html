@@ -43,6 +43,84 @@
 
     <div class="container">
 
+
+         <form class="form-horizontal" id="form1" action="/chu/test2/result" method="POST" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="folder" class="col-sm-2 control-label">Folder</label>
+<!--          <label for="folder">Folder</label>-->
+        <div class="col-sm-7">
+          <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
+
+        </div>
+        <div class="col-sm-3">
+            <button type="submit" class="btn btn-success">Re-check</button>
+        </div>
+      </div>
+
+
+
+<!--      <div class="form-group">-->
+<!--        <div class="col-sm-offset-2 col-sm-10">-->
+<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
+<!--        </div>-->
+<!--      </div>-->
+    </form>
+
+<div style="padding-top: 10px;"></div>
+      <hr class="style1">
+
+<div style="padding-top: 10px;"></div>
+
+    <h4> VReg calculation results</h4>
+        <div style="padding-top: 10px;"></div>
+
+        <table class="table table-bordered table-hover table-condensed text-center">
+        <tr>
+            {% for col in column_names_1 %}
+                <th class="text-center">{{col}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in row_data_1 %}
+        <tr>
+            {% for col, row_ in zip(column_names_1, row) %}
+
+            {% if col == 'ppm' %}
+              {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
+
+            {% elif col == 'VReg' %}
+              {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
+
+
+            {% else %}
+          <td>{{row_}}</td>
+           {% endif %}
+
+
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+
+
+<div style="padding-top: 10px;"></div>
+      <hr class="style1">
+
+<div style="padding-top: 10px;"></div>
+    <h4>Test-2 output</h4>
+
+
     <form class="form-inline">
       <div class="form-group">
         <label for="exampleInputName2">File: </label>
@@ -91,6 +169,9 @@
 <div style="padding-top: 10px;"></div>
 
 
+
+
+
     <table class="table table-bordered table-hover table-condensed text-center">
         <tr>
             {% for col in column_names %}
@@ -132,42 +213,7 @@
 
 
 
-    <form class="form-horizontal" id="form1" action="/chu/test2/result" method="POST" enctype="multipart/form-data">
 
-      <div class="form-group">
-        <label for="folder" class="col-sm-2 control-label">Folder</label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
-        </div>
-        <div class="col-sm-2"></div>
-      </div>
-
-<!--      <div class="form-group">-->
-<!--        <label for="vreg_threshold" class="col-sm-2 control-label">VReg threshold(+/-) </label>-->
-<!--        <div class="col-sm-1">-->
-<!--          <input type="text" class="form-control" id="vreg_threshold" name="vreg_threshold" value="{{ vreg_threshold }}" placeholder="Working folder">-->
-<!--        </div>-->
-
-
-<!--        <label for="ppm_threshold" class="col-sm-2 control-label">ppm threshold(+/-) </label>-->
-<!--        <div class="col-sm-1">-->
-<!--          <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">-->
-<!--        </div>-->
-<!--        <div class="col-sm-3"></div>-->
-<!--        <div class="col-sm-3"></div>-->
-<!--      </div>-->
-
-
-<!--      <div class="form-group"></div>-->
-<!--      <hr class="style1">-->
-
-
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success">Re-check</button>
-        </div>
-      </div>
-    </form>
 
 
 
