@@ -1,14 +1,14 @@
 import os
 from datetime import datetime
 
-from . import conf_file
+from . import prepare_config_file
 from . import card_config
 
 script_file = "1-OvenLoad.uscript"
 
 def prepare(folder, card1, card2, frequency):
 
-    config_file = conf_file.create_config(folder)
+    config_file = prepare_config_file.create_config(folder)
 
     script_file_name = script_file.replace(".uscript", "")
 

@@ -7,6 +7,7 @@ from .lib import prepare_test2
 from .lib import processing
 from .lib import read_results_test1
 from .lib import read_results_test2
+from .lib import vreg_calculator
 
 
 
@@ -286,6 +287,9 @@ def test2_result():
         # ppm_threshold = float(request.form.get('ppm_threshold'))
 
     message_success, message_text, file, time, result = read_results_test2.read(folder)
+    vregs_table = vreg_calculator.calculate(result)
+
+    #print(vregs_table)
 
 
     return render_template('test2_results.html',

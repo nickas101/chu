@@ -51,7 +51,7 @@ def read(folder):
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
 
-        #print(result)
+        #print(result.info())
 
         message_success = True
         message_text = ""
