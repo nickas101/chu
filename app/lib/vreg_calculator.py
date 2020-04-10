@@ -1,8 +1,8 @@
 # The module is to substitute '2- SetUpVreg Calculator.xlsx' file
 # to calculate VReg for a test-3 preparation
 #
-# Input: Pandas DataFrame with columns = ['DUT'(object), 'pos'(object), 'Temp'(float64), 'VReg_Trim'(int64), 'TcVReg_Trim'(int64), 'V'(float64)]
-# Output: Pandas DataFrame with columns = ['DUT'(object), 'pos'(object), 'Table-0'(int64), 'Table-1'(int64)]
+# Input: Pandas DataFrame with columns = ['DUT'(object), 'pos'(int64), 'Temp'(float64), 'VReg_Trim'(int64), 'TcVReg_Trim'(int64), 'V'(float64)]
+# Output: Pandas DataFrame with columns = ['DUT'(object), 'pos'(int64), 'Table-0'(int64), 'Table-1'(int64)]
 
 import pandas as pd
 import numpy as np
@@ -152,6 +152,6 @@ def calculate(input_df):
     result_df = pd.DataFrame.from_dict(output_dict, orient='index')
     result_df.columns = columns
 
-    print(result_df)
+    #print(result_df)
 
     return result_df

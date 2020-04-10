@@ -39,7 +39,7 @@ def read(folder):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                table[i] = [line_splitted[0], str(int(line_splitted[0]) + 1), float(line_splitted[1]), float(line_splitted[2])]
+                table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
                 i = i + 1
                 #print(line_splitted)
 

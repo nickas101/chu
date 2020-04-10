@@ -65,7 +65,7 @@
         <label for="card11" class="col-sm-1 control-label">Card-1</label>
         <div class="col-sm-9">
           {% for card11 in cards11 %}
-            <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %}>{{ card11 }}</label>
+            <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %}>{% if card11 < 10 %}0{% endif %}{{ card11 }}</label>
           {% endfor %}
 
         </div>
@@ -103,7 +103,7 @@
         <label for="card21" class="col-sm-1 control-label">Card-2</label>
         <div class="col-sm-9">
           {% for card21 in cards21 %}
-            <label class="checkbox-inline"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %}>{{ card21 }}</label>
+            <label class="checkbox-inline"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %}>{% if card21 < 10 %}0{% endif %}{{ card21 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">

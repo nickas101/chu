@@ -13,6 +13,7 @@ def read(folder):
     message_success = True
     result = ""
     time = ""
+    freq = ""
     table = {}
     i = 1
 
@@ -21,7 +22,7 @@ def read(folder):
     #print(full_path)
 
     if not path.os.path.isfile(full_path):
-        message_text = message_text + " *** File not found!"
+        message_text = message_text + " *** Input file not found!"
         message_success = False
     else:
         time_raw = os.path.getmtime(full_path)
@@ -39,12 +40,19 @@ def read(folder):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                table[i] = [line_splitted[0], str(int(line_splitted[0]) + 1), float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
+                table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
                 i = i + 1
                 #print(line_splitted)
 
             if "DUT" in line and "Temp" in line and "VReg_Trim" in line and "TcVReg_Trim" in line and "_fPrint" not in line:
                 start = True
+
+            if "_define nominalFreq-" in line:
+                freq_splitted = line.split("\t")
+                freq = freq_splitted[1].replace("_define nominalFreq-", "")
+                freq = freq.replace(";", "")
+                #freq = float(freq)
+
 
         columns = ['DUT', 'pos', 'Temp', 'VReg_Trim', 'TcVReg_Trim', 'V']
 
@@ -57,4 +65,4 @@ def read(folder):
         message_text = ""
 
 
-    return message_success, message_text, test_results_file, time, result
+    return message_success, message_text, test_results_file, freq, time, result

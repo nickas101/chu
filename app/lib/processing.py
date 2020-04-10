@@ -3,7 +3,7 @@
 
 def update_card(cards, card):
     for key in cards:
-        if key in card:
+        if key in card or str(int(key)) in card or int(key) in card:
             cards[key] = True
         else:
             cards[key] = False
