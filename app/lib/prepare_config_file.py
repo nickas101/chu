@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from pathlib import Path
 
 
 
@@ -7,23 +8,27 @@ config_file = "chamber-U config.hwc"
 
 def create_config(folder):
 
-    config_file_name = config_file.replace(".hwc", "")
-
     current_time = datetime.now()
     file_time = str(current_time)
     file_time = file_time.replace(" ", "_")
     file_time = file_time.replace(":", "-")
     file_time = file_time.split(".")
+
+    data_folder = Path(folder)
+    file_actual = data_folder / config_file
+    file_old = data_folder / config_file.replace(".hwc", '_' + str(file_time[0]) + '.hwc')
+    print(file_actual)
+    print(file_old)
+
     try:
-        os.rename(folder + '/' + config_file, folder + '/' + config_file_name + '_' + str(file_time[0]) + '.hwc')
+        os.rename(file_actual, file_old)
     except:
         pass
 
     with open('app/scripts/Chamber-U Config.hwc', 'r') as file:
-        #data = file.read().replace('\n', '')
         data = file.read()
 
-    with open(folder + '/' + config_file, 'w') as output_file:
+    with open(file_actual, 'w') as output_file:
         output_file.write(data)
 
 

@@ -2,6 +2,7 @@ import os
 from os import path
 from datetime import datetime
 import pandas as pd
+from pathlib import Path
 
 
 test_results_file = "1-OvenLoad.txt"
@@ -16,9 +17,9 @@ def read(folder):
     table = {}
     i = 1
 
-    full_path = folder + '\\' + test_results_file
-
-    #print(full_path)
+    data_folder = Path(folder)
+    full_path = data_folder / test_results_file
+    print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** File not found!"

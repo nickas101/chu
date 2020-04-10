@@ -2,6 +2,7 @@ import os
 from os import path
 from datetime import datetime
 import pandas as pd
+from pathlib import Path
 
 
 test_results_file = "2 -SetUpVreg.txt"
@@ -17,9 +18,9 @@ def read(folder):
     table = {}
     i = 1
 
-    full_path = folder + '\\' + test_results_file
-
-    #print(full_path)
+    data_folder = Path(folder)
+    full_path = data_folder / test_results_file
+    print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** Input file not found!"
@@ -59,7 +60,7 @@ def read(folder):
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
 
-        #print(result.info())
+        # print(result.info())
 
         message_success = True
         message_text = ""
