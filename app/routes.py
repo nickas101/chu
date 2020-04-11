@@ -7,12 +7,14 @@ from .lib import prepare_test2
 from .lib import processing
 from .lib import read_results_test1
 from .lib import read_results_test2
+from .lib import vreg_calculator_old
 from .lib import vreg_calculator
 
 
 
 
-folder = 'C:\Temp\dorsum'
+# folder = 'C:\Temp\dorsum'
+folder = '/Users/nickas/Documents/_to_upload/dorsum'
 #folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
 card1 = ""
