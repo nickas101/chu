@@ -10,11 +10,13 @@ import numpy as np
 
 
 
-def calculate(input_df):
+def calculate(df):
 
     t1 = 25
     output_dict = {}
     index = 0
+
+    input_df = df.copy()
 
     duts = input_df['DUT'].unique().tolist()
     input_df['V2'] = input_df['V'] - 2
