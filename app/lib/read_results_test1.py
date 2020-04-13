@@ -19,7 +19,7 @@ def read(folder):
 
     data_folder = Path(folder)
     full_path = data_folder / test_results_file
-    print(full_path)
+    #print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** File not found!"

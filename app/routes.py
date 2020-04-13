@@ -13,8 +13,8 @@ from .lib import vreg_calculator
 
 
 
-# folder = 'C:\Temp\dorsum'
-folder = '/Users/nickas/Documents/_to_upload/dorsum'
+folder = 'C:\Temp\dorsum'
+#folder = '/Users/nickas/Documents/_to_upload/dorsum'
 #folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
 card1 = ""
