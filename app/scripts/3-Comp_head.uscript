@@ -1,18 +1,19 @@
-// 1-OvenLoad.uScript													HP 3/09/2019
+// 3-Comp.uScript													GT 18/06/2019
+//																	HP 04/09/2019
 // Kepler PG1.0
 // =============================================================================================
 // This script assumes the Kepler Chip spec is as per the default 
 // This script serves 2 purposes.
-// 1) Check the 2V Veg output from the Test Mux (TP) @ +25°C
-// 2) Check the ppm 
-// The chamber is left at 25°C ready for the 2-SetUpVreg.uScript
-// Use your judgement to decide if it is OK to proceed
+// 1) Measures the Have to Comp with no Tanh gain
+// 2) Characterise the Tanh generators, max gain, @ 5 equi spaced values of SetPt
+// The temperature span is Tmax + 10°C to Tmin -9°C in -1°C steps
+// The chamber is returned to 25°C at the end of the run
 //
 // As always this Script assumes you have already manually selected and Initialised
 // all the Instruments & the Chamber COM Port
 //
 // ***** Make sure nDUTs and the Table lengths [N] are consistent *****
+// ***** Make sure you have entered the values from 2-SetUpVreg.uScript into Table-0 & -1 *****
 // ***** Check all the temperatures are correct for your devices *****
 // =============================================================================================
-
 // Script DEFINES

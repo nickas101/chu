@@ -1,0 +1,325 @@
+// ***** Make sure these numbers are echoed below *****
+
+
+// Any Tables from previous Scripts go here
+_define chamberTempRange-0 105 75 1;								// 105°C to 75°C step -1
+_define chamberTempRange-1 74 44 1;									// 74°C to 44°C step -1
+_define chamberTempRange-2 43 13 1;									// 43°C to 13°C step -1
+_define chamberTempRange-3 12 -18 1;								// 12°C to -18°C step -1
+_define chamberTempRange-4 -19 -49 1;								// -19°C to -49°C step -1
+
+
+// Script BODY
+_start;
+_click selectSpec;												// Select ChipSpec
+_setSpec 31;
+_click selectSpec;												// and Load it
+
+_setParam PSU1 3.3;												// Set PSU1
+_click PowerBtn;
+_timeDelay 1;
+
+_setVcxoDac 1.25;												// Set Vcontrol
+
+// Init each DUT
+_loop nCARDs;
+{
+	_selecting nextCARD; 
+	_loop nDUTs;
+	{	
+		_selecting nextDUTPos; 
+		_selecting nextRFPos;
+		// any over rides go here
+		_setParam VReg_Trim Table-0;								// VReg_Trim
+		_setParam TcVReg_Trim Table-1;								// TcVReg_Trim
+		_setParam Slope_0 31;										// CoeffB
+		_setParam Slope_1 31;
+		_setParam Slope_2 31;
+		_setParam Slope_3 31;
+		_setParam Slope_4 31;
+		_setParam Slope_5 31;
+		_setParam Slope_6 31;
+		_setParam Slope_7 31;
+		
+		_setParam TsGain 0;											// 1 for AKM (0 for Pluto+)
+	
+		_click varsToRamblock;
+		_click varsToDut;
+	}
+};
+
+// Here we go:-
+_fPrint "3-Comp nDUTs";
+_fPrint [\nnDUTsOnTest,];
+_fPrint "DUT,Temp,CoeffB,CoeffC,ppm";								// Header
+
+// Segment 0  Have to Comp & Characterise CoeffB
+_setChamberTemp 105 stab 13;										// Chamber to Tmax + 10°C wait 13 mins
+_loop chamberTempRange-0;
+{	
+	_setChamberTemp chamberTempRange-0 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;												// DUT 0 to 2
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];							// This is Have to Comp
+			_setParam Amp_0 31;										// Set CoeffA 31
+			_setParam Amp_1 31;
+			_setParam Amp_2 31;
+			_setParam Amp_3 31;
+			_setParam Amp_4 31;
+			_setParam Amp_5 31;
+			_setParam Amp_6 31;
+			_setParam Amp_7 31;
+			_setParam SetPt_0 48;									// Force CoeffC
+			_setParam SetPt_1 48;
+			_setParam SetPt_2 48;
+			_setParam SetPt_3 48;
+			_setParam SetPt_4 48;
+			_setParam SetPt_5 48;
+			_setParam SetPt_6 48;
+			_setParam SetPt_7 48;
+			_setParam Tanh_Gain 255;								// Set CoeffE = 255
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,Slope_0,SetPt_0,F1ppm,];			// This is Characterise CoeffA,B&C
+			_setParam Amp_0 0;										// Set CoeffA 0
+			_setParam Amp_1 0;
+			_setParam Amp_2 0;
+			_setParam Amp_3 0;
+			_setParam Amp_4 0;
+			_setParam Amp_5 0;
+			_setParam Amp_6 0;
+			_setParam Amp_7 0;
+			_setParam Tanh_Gain 0;									// Set CoeffE = 0
+			_click varsToRamblock;
+			_click varsToDut;
+		}
+	}
+};
+
+// Segment 1  Have to Comp & Characterise CoeffB
+_loop chamberTempRange-1;
+{
+	_setChamberTemp chamberTempRange-1 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;												// DUT 0 to 2
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];							// This is Have to Comp
+			_setParam Amp_0 31;										// Set CoeffA 31
+			_setParam Amp_1 31;
+			_setParam Amp_2 31;
+			_setParam Amp_3 31;
+			_setParam Amp_4 31;
+			_setParam Amp_5 31;
+			_setParam Amp_6 31;
+			_setParam Amp_7 31;
+			_setParam SetPt_0 35;									// CoeffC
+			_setParam SetPt_1 35;
+			_setParam SetPt_2 35;
+			_setParam SetPt_3 35;
+			_setParam SetPt_4 35;
+			_setParam SetPt_5 35;
+			_setParam SetPt_6 35;
+			_setParam SetPt_7 35;
+			_setParam Tanh_Gain 255;								// Set CoeffE = 255
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,Slope_0,SetPt_0,F1ppm,];			// This is Characterise CoeffCoeffA,B&C
+			_setParam Amp_0 0;										// Set CoeffA 0
+			_setParam Amp_1 0;
+			_setParam Amp_2 0;
+			_setParam Amp_3 0;
+			_setParam Amp_4 0;
+			_setParam Amp_5 0;
+			_setParam Amp_6 0;
+			_setParam Amp_7 0;
+			_setParam Tanh_Gain 0;									// Set CoeffE = 0
+			_click varsToRamblock;
+			_click varsToDut;
+		}
+	}
+};
+
+// Segment 2  Have to Comp & Characterise CoeffB
+_loop chamberTempRange-2;
+{
+	_setChamberTemp chamberTempRange-2 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;												// DUT 0 to 2
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];							// This is Have to Comp
+			_setParam Amp_0 31;										// Set CoeffA 31
+			_setParam Amp_1 31;
+			_setParam Amp_2 31;
+			_setParam Amp_3 31;
+			_setParam Amp_4 31;
+			_setParam Amp_5 31;
+			_setParam Amp_6 31;
+			_setParam Amp_7 31;
+			_setParam SetPt_0 25;									// CoeffC
+			_setParam SetPt_1 25;
+			_setParam SetPt_2 25;
+			_setParam SetPt_3 25;
+			_setParam SetPt_4 25;
+			_setParam SetPt_5 25;
+			_setParam SetPt_6 25;
+			_setParam SetPt_7 25;
+			_setParam Tanh_Gain 255;								// Set CoeffE = 255
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,Slope_0,SetPt_0,F1ppm,];			// This is Characterise CoeffCoeffA,B&C
+			_setParam Amp_0 0;										// Set CoeffA 0
+			_setParam Amp_1 0;
+			_setParam Amp_2 0;
+			_setParam Amp_3 0;
+			_setParam Amp_4 0;
+			_setParam Amp_5 0;
+			_setParam Amp_6 0;
+			_setParam Amp_7 0;
+			_setParam Tanh_Gain 0;									// Set CoeffE = 0
+			_click varsToRamblock;
+			_click varsToDut;
+		}
+	}
+};
+
+// Segment 3  Have to Comp & Characterise CoeffB
+_loop chamberTempRange-3;
+{
+	_setChamberTemp chamberTempRange-3 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;												// DUT 0 to 2
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];							// This is Have to Comp
+			_setParam Amp_0 31;										// Set CoeffA 31
+			_setParam Amp_1 31;
+			_setParam Amp_2 31;
+			_setParam Amp_3 31;
+			_setParam Amp_4 31;
+			_setParam Amp_5 31;
+			_setParam Amp_6 31;
+			_setParam Amp_7 31;
+			_setParam SetPt_0 16;									// CoeffC
+			_setParam SetPt_1 16;
+			_setParam SetPt_2 16;
+			_setParam SetPt_3 16;
+			_setParam SetPt_4 16;
+			_setParam SetPt_5 16;
+			_setParam SetPt_6 16;
+			_setParam SetPt_7 16;
+			_setParam Tanh_Gain 255;								// Set CoeffE = 255
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,Slope_0,SetPt_0,F1ppm,];			// This is Characterise CoeffCoeffA,B&C
+			_setParam Amp_0 0;										// Set CoeffA 0
+			_setParam Amp_1 0;
+			_setParam Amp_2 0;
+			_setParam Amp_3 0;
+			_setParam Amp_4 0;
+			_setParam Amp_5 0;
+			_setParam Amp_6 0;
+			_setParam Amp_7 0;
+			_setParam Tanh_Gain 0;									// Set CoeffE = 0
+			_click varsToRamblock;
+			_click varsToDut;
+		}
+	}
+};
+
+// Segment 4  Have to Comp & Characterise CoeffB
+_loop chamberTempRange-4;
+{
+	_setChamberTemp chamberTempRange-4 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;												// DUT 0 to 2
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];							// This is Have to Comp
+			_setParam Amp_0 31;										// Set CoeffA 31
+			_setParam Amp_1 31;
+			_setParam Amp_2 31;
+			_setParam Amp_3 31;
+			_setParam Amp_4 31;
+			_setParam Amp_5 31;
+			_setParam Amp_6 31;
+			_setParam Amp_7 31;
+			_setParam SetPt_0 7;									// CoeffC
+			_setParam SetPt_1 7;
+			_setParam SetPt_2 7;
+			_setParam SetPt_3 7;
+			_setParam SetPt_4 7;
+			_setParam SetPt_5 7;
+			_setParam SetPt_6 7;
+			_setParam SetPt_7 7;
+			_setParam Tanh_Gain 255;								// Set CoeffE = 255
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,Slope_0,SetPt_0,F1ppm,];			// This is Characterise CoeffCoeffA,B&C
+			_setParam Amp_0 0;										// Set CoeffA 0
+			_setParam Amp_1 0;
+			_setParam Amp_2 0;
+			_setParam Amp_3 0;
+			_setParam Amp_4 0;
+			_setParam Amp_5 0;
+			_setParam Amp_6 0;
+			_setParam Amp_7 0;
+			_setParam Tanh_Gain 0;									// Set CoeffE = 0
+			_click varsToRamblock;
+			_click varsToDut;
+		}
+	}
+};
+
+// Finished
+_setChamberTemp 25 stab 0;											// Return Chamber to 25°C
+_scriptEnd ;
+
