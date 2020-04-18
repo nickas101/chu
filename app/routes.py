@@ -692,7 +692,7 @@ def test4_result():
             if interpol < 1:
                 interpol = 1
 
-    message_success, message_text, file, freq, time, bad_units, result_fvt, result_cutted = read_results_test4.read(folder, interpol)
+    message_success, message_text, file, freq, time, bad_units, result_fvt, result_calculated = read_results_test4.read(folder, interpol)
     print(message_text)
 
     # try:
@@ -717,8 +717,8 @@ def test4_result():
                            card2=card2,
                            column_names=result_fvt.columns.values,
                            row_data=list(result_fvt.values.tolist()),
-                           column_names_1=vregs_table.columns.values,
-                           row_data_1=list(vregs_table.values.tolist()),
+                           column_names_1=result_calculated.columns.values,
+                           row_data_1=list(result_calculated.values.tolist()),
                            zip=zip,
                            entered_folder=folder,
                            message_success=message_success,

@@ -18,6 +18,9 @@ def read(folder, limit):
     bad_units = ""
     result_fvt = pd.DataFrame()
     result_calculated = pd.DataFrame()
+    result_max = pd.DataFrame()
+    result_min = pd.DataFrame()
+    result_mean = pd.DataFrame()
     table = {}
     i = 1
 
@@ -45,7 +48,7 @@ def read(folder, limit):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                print(line_splitted)
+                # print(line_splitted)
                 table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
                 i = i + 1
 
@@ -67,6 +70,10 @@ def read(folder, limit):
 
         result_fvt.sort_values(['pos', 'Temp'], ascending=[True, False], inplace=True)
         result_fvt.reset_index(inplace=True, drop=True)
+        result_calculated['DUT'] =  result_fvt['DUT'].unique()
+        result_calculated['pos'] = result_fvt['pos'].unique()
+
+        print(result_calculated)
 
         # print(result_fvt)
 
@@ -91,6 +98,17 @@ def read(folder, limit):
         # print(result_full)
         # print(result_cutted)
         # print(result_full.info())
+
+        result_max['max'] = result_fvt.groupby(['pos'])['ppm'].max()
+        result_min['min'] = result_fvt.groupby(['pos'])['ppm'].min()
+        result_mean['mean'] = result_fvt.groupby(['pos'])['ppm'].mean()
+
+        result_calculated = pd.merge(result_calculated, result_max, on='pos', how='left')
+        result_calculated = pd.merge(result_calculated, result_min, on='pos', how='left')
+        result_calculated = pd.merge(result_calculated, result_mean, on='pos', how='left')
+
+        print(result_calculated)
+        print(result_calculated.info())
 
         result_fvt.to_pickle("app/scripts/read_test_3.pkl")
         #unpickled_df = pd.read_pickle("app/scripts/read_test_3.pkl")
