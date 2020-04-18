@@ -488,9 +488,14 @@ def test3_result():
 
     message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(folder, interpol)
     print(message_text)
-    solver_output = comp_solver.solve(result_cutted)
-    print(solver_output)
-    print(solver_output.info())
+
+    try:
+        solver_output = comp_solver.solve(result_cutted)
+        print(solver_output)
+        print(solver_output.info())
+    except:
+        message_text = message_text + " *** Problem with solver calculations"
+        message_success = False
 
     vregs_table = pd.DataFrame()
 
@@ -693,9 +698,14 @@ def test4_result():
 
     message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(folder, interpol)
     print(message_text)
-    solver_output = comp_solver.solve(result_cutted)
-    print(solver_output)
-    print(solver_output.info())
+
+    try:
+        solver_output = comp_solver.solve(result_cutted)
+        print(solver_output)
+        print(solver_output.info())
+    except:
+        message_text = message_text + " *** Problem with solver calculations"
+        message_success = False
 
     vregs_table = pd.DataFrame()
 
