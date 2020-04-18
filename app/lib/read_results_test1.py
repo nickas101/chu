@@ -22,7 +22,7 @@ def read(folder):
     #print(full_path)
 
     if not path.os.path.isfile(full_path):
-        message_text = message_text + " *** File not found!"
+        message_text = message_text + " *** Input file not found!"
         message_success = False
     else:
         time_raw = os.path.getmtime(full_path)

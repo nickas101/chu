@@ -17,8 +17,8 @@ def create_config(folder):
     data_folder = Path(folder)
     file_actual = data_folder / config_file
     file_old = data_folder / config_file.replace(".hwc", '_' + str(file_time[0]) + '.hwc')
-    print(file_actual)
-    print(file_old)
+    #print(file_actual)
+    #print(file_old)
 
     try:
         os.rename(file_actual, file_old)
