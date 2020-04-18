@@ -16,9 +16,10 @@
     <li><a href="{{ url_for('test2') }}">Test-2</a></li>
     <li class="active"><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
     <li><a href="{{ url_for('test3') }}">Test-3</a></li>
+    <li><a href="{{ url_for('test3_result') }}">Test-3-Result</a></li>
     <li><a href="{{ url_for('test4') }}">Test-4</a></li>
+    <li><a href="{{ url_for('test4_result') }}">Test-4-Result</a></li>
   </ul>
-
 
 
 
@@ -44,31 +45,25 @@
     <div class="container">
 
 
-         <form class="form-horizontal" id="form1" action="/chu/test2/result" method="POST" enctype="multipart/form-data">
+        <form class="form-horizontal" id="form1" action="/chu/test2/result" method="POST" enctype="multipart/form-data">
 
-      <div class="form-group">
-        <label for="folder" class="col-sm-2 control-label">Folder</label>
-<!--          <label for="folder">Folder</label>-->
-        <div class="col-sm-7">
-          <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
+          <div class="form-group">
+            <label for="folder" class="col-sm-2 control-label">Folder</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
 
-        </div>
-        <div class="col-sm-3">
-            <button type="submit" class="btn btn-success">Re-check</button>
-        </div>
-      </div>
+            </div>
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-success">Re-Check</button>
+            </div>
+          </div>
 
-
-
-<!--      <div class="form-group">-->
-<!--        <div class="col-sm-offset-2 col-sm-10">-->
-<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
-<!--        </div>-->
-<!--      </div>-->
-    </form>
+        </form>
 
 <div style="padding-top: 10px;"></div>
       <hr class="style1">
+
+{% if message_success %}
 
 <div style="padding-top: 10px;"></div>
 
@@ -215,6 +210,8 @@
         {% endfor %}
 
     </table>
+
+{% endif %}
     </div>
 
 
@@ -224,6 +221,8 @@
 
 
   </div>
+
+
 
 
 {% endblock %}

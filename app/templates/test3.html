@@ -16,7 +16,9 @@
     <li><a href="{{ url_for('test2') }}">Test-2</a></li>
     <li><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
     <li class="active"><a href="{{ url_for('test3') }}">Test-3</a></li>
+    <li><a href="{{ url_for('test3_result') }}">Test-3-Result</a></li>
     <li><a href="{{ url_for('test4') }}">Test-4</a></li>
+    <li><a href="{{ url_for('test4_result') }}">Test-4-Result</a></li>
   </ul>
 
 
@@ -40,12 +42,16 @@
 
     <div style="padding-top: 10px;"></div>
 
-    <form class="form-horizontal" id="form1" action="/chu/test3" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" id="form1" action="/chu/test3" method="GET" enctype="multipart/form-data">
 
       <div class="form-group">
         <label for="folder" class="col-sm-1 control-label">Folder</label>
-        <div class="col-sm-7">
+        <div class="col-sm-6">
           <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
+        </div>
+
+        <div class="col-sm-1">
+          <a href="/chu/test3" target="blank"><button type="submit" class='btn btn-success'>Re-Check</button></a>
         </div>
 
         <label for="freq" class="col-sm-1 control-label">Frequency</label>
@@ -60,12 +66,16 @@
 
       </div>
 
+    </form>
+
+
+      <form class="form-horizontal" id="form2" action="/chu/test3" method="POST" enctype="multipart/form-data">
 
       <div class="form-group">
         <label for="card11" class="col-sm-1 control-label">Card-1</label>
         <div class="col-sm-9">
           {% for card11 in cards11 %}
-            <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %} {% if card11 not in card11_available %} disabled {% endif %}>{% if card11 < 10 %}0{% endif %}{{ card11 }}</label>
+            <label class="checkbox-inline {% if card11 not in card11_available %} text-muted disabled {% endif %}"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %} {% if card11 not in card11_available %} disabled {% endif %}>{% if card11 < 10 %}0{% endif %}{{ card11 }}</label>
           {% endfor %}
 
         </div>
@@ -84,7 +94,7 @@
         <label for="card12" class="col-sm-1 control-label"></label>
         <div class="col-sm-9">
           {% for card12 in cards12 %}
-            <label class="checkbox-inline"><input type="checkbox" class="card12" name="card12" value="{{ card12 }}" {% if cards12[card12] %} checked {% endif %} {% if card12 not in card12_available %} disabled {% endif %}>{{ card12 }}</label>
+            <label class="checkbox-inline {% if card12 not in card12_available %} text-muted disabled {% endif %}"><input type="checkbox" class="card12" name="card12" value="{{ card12 }}" {% if cards12[card12] %} checked {% endif %} {% if card12 not in card12_available %} disabled {% endif %}>{{ card12 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
@@ -103,7 +113,7 @@
         <label for="card21" class="col-sm-1 control-label">Card-2</label>
         <div class="col-sm-9">
           {% for card21 in cards21 %}
-            <label class="checkbox-inline"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %} {% if card21 not in card21_available %} disabled {% endif %}>{% if card21 < 10 %}0{% endif %}{{ card21 }}</label>
+            <label class="checkbox-inline {% if card21 not in card21_available %} text-muted disabled {% endif %}"><input type="checkbox" class="card21" name="card21" value="{{ card21 }}" {% if cards21[card21] %} checked {% endif %} {% if card21 not in card21_available %} disabled {% endif %}>{% if card21 < 10 %}0{% endif %}{{ card21 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
@@ -121,7 +131,7 @@
         <label for="card22" class="col-sm-1 control-label"></label>
         <div class="col-sm-9">
           {% for card22 in cards22 %}
-            <label class="checkbox-inline"><input class="card22" type="checkbox" name="card22" value="{{ card22 }}" {% if cards22[card22] %} checked {% endif %} {% if card22 not in card22_available %} disabled {% endif %}>{{ card22 }}</label>
+            <label class="checkbox-inline {% if card22 not in card22_available %} text-muted disabled {% endif %}"><input class="card22" type="checkbox" name="card22" value="{{ card22 }}" {% if cards22[card22] %} checked {% endif %} {% if card22 not in card22_available %} disabled {% endif %}>{{ card22 }}</label>
           {% endfor %}
         </div>
         <div class="col-sm-1">
@@ -135,17 +145,19 @@
         <div class="col-sm-1"></div>
       </div>
 
+      <div class="form-group">
+        <label for="folder" class="col-sm-1 control-label">SetPt_N for</label>
+        <div class="col-sm-6">
+          <select class="form-control" id="setpoint" name = "setpoint">
+              {% for set_point in set_points %}
+                  <option value="{{set_points[set_point]}}" {% if set_points[set_point] == entered_set_point %} selected {% endif %}>{{set_points[set_point]}}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-5"></div>
 
-<!--      <div class="form-group">-->
-<!--        <label for="freq" class="col-sm-2 control-label">Frequency</label>-->
-<!--        <div class="col-sm-8">-->
-<!--          <div class="input-group">-->
-<!--          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">-->
-<!--          <span class="input-group-addon">MHz</span>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="col-sm-2"></div>-->
-<!--      </div>-->
+      </div>
+
 
       <div class="form-group"></div>
       <hr class="style1">
@@ -156,6 +168,13 @@
           <p class="form-control-static">{{ entered_folder }}</p>
         </div>
         <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input file</label>
+        <div class="col-sm-10">
+          <p class="form-control-static">{{ input_file }}</p>
+        </div>
       </div>
 
       <div class="form-group">
@@ -176,6 +195,13 @@
         <label class="col-sm-2 control-label">Number of DUTs</label>
         <div class="col-sm-10">
           <p class="form-control-static">{{ duts_number }}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">SetPt_N for</label>
+        <div class="col-sm-10">
+          <p class="form-control-static">{{ entered_set_point }}</p>
         </div>
       </div>
 
@@ -209,9 +235,6 @@
       </div>
     </form>
 
-<!--    <div class="alert alert-success" role="alert">-->
-<!--      <strong>Success!</strong> Now you can start Test-1-->
-<!--    </div>-->
 
   </div>
 

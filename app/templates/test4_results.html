@@ -1,0 +1,238 @@
+{% extends "base_generic.html" %}
+{% block title %}Please select{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+  <ul class="nav nav-tabs">
+    <li><a href="{{ url_for('test1') }}">Test-1</a></li>
+    <li><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
+    <li><a href="{{ url_for('test2') }}">Test-2</a></li>
+    <li><a href="{{ url_for('test2_result') }}">Test-2-Result</a></li>
+    <li><a href="{{ url_for('test3') }}">Test-3</a></li>
+    <li><a href="{{ url_for('test3_result') }}">Test-3-Result</a></li>
+    <li><a href="{{ url_for('test4') }}">Test-4</a></li>
+    <li class="active"><a href="{{ url_for('test4_result') }}">Test-4-Result</a></li>
+  </ul>
+
+
+
+
+  <div class="container-fluid">
+
+    <div style="padding-top: 30px;"></div>
+
+    {% if message_text %}
+      {% if message_success %}
+        <div class="alert alert-success" role="alert">
+          <strong>Success!</strong>{{ message_text }}
+        </div>
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+          <strong>Error!</strong>{{ message_text }}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div style="padding-top: 10px;"></div>
+
+
+<!--    <div class="container">-->
+
+<div class="container-fluid">
+        <form class="form-horizontal" id="form1" action="/chu/test3/result" method="POST" enctype="multipart/form-data">
+
+          <div class="form-group">
+            <label for="folder" class="col-sm-2 control-label">Folder</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
+
+            </div>
+
+          <label for="folder" class="col-sm-1 control-label">Interpolation</label>
+            <div class="col-sm-1">
+              <input type="text" class="form-control" id="inter" name="inter" value="{{ entered_interpol }}" placeholder="Interpolation">
+
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-success">Re-Check</button>
+            </div>
+          </div>
+
+            {% if bad_units_exist %}
+        <div class="form-group">
+        <label class="col-sm-2 control-label">Bad units (DUT)</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{ bad_units }}</p>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+            {% endif %}
+
+        </form>
+</div>
+
+{% if message_success %}
+<div class="container-fluid">
+<!--    <div class="row">-->
+      <div class="col-sm-2"></div>
+
+<div class="col-sm-10" style="padding-left:5px;">
+      <form class="form-inline">
+      <div class="form-group">
+        <label for="exampleInputName2">Folder : </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ folder }}</p>
+
+      </div>
+
+        <div class="form-group" style="padding-left: 20px;">
+          <label for="exampleInputName2">File : </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ file }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">File modified : </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ time }}</p>
+      </div>
+
+      <div class="form-group" style="padding-left: 20px;">
+        <label for="exampleInputName2">Frequency : </label>
+    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
+        <p class="form-control-static">{{ freq }}MHz</p>
+      </div>
+
+
+
+
+</form>
+    </div>
+    </div>
+<!--      </div>-->
+       {% endif %}
+
+
+<div style="padding-top: 10px;"></div>
+      <hr class="style1">
+
+{% if message_success %}
+
+<div style="padding-top: 10px;"></div>
+
+      <div class="container">
+
+    <h4> Calculation results</h4>
+        <div style="padding-top: 10px;"></div>
+
+        <table class="table table-bordered table-hover table-condensed text-center">
+        <tr>
+            {% for col in column_names_1 %}
+                <th class="text-center">{{col}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in row_data_1 %}
+        <tr>
+            {% for col, row_ in zip(column_names_1, row) %}
+
+<!--            {% if col == 'ppm' %}-->
+<!--              {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}-->
+<!--                <td class="danger">{{row_}}</td>-->
+<!--              {% else %}-->
+<!--                <td class="success">{{row_}}</td>-->
+<!--              {% endif %}-->
+
+<!--            {% elif col == 'VReg' %}-->
+<!--              {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}-->
+<!--                <td class="danger">{{row_}}</td>-->
+<!--              {% else %}-->
+<!--                <td class="success">{{row_}}</td>-->
+<!--              {% endif %}-->
+
+
+<!--            {% else %}-->
+          <td>{{row_}}</td>
+<!--           {% endif %}-->
+
+
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+          </div>
+
+        <div style="padding-top: 10px;"></div>
+      <hr class="style1">
+
+<!--        <div class="container-fluid">-->
+            <div class="container-fluid">
+
+        <img class="img-responsive center-block" src="/chu/test3/result/plot.png" alt="plot" align="centre">
+
+            </div>
+
+
+<div style="padding-top: 20px;"></div>
+      <hr class="style1">
+
+<div style="padding-top: 10px;"></div>
+      <div class="container">
+    <h4>Test-3 output</h4>
+
+
+
+
+
+<div style="padding-top: 10px;"></div>
+
+
+
+
+
+    <table class="table table-bordered table-hover table-condensed text-center">
+        <tr>
+            {% for col in column_names %}
+                <th class="text-center">{{col}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in row_data %}
+        <tr>
+            {% for col, row_ in zip(column_names, row) %}
+
+          <td>{{row_}}</td>
+
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+
+{% endif %}
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+{% endblock %}
+
+
