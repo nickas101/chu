@@ -31,6 +31,7 @@ card1 = ""
 card2 = ""
 frequency = ""
 result_test3_full = pd.DataFrame()
+result_fvt = pd.DataFrame()
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -680,7 +681,7 @@ def test4_result():
     global vreg_threshold
     global ppm
     global ppm_threshold
-    global result_test3_full
+    global result_fvt
 
     interpol = 1
 
@@ -691,16 +692,16 @@ def test4_result():
             if interpol < 1:
                 interpol = 1
 
-    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(folder, interpol)
+    message_success, message_text, file, freq, time, bad_units, result_fvt, result_cutted = read_results_test4.read(folder, interpol)
     print(message_text)
 
-    try:
-        solver_output = comp_solver.solve(result_cutted)
-        print(solver_output)
-        print(solver_output.info())
-    except:
-        message_text = message_text + " *** Problem with solver calculations"
-        message_success = False
+    # try:
+    #     solver_output = comp_solver.solve(result_cutted)
+    #     print(solver_output)
+    #     print(solver_output.info())
+    # except:
+    #     message_text = message_text + " *** Problem with solver calculations"
+    #     message_success = False
 
     vregs_table = pd.DataFrame()
 
@@ -714,8 +715,8 @@ def test4_result():
                            folder=folder,
                            card1=card1,
                            card2=card2,
-                           column_names=result_test3_full.columns.values,
-                           row_data=list(result_test3_full.values.tolist()),
+                           column_names=result_fvt.columns.values,
+                           row_data=list(result_fvt.values.tolist()),
                            column_names_1=vregs_table.columns.values,
                            row_data_1=list(vregs_table.values.tolist()),
                            zip=zip,
@@ -733,11 +734,11 @@ def test4_result():
 
 @app.route('/chu/test4/result/plot.png', methods=['post', 'get'])
 def test4_plot_png():
-    global result_test3_full
+    global result_fvt
 
 
     title = "Test-4 results"
-    fig = plotter.plot(result_test3_full, title)
+    fig = plotter.plot(result_fvt, title)
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)

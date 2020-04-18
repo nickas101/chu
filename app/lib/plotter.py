@@ -24,9 +24,9 @@ def plot(df, title):
         bins = result_single['Temp']
         pos = result_single['pos'].iloc[0]
         label_ppm = "pos#" + str(pos)
-        label_residual = "residual pos#" + str(pos)
+        # label_residual = "residual pos#" + str(pos)
         data_ppm = result_single['ppm']
-        data_residual = result_single['residual']
+        # data_residual = result_single['residual']
 
 
         axis.plot(bins, data_ppm, alpha=1, label=label_ppm, linewidth=1)
