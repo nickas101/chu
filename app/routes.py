@@ -23,19 +23,14 @@ from .lib.kepler import comp_solver
 
 
 
-folder = 'C:\Temp\dorsum'
-#folder = '/Users/nickas/Documents/_to_upload/dorsum'
+# folder = 'C:\Temp\dorsum'
+folder = '/Users/nickas/Documents/_to_upload/dorsum'
 #folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
 card1 = ""
 card2 = ""
 frequency = ""
 result_test3_full = pd.DataFrame()
-
-# cards11 = {'01': True, '02': True, '03': True, '04': True, '05': True, '06': True, '07': True, '08': True, '09': True, '10': True, '11': True, '12': True, '13': True, '14': True, '15': True, '16': True}
-# cards12 = {'17': False, '18': False, '19': False, '20': False, '21': False, '22': False, '23': False, '24': False, '25': False, '26': False, '27': False, '28': False, '29': False, '30': False, '31': False, '32': False}
-# cards21 = {'01': False, '02': False, '03': False, '04': False, '05': False, '06': False, '07': False, '08': False, '09': False, '10': False, '11': False, '12': False, '13': False, '14': False, '15': False, '16': False}
-# cards22 = {'17': False, '18': False, '19': False, '20': False, '21': False, '22': False, '23': False, '24': False, '25': False, '26': False, '27': False, '28': False, '29': False, '30': False, '31': False, '32': False}
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
