@@ -62,6 +62,12 @@ def read(folder):
 
         # print(result.info())
 
+        result['temp_rounded'] = round(result['Temp'], 0)
+
+        result.sort_values(['pos', 'temp_rounded', 'VReg_Trim', 'TcVReg_Trim'], ascending=[True, True, True, True], inplace=True)
+
+        result.drop('temp_rounded', 1, inplace=True)
+
         message_success = True
         message_text = ""
 

@@ -60,12 +60,12 @@
 
         </form>
 
-<div style="padding-top: 10px;"></div>
+{#<div style="padding-top: 10px;"></div>#}
       <hr class="style1">
 
 {% if message_success %}
 
-<div style="padding-top: 10px;"></div>
+{#<div style="padding-top: 10px;"></div>#}
 
     <h4> VReg calculation results</h4>
         <div style="padding-top: 10px;"></div>
@@ -109,10 +109,10 @@
     </table>
 
 
-<div style="padding-top: 10px;"></div>
+<div style="padding-top: 5px;"></div>
       <hr class="style1">
 
-<div style="padding-top: 10px;"></div>
+{#<div style="padding-top: 10px;"></div>#}
     <h4>Test-2 output</h4>
 
 
@@ -120,13 +120,19 @@
       <div class="form-group">
         <label for="exampleInputName2">File: </label>
     <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ file }}</p>
+        <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
       </div>
 
+{#      <div class="form-group" style="padding-left: 20px;">#}
+{#        <label for="exampleInputName2">File modified: </label>#}
+{#    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->#}
+{#        <p class="form-control-static">{{ time }}</p>#}
+{#      </div>#}
+
       <div class="form-group" style="padding-left: 20px;">
-        <label for="exampleInputName2">File modified: </label>
+        <label for="exampleInputName2">Folder: </label>
     <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ time }}</p>
+        <p class="form-control-static">{{ folder }}</p>
       </div>
 
       <div class="form-group" style="padding-left: 20px;">
@@ -135,35 +141,7 @@
         <p class="form-control-static">{{ freq }}MHz</p>
       </div>
 
-      <div class="form-group" style="padding-left: 20px;">
-        <label for="exampleInputName2">Folder: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ folder }}</p>
-      </div>
 
-<!--      <div class="form-group" style="padding-left: 20px;">-->
-<!--        <label for="exampleInputName2">VReg: </label>-->
-<!--    &lt;!&ndash;    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">&ndash;&gt;-->
-<!--        <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>-->
-<!--      </div>-->
-
-<!--      <div class="form-group" style="padding-left: 20px;">-->
-<!--        <label for="exampleInputName2">ppm: </label>-->
-<!--    &lt;!&ndash;    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">&ndash;&gt;-->
-<!--        <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>-->
-<!--      </div>-->
-
-<!--        <div class="form-group">-->
-<!--    <label class="col-sm-2 control-label">Email</label>-->
-<!--    <div class="col-sm-10">-->
-<!--      <p class="form-control-static">email@example.com</p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="form-group">-->
-<!--    <label for="exampleInputEmail2">Email</label>-->
-<!--    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">-->
-<!--  </div>-->
-<!--  <button type="submit" class="btn btn-default">Send invitation</button>-->
 </form>
 
 

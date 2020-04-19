@@ -68,7 +68,7 @@ def read(folder, limit):
                 freq_splitted = line.split("\t")
                 freq = freq_splitted[1].replace("_define nominalFreq-", "")
                 freq = freq.replace(";", "")
-                #freq = float(freq)
+                freq = str(float(freq))
 
 
         columns = ['DUT', 'pos', 'residual', 'Temp', 'CoeffB', 'CoeffC', 'ppm']

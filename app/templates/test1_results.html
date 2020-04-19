@@ -51,14 +51,14 @@
           <div class="form-group">
             <label for="exampleInputName2">File: </label>
         <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-            <p class="form-control-static">{{ file }}</p>
+            <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
           </div>
 
-          <div class="form-group" style="padding-left: 20px;">
-            <label for="exampleInputName2">File modified: </label>
-        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-            <p class="form-control-static">{{ time }}</p>
-          </div>
+{#          <div class="form-group" style="padding-left: 20px;">#}
+{#            <label for="exampleInputName2">File modified: </label>#}
+{#        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->#}
+{#            <p class="form-control-static">{{ time }}</p>#}
+{#          </div>#}
 
           <div class="form-group" style="padding-left: 20px;">
             <label for="exampleInputName2">Folder: </label>
