@@ -92,13 +92,13 @@ def read(folder, limit):
 
         bad_units_append = bad_units_residual.append(bad_units_ppm)
 
-        bad_units_append.sort_values(['DUT'], ascending=[True], inplace=True)
+        bad_units_append.sort_values(['pos'], ascending=[True], inplace=True)
 
-        bad_units_list = natsorted(bad_units_append['DUT'].unique().tolist())
+        bad_units_list = natsorted(bad_units_append['pos'].unique().tolist())
 
         bad_units = bad_units + " " + ", ".join(str(int(x)) for x in bad_units_list)
 
-        result_cutted = result_full[~result_full['DUT'].isin(bad_units_list)]
+        result_cutted = result_full[~result_full['pos'].isin(bad_units_list)]
         #rslt_df = dataframe.loc[~dataframe['Stream'].isin(options)]
 
         # print(bad_units)

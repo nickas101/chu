@@ -30,9 +30,11 @@ folder = '/Users/nickas/Documents/_to_upload/dorsum'
 card1 = ""
 card2 = ""
 frequency = ""
+freq = ""
 result_test3_full = pd.DataFrame()
 result_fvt = pd.DataFrame()
 result_fvt_single = pd.DataFrame()
+result_fvt_single_3 = pd.DataFrame()
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -468,13 +470,22 @@ def test3_result():
     global card1
     global card2
     global frequency
+    global freq
     global vreg
     global vreg_threshold
     global ppm
     global ppm_threshold
     global result_test3_full
+    global result_fvt_single_3
 
     interpol = 1
+
+    result_fvt_single_3 = pd.DataFrame()
+
+    if request.method == 'GET' and request.args.get('pos') and request.args.get('pos') != 'ALL':
+        entered_pos = int(request.args.get('pos'))
+    else:
+        entered_pos = 'ALL'
 
     if request.method == 'POST':
         folder = request.form.get('folder')
@@ -486,6 +497,17 @@ def test3_result():
     message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(folder, interpol)
     print(message_text)
 
+    if message_success:
+        poses = result_test3_full['pos'].unique().tolist()
+        poses.insert(0, 'ALL')
+        if entered_pos == 'ALL':
+            result_fvt_single_3 = result_test3_full
+        else:
+            result_fvt_single_3 = result_test3_full[result_test3_full['pos'] == entered_pos]
+
+    else:
+        poses = []
+
     try:
         solver_output = comp_solver.solve(result_cutted)
         print(solver_output)
@@ -495,6 +517,8 @@ def test3_result():
         message_success = False
 
     vregs_table = pd.DataFrame()
+
+    # print(len(bad_units))
 
     if len(bad_units) > 1:
         bad_units_exist = True
@@ -506,8 +530,8 @@ def test3_result():
                            folder=folder,
                            card1=card1,
                            card2=card2,
-                           column_names=result_test3_full.columns.values,
-                           row_data=list(result_test3_full.values.tolist()),
+                           column_names=result_fvt_single_3.columns.values,
+                           row_data=list(result_fvt_single_3.values.tolist()),
                            column_names_1=vregs_table.columns.values,
                            row_data_1=list(vregs_table.values.tolist()),
                            zip=zip,
@@ -520,6 +544,8 @@ def test3_result():
                            bad_units=bad_units,
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
+                           poses=poses,
+                           entered_pos=entered_pos,
                            frequency=frequency)
 
 
@@ -527,10 +553,12 @@ def test3_result():
 @app.route('/chu/test3/result/plot.png', methods=['post', 'get'])
 def test3_plot_png():
     global result_test3_full
+    global result_fvt_single_3
+    global freq
 
 
-    title = "Test-3 results"
-    fig = plotter.plot(result_test3_full, title)
+    title = "Test-3 results (frequency = " + str(freq) + "MHz)"
+    fig = plotter.plot(result_fvt_single_3, title)
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
