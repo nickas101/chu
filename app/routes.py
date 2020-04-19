@@ -32,6 +32,7 @@ card2 = ""
 frequency = ""
 result_test3_full = pd.DataFrame()
 result_fvt = pd.DataFrame()
+result_fvt_single = pd.DataFrame()
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -682,8 +683,15 @@ def test4_result():
     global ppm
     global ppm_threshold
     global result_fvt
+    global result_fvt_single
 
     interpol = 1
+    result_fvt_single = pd.DataFrame()
+
+    if request.method == 'GET' and request.args.get('pos') and request.args.get('pos') != 'ALL':
+        entered_pos = int(request.args.get('pos'))
+    else:
+        entered_pos = 'ALL'
 
     if request.method == 'POST':
         folder = request.form.get('folder')
@@ -694,6 +702,17 @@ def test4_result():
 
     message_success, message_text, file, freq, time, bad_units, result_fvt, result_calculated = read_results_test4.read(folder, interpol)
     print(message_text)
+
+    if message_success:
+        poses = result_fvt['pos'].unique().tolist()
+        poses.insert(0, 'ALL')
+        if entered_pos == 'ALL':
+            result_fvt_single = result_fvt
+        else:
+            result_fvt_single = result_fvt[result_fvt['pos'] == entered_pos]
+
+    else:
+        poses = []
 
     # try:
     #     solver_output = comp_solver.solve(result_cutted)
@@ -710,13 +729,15 @@ def test4_result():
     else:
         bad_units_exist = False
 
+    print("entered_pos = " + str(entered_pos))
+
 
     return render_template('test4_results.html',
                            folder=folder,
                            card1=card1,
                            card2=card2,
-                           column_names=result_fvt.columns.values,
-                           row_data=list(result_fvt.values.tolist()),
+                           column_names=result_fvt_single.columns.values,
+                           row_data=list(result_fvt_single.values.tolist()),
                            column_names_1=result_calculated.columns.values,
                            row_data_1=list(result_calculated.values.tolist()),
                            zip=zip,
@@ -729,16 +750,19 @@ def test4_result():
                            bad_units=bad_units,
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
+                           poses=poses,
+                           entered_pos=entered_pos,
                            frequency=frequency)
 
 
 @app.route('/chu/test4/result/plot.png', methods=['post', 'get'])
 def test4_plot_png():
     global result_fvt
+    global result_fvt_single
 
 
     title = "Test-4 results"
-    fig = plotter.plot(result_fvt, title)
+    fig = plotter.plot(result_fvt_single, title)
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)

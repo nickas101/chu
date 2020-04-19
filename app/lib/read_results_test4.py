@@ -107,8 +107,8 @@ def read(folder, limit):
         result_calculated = pd.merge(result_calculated, result_min, on='pos', how='left')
         result_calculated = pd.merge(result_calculated, result_mean, on='pos', how='left')
 
-        print(result_calculated)
-        print(result_calculated.info())
+        # print(result_calculated)
+        # print(result_calculated.info())
 
         result_fvt.to_pickle("app/scripts/read_test_3.pkl")
         #unpickled_df = pd.read_pickle("app/scripts/read_test_3.pkl")
