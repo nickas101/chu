@@ -43,7 +43,6 @@
     <div style="padding-top: 10px;"></div>
 
 
-<!--    <div class="container">-->
 
 <div class="container-fluid">
         <form class="form-horizontal" id="form1" action="/chu/test4/result" method="POST" enctype="multipart/form-data">
@@ -65,9 +64,11 @@
             </div>
           </div>
 
+{% if message_success %}
+
             {% if bad_units_exist %}
         <div class="form-group">
-        <label class="col-sm-2 control-label">Bad units (DUT)</label>
+        <label class="col-sm-2 control-label">Bad units (pos)</label>
         <div class="col-sm-8">
           <p class="form-control-static">{{ bad_units }}</p>
         </div>
@@ -75,81 +76,31 @@
       </div>
             {% endif %}
 
+
+                <div class="form-group">
+        <label class="col-sm-2 control-label">File</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+
+{% endif %}
+
         </form>
 </div>
 
-{% if message_success %}
 
-          <hr class="style1">
-        <div style="padding-top: 5px;"></div>
-<div class="container-fluid">
-<!--    <div class="row">-->
-{#      <div class="col-sm-2"></div>#}
-
-
-      <form class="form-inline">
-          <div class="col-sm-8">
-      <div class="form-group">
-        <label for="exampleInputName2">Folder : </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ folder }}</p>
-
-      </div>
-                 </div>
-
-                    <div class="col-sm-4">
-
-      <div class="form-group">
-        <label for="exampleInputName2">Frequency : </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ freq }}MHz</p>
-      </div>
-             </div>
-
-
-
-
-</form>
-
-
-      <form class="form-inline">
-          <div class="col-sm-8">
-
-        <div class="form-group">
-          <label for="exampleInputName2">File : </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ file }}</p>
-      </div>
-              </div>
-<div class="col-sm-4">
-      <div class="form-group">
-        <label for="exampleInputName2">File modified : </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
-        <p class="form-control-static">{{ time }}</p>
-      </div>
-          </div>
-
-
-</form>
-
-
-
-
-    </div>
-<!--      </div>-->
-       {% endif %}
-
-
-<div style="padding-top: 10px;"></div>
       <hr class="style1">
 
 {% if message_success %}
 
-<div style="padding-top: 10px;"></div>
+{#<div style="padding-top: 10px;"></div>#}
 
       <div class="container">
 
-    <h4> Calculation results</h4>
+{#    <h4> Calculation results</h4>#}
         <div style="padding-top: 10px;"></div>
 
         <table class="table table-bordered table-hover table-condensed text-center">
@@ -182,8 +133,7 @@
           <td>{{row_}}</td>
 <!--           {% endif %}-->
 
-
-
+                
             {% endfor %}
         </tr>
         {% endfor %}
@@ -191,14 +141,16 @@
     </table>
           </div>
 
-        <div style="padding-top: 10px;"></div>
-      <hr class="style1">
 
-<!--        <div class="container-fluid">-->
             <div class="container-fluid">
 
+            </div>
 
-             <form class="form-inline" id="form1" action="/chu/test4/result" method="GET" enctype="multipart/form-data">
+<div style="padding-top: 10px;"></div>
+      <div class="container">
+{#    <h4>Test-3 output</h4>#}
+
+                 <form class="form-inline" id="form1" action="/chu/test4/result" method="GET" enctype="multipart/form-data">
 <div class="col-sm-1"></div>
              <div class="col-sm-11">
             <div class="form-group">
@@ -217,28 +169,10 @@
 
         </form>
 
-
-
         <img class="img-responsive center-block" src="/chu/test4/result/plot.png" alt="plot" align="centre">
-
-            </div>
 
 
 <div style="padding-top: 20px;"></div>
-      <hr class="style1">
-
-<div style="padding-top: 10px;"></div>
-      <div class="container">
-    <h4>Test-3 output</h4>
-
-
-
-
-
-<div style="padding-top: 10px;"></div>
-
-
-
 
 
     <table class="table table-bordered table-hover table-condensed text-center">
@@ -265,14 +199,7 @@
     </div>
 
 
-
-
-
-
-
   </div>
-
-
 
 
 {% endblock %}

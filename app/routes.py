@@ -706,6 +706,7 @@ def test4_result():
     global card1
     global card2
     global frequency
+    global freq
     global vreg
     global vreg_threshold
     global ppm
@@ -787,9 +788,10 @@ def test4_result():
 def test4_plot_png():
     global result_fvt
     global result_fvt_single
+    global freq
 
 
-    title = "Test-4 results"
+    title = "Test-4 results (frequency = " + str(freq) + "MHz)"
     fig = plotter.plot(result_fvt_single, title)
 
     output = io.BytesIO()
