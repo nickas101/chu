@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from pathlib import Path
+import pandas as pd
 
 from . import prepare_config_file
 from . import solver_table_converter
@@ -38,10 +39,11 @@ coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
 
 script_file = "4-Soft Vfy with comp numbers.uscript"
 
-def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3):
+def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3, temp_range):
 
     success = True
     message = "OK"
+    solver_table_converted = pd.DataFrame()
 
     config_file = prepare_config_file.create_config(folder)
 
@@ -50,10 +52,6 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
     except:
         success = False
         message = " *** Problem with converting Solver Table!"
-
-    # print(solver_table)
-    # print(solver_table_converted)
-    # print(solver_table_converted.info())
 
     current_time = datetime.now()
     file_time = str(current_time)
@@ -102,11 +100,8 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
     card1_int = list(map(int, card1))
     card2_int = list(map(int, card2))
     card_int = card1_int + card2_int
-    # print(card_int)
 
     vreg_table_cutted = vreg_table_from_test3[vreg_table_from_test3['pos'].isin(card_int)]
-
-    # print(vreg_table_cutted)
 
     table_0 = vreg_table_cutted['Table-0'].to_list()
     table_1 = vreg_table_cutted['Table-1'].to_list()
@@ -125,13 +120,9 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
             table = solver_table_converted_cutted[column].to_list()
             define_tables = define_tables + str(create_row_for_table(table, column))
 
-
-    # if "Pluto+" in set_point:
-    #     set_point_string = "_define Table-2 [5] 50 41 32 23 15;\t\t\t\t\t\t// SetPt_N for Pluto+\n"
-    # elif "AKM2156" in set_point:
-    #     set_point_string = "_define Table-2 [5] 48 35 25 16 7;\t\t\t\t\t\t// SetPt_N for AKM2156\n"
-    # else:
-    #     set_point_string = ""
+    temp_range_splitted = temp_range.split(" ")
+    temp_range_comment = '// ' + temp_range_splitted[0] + "'C to " + temp_range_splitted[1] + " step -" + temp_range_splitted[2]
+    temperature_range_string = "\n\n// Any Tables for what we are testing go here\n_define chamberTempRange-0 " + str(temp_range) + ";\t\t\t\t\t\t" + str(temp_range_comment) + "\n"
 
 
     with open('app/scripts/4-Soft Vfy with comp numbers_head.uscript', 'r') as file:
@@ -148,9 +139,8 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
         output_file.write(frequency_string)
         output_file.write(text_1)
         output_file.write(define_tables)
-        # output_file.write(set_point_string)
+        output_file.write(temperature_range_string)
         output_file.write(data_body)
-
 
 
     return success, message, config_file, script_file

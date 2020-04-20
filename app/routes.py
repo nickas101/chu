@@ -18,6 +18,7 @@ from .lib import read_results_test3
 from .lib import read_results_test4
 from .lib import vreg_calculator_old
 from .lib import vreg_calculator
+from .lib import solver_table_converter
 from .lib.kepler import comp_solver
 
 
@@ -47,6 +48,9 @@ vreg = 1.9
 vreg_threshold = 0.2
 ppm = 0
 ppm_threshold = 0.5
+temp_min = -40
+temp_max = 95
+step = 1
 
 
 
@@ -509,9 +513,10 @@ def test3_result():
         poses = []
 
     try:
-        solver_output = comp_solver.solve(result_cutted)
-        print(solver_output)
-        print(solver_output.info())
+        solver = comp_solver.solve(result_cutted)
+        solver_output = solver_table_converter.convert(solver)
+        # print(solver_output)
+        # print(solver_output.info())
     except:
         message_text = message_text + " *** Problem with solver calculations"
         message_success = False
@@ -532,8 +537,8 @@ def test3_result():
                            card2=card2,
                            column_names=result_fvt_single_3.columns.values,
                            row_data=list(result_fvt_single_3.values.tolist()),
-                           column_names_1=vregs_table.columns.values,
-                           row_data_1=list(vregs_table.values.tolist()),
+                           column_names_1=solver_output.columns.values,
+                           row_data_1=list(solver_output.values.tolist()),
                            zip=zip,
                            entered_folder=folder,
                            message_success=message_success,
@@ -577,6 +582,9 @@ def test4():
     global cards21
     global cards22
     global frequency
+    global temp_max
+    global temp_min
+    global step
 
     config_file = ""
     script_file = ""
@@ -589,6 +597,7 @@ def test4():
     card11_available = []
     card12_available = []
     interpol = 1
+    temp_range = ""
 
 
 
@@ -597,13 +606,15 @@ def test4():
         folder = request.args.get('folder')
         #print(folder)
 
-    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+    success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
         folder, interpol)
-    print(message_text)
 
-    if message_success:
+    if success_test3:
         card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
         card12_available = result_cutted[result_cutted['pos'] > 16]['pos'].unique().tolist()
+    else:
+        message_text = message_text + message_test3
+        message_success = False
 
     if request.method == 'POST':
 
@@ -625,13 +636,25 @@ def test4():
         entered_card1 = processing.join_entered_cards(card11, card12)
         entered_card2 = processing.join_entered_cards(card21, card22)
 
-        #folder = request.form.get('folder')
-        entered_set_point = request.form.get('setpoint')
-        # frequency = request.form.get('freq')
-        #
-        message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+        temp_max = request.form.get('temp_max')
+        temp_min = request.form.get('temp_min')
+        step = request.form.get('step')
+
+        try:
+            if int(temp_max) < int(temp_min):
+                temp_temp = temp_max
+                temp_max = temp_min
+                temp_min = temp_temp
+            if int(step) < 1:
+                step = 1
+            temp_range = str(int(temp_max)) + ' ' + str(int(temp_min)) + ' ' + str(int(step))
+        except:
+            message_text = message_text + " *** Temperature range is incorrect!"
+            message_success = False
+
+
+        success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
             folder, interpol)
-        print(message_text)
 
         duts_number = len(card_total)
         if duts_number < 1:
@@ -640,14 +663,14 @@ def test4():
         else:
             duts_number_string = str(duts_number)
 
-        if message_success:
+        if success_test3 and message_success:
             solver_table = comp_solver.solve(result_cutted)
-            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_table, vreg_table_from_test3)
+            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_table, vreg_table_from_test3, temp_range)
             if success:
                 message_text = " Now you can start Test-4"
             else:
                 message_success = False
-                message_text = message
+                message_text = message_text + message_test3
         else:
             card11_available = []
             card12_available = []
@@ -694,7 +717,9 @@ def test4():
                            input_file=file,
                            freq = freq,
                            entered_frequency=freq,
-                           entered_set_point=entered_set_point,
+                           entered_temp_min=temp_min,
+                           entered_temp_max=temp_max,
+                           entered_step=step,
                            duts_number=duts_number_string)
 
 
