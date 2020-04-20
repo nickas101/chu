@@ -3,13 +3,57 @@ from datetime import datetime
 from pathlib import Path
 
 from . import prepare_config_file
+from . import solver_table_converter
 from . import card_config
 
-script_file = "3-Comp.uscript"
+coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
+                        'Table-1': 'TcVReg_Trim from 2-SetUpVreg',
+                        'Table-2': 'CoeffA0',
+                        'Table-3': 'CoeffB0',
+                        'Table-4': 'CoeffC0',
+                        'Table-5': 'CoeffA1',
+                        'Table-6': 'CoeffB1',
+                        'Table-7': 'CoeffC1',
+                        'Table-8': 'CoeffA2',
+                        'Table-9': 'CoeffB2',
+                        'Table-10': 'CoeffC2',
+                        'Table-11': 'CoeffA3',
+                        'Table-12': 'CoeffB3',
+                        'Table-13': 'CoeffC3',
+                        'Table-14': 'CoeffA4',
+                        'Table-15': 'CoeffB4',
+                        'Table-16': 'CoeffC4',
+                        'Table-17': 'CoeffA5',
+                        'Table-18': 'CoeffB5',
+                        'Table-19': 'CoeffC5',
+                        'Table-20': 'CoeffA6',
+                        'Table-21': 'CoeffB6',
+                        'Table-22': 'CoeffC6',
+                        'Table-23': 'CoeffB7',
+                        'Table-24': 'CoeffC7',
+                        'Table-25': 'CoeffA7',
+                        'Table-26': 'CoeffD',
+                        'Table-27': 'CoeffE'
+                      }
 
-def prepare(folder, card1, card2, frequency, vregs_table, set_point):
+script_file = "4-Soft Vfy with comp numbers.uscript"
+
+def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3):
+
+    success = True
+    message = "OK"
 
     config_file = prepare_config_file.create_config(folder)
+
+    try:
+        solver_table_converted = solver_table_converter.convert(solver_table)
+    except:
+        success = False
+        message = " *** Problem with converting Solver Table!"
+
+    # print(solver_table)
+    # print(solver_table_converted)
+    # print(solver_table_converted.info())
 
     current_time = datetime.now()
     file_time = str(current_time)
@@ -20,8 +64,6 @@ def prepare(folder, card1, card2, frequency, vregs_table, set_point):
     data_folder = Path(folder)
     file_actual = data_folder / script_file
     file_old = data_folder / script_file.replace(".uscript", '_' + str(file_time[0]) + '.uscript')
-    #print(file_actual)
-    #print(file_old)
 
     try:
         os.rename(file_actual, file_old)
@@ -55,37 +97,47 @@ def prepare(folder, card1, card2, frequency, vregs_table, set_point):
 
     define_cards = define_cards + "// Note:- numbers are card position numbers starting at 1 (not 0)\n"
 
-    text_1 = "\n\n// Tables from PreComp.uScript solve go here\n"
+    text_1 = "\n\n// Any Tables from previous Scripts go here\n"
 
-    table_0 = vregs_table['Table-0'].to_list()
-    table_1 = vregs_table['Table-1'].to_list()
+    card1_int = list(map(int, card1))
+    card2_int = list(map(int, card2))
+    card_int = card1_int + card2_int
+    # print(card_int)
+
+    vreg_table_cutted = vreg_table_from_test3[vreg_table_from_test3['pos'].isin(card_int)]
+
+    # print(vreg_table_cutted)
+
+    table_0 = vreg_table_cutted['Table-0'].to_list()
+    table_1 = vreg_table_cutted['Table-1'].to_list()
 
     define_tables = ""
 
-    if len(table_0) > 0:
-        define_tables = define_tables + '_define Table-0 [' + str(len(table_0)) + ']'
-        define_tables = define_tables + " " + " ".join(str(int(x)) for x in table_0)
-        define_tables = define_tables + ";\t\t\t\t\t\t// VReg_Trim from 2-SetUpVreg\n"
+    define_tables = define_tables + str(create_row_for_table(table_0, 'Table-0'))
+    define_tables = define_tables + str(create_row_for_table(table_1, 'Table-1'))
 
-    if len(table_1) > 0:
-        define_tables = define_tables + '_define Table-1 [' + str(len(table_1)) + ']'
-        define_tables = define_tables + " " + " ".join(str(int(x)) for x in table_1)
-        define_tables = define_tables + ";\t\t\t\t\t\t// TcVReg_Trim from 2-SetUpVreg\n"
+    solver_table_converted_cutted = solver_table_converted[solver_table_converted['pos'].isin(card_int)]
 
-    #print(table_0)
+    define_tables = define_tables + "\n"
 
-    if "Pluto+" in set_point:
-        set_point_string = "_define Table-2 [5] 50 41 32 23 15;\t\t\t\t\t\t// SetPt_N for Pluto+\n"
-    elif "AKM2156" in set_point:
-        set_point_string = "_define Table-2 [5] 48 35 25 16 7;\t\t\t\t\t\t// SetPt_N for AKM2156\n"
-    else:
-        set_point_string = ""
+    for column in solver_table_converted_cutted.columns:
+        if column != 'DUT' and column != 'pos':
+            table = solver_table_converted_cutted[column].to_list()
+            define_tables = define_tables + str(create_row_for_table(table, column))
 
 
-    with open('app/scripts/3-Comp_head.uscript', 'r') as file:
+    # if "Pluto+" in set_point:
+    #     set_point_string = "_define Table-2 [5] 50 41 32 23 15;\t\t\t\t\t\t// SetPt_N for Pluto+\n"
+    # elif "AKM2156" in set_point:
+    #     set_point_string = "_define Table-2 [5] 48 35 25 16 7;\t\t\t\t\t\t// SetPt_N for AKM2156\n"
+    # else:
+    #     set_point_string = ""
+
+
+    with open('app/scripts/4-Soft Vfy with comp numbers_head.uscript', 'r') as file:
         data_head = file.read()
 
-    with open('app/scripts/3-Comp_body.uscript', 'r') as file:
+    with open('app/scripts/4-Soft Vfy with comp numbers_body.uscript', 'r') as file:
         data_body = file.read()
 
     with open(file_actual, 'w') as output_file:
@@ -96,12 +148,26 @@ def prepare(folder, card1, card2, frequency, vregs_table, set_point):
         output_file.write(frequency_string)
         output_file.write(text_1)
         output_file.write(define_tables)
-        output_file.write(set_point_string)
+        # output_file.write(set_point_string)
         output_file.write(data_body)
 
 
-    success = True
-    message = "OK"
-
 
     return success, message, config_file, script_file
+
+
+
+def create_row_for_table(input_table, table_name):
+    row = ''
+
+    try:
+        comment = coefficients_names[table_name]
+    except:
+        comment = ''
+
+    if len(input_table) > 0:
+        row = row + '_define ' + str(table_name) + ' [' + str(len(input_table)) + ']'
+        row = row + " " + " ".join(str(int(x)) for x in input_table)
+        row = row + ";\t\t\t\t\t\t// " + comment + "\n"
+
+    return row

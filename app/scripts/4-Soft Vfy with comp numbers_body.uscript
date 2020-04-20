@@ -1,0 +1,88 @@
+
+
+// Script BODY
+_start;
+_click selectSpec;													// Select ChipSpec
+_setSpec 31;
+_click selectSpec;													// and Load it
+
+_setParam PSU1 3.3;													// Set PSU1
+_click PowerBtn;
+_timeDelay 1;
+
+_setVcxoDac 1.25;													// Set Vcontrol
+
+// Init each DUT
+_loop nCARDs;
+{
+	_selecting nextCARD;
+	_loop nDUTs;
+	{	
+		_selecting nextDUTPos;
+		_selecting nextRFPos;
+		// any over rides go here
+		_setParam VReg_Trim Table-0;									// VReg_Trim
+		_setParam TcVReg_Trim Table-1;								// TcVReg_Trim
+		_setParam Amp_0 Table-2;										// CoeffA0
+		_setParam Slope_0 Table-3;									// CoeffB0
+		_setParam SetPt_0 Table-4;									// CoeffC0
+		_setParam Amp_1 Table-5;										// CoeffA1
+		_setParam Slope_1 Table-6;									// CoeffB1
+		_setParam SetPt_1 Table-7;									// CoeffC1
+		_setParam Amp_2 Table-8;										// CoeffA2
+		_setParam Slope_2 Table-9;									// CoeffB2
+		_setParam SetPt_2 Table-10;									// CoeffC2
+		_setParam Amp_3 Table-11;									// CoeffA3
+		_setParam Slope_3 Table-12;									// CoeffB3
+		_setParam SetPt_3 Table-13;									// CoeffC3
+		_setParam Amp_4 Table-14;									// CoeffA4
+		_setParam Slope_4 Table-15;									// CoeffB4
+		_setParam SetPt_4 Table-16;									// CoeffC4
+		_setParam Amp_5 Table-17;									// CoeffA5
+		_setParam Slope_5 Table-18;									// CoeffB5
+		_setParam SetPt_5 Table-19;									// CoeffC5
+		_setParam Amp_6 Table-20;									// CoeffA6
+		_setParam Slope_6 Table-21;									// CoeffB6
+		_setParam SetPt_6 Table-22;									// CoeffC6
+		_setParam Amp_7 Table-23;									// CoeffA7
+		_setParam Slope_7 Table-24;									// CoeffB7
+		_setParam SetPt_7 Table-25;									// CoeffC7
+		_setParam Tanh_Offset Table-26;								// CoeffD
+		_setParam Tanh_Gain Table-27;									// CoeffE
+		
+		_setParam TsGain 1;											// AKM (not Pluto+)
+		
+		_click varsToRamblock;
+		_click varsToDut;
+	}
+};
+
+// Here we go:-
+_fPrint "4-Soft Vfy with comp numbers nDUTs";
+_fPrint [\nnDUTsOnTest,];
+_fPrint "DUT,Temp,ppm";
+_setChamberTemp 95 stab 13;											// Chamber tp +95'C wait 13 mins
+
+// Measure ppm 95'C to -40'C
+_loop chamberTempRange-0;												// Loop Chamber Temps
+{
+	_setChamberTemp chamberTempRange-0 stab 2;
+	_loop nCARDs;
+	{
+		_selecting nextCARD;
+		_loop nDUTs;
+		{
+			_selecting nextDUTPos;
+			_selecting nextRFPos;
+			_click varsToRamblock;
+			_click varsToDut;
+			_measFreq F1;
+			_measFreq F1;
+			_fPrint [\nDUT,Temp,F1ppm,];
+		}
+	}
+};
+
+// Finished
+_setChamberTemp 25 stab 0;											// Return Chamber to 25'C
+_scriptEnd ;

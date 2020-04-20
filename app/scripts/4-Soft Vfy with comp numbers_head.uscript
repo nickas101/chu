@@ -1,0 +1,17 @@
+// 4 Soft Vfy with comp numbers.uScript									GT 01/07/2019
+// Kepler pg1.0
+// =======================================================================================
+// This script assumes the Kepler Chip spec is as per the default 
+// This script serves 1 purpose.
+// 1) Do a soft verify run using the numbers generated from Scripts
+// 2-SetUpVreg.uScript & 3-Comp.uScript
+// The chamber is left at 25°C ready for blow fuses if required
+// Use your judgement to decide if it is OK to proceed
+//
+// As always this Script assumes you have already manually selected and Initialised
+// all the Instruments & the Chamber COM Port
+//
+// ***** Make sure nDUTs and the Table lengths [N] are consistent *****
+// ***** Check all the temperatures are correct for your devices *****
+// =======================================================================================
+// Script DEFINES

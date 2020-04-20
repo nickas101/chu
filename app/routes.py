@@ -494,7 +494,7 @@ def test3_result():
             if interpol < 1:
                 interpol = 1
 
-    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(folder, interpol)
+    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
     print(message_text)
 
     if message_success:
@@ -597,7 +597,7 @@ def test4():
         folder = request.args.get('folder')
         #print(folder)
 
-    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(
+    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
         folder, interpol)
     print(message_text)
 
@@ -629,7 +629,7 @@ def test4():
         entered_set_point = request.form.get('setpoint')
         # frequency = request.form.get('freq')
         #
-        message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted = read_results_test3.read(
+        message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
             folder, interpol)
         print(message_text)
 
@@ -641,15 +641,13 @@ def test4():
             duts_number_string = str(duts_number)
 
         if message_success:
-            pass
-            #!!!!!!add solver here
-            #vregs_table = vreg_calculator.calculate(result_cutted)
-            #success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, vregs_table, entered_set_point)
-            # if success:
-            #     message_text = " Now you can start Test-3"
-            # else:
-            #     message_success = False
-            #     message_text = message
+            solver_table = comp_solver.solve(result_cutted)
+            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_table, vreg_table_from_test3)
+            if success:
+                message_text = " Now you can start Test-4"
+            else:
+                message_success = False
+                message_text = message
         else:
             card11_available = []
             card12_available = []
