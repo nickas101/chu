@@ -485,6 +485,7 @@ def test3_result():
     interpol = 1
 
     result_fvt_single_3 = pd.DataFrame()
+    solver_output = pd.DataFrame()
 
     if request.method == 'GET' and request.args.get('pos') and request.args.get('pos') != 'ALL':
         entered_pos = int(request.args.get('pos'))
@@ -514,16 +515,10 @@ def test3_result():
 
     try:
         solver = comp_solver.solve(result_cutted)
-        solver_output = solver_table_converter.convert(solver)
-        # print(solver_output)
-        # print(solver_output.info())
+        solver_output = solver_table_converter.convert_short(solver)
     except:
         message_text = message_text + " *** Problem with solver calculations"
         message_success = False
-
-    vregs_table = pd.DataFrame()
-
-    # print(len(bad_units))
 
     if len(bad_units) > 1:
         bad_units_exist = True
