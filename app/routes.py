@@ -51,6 +51,10 @@ ppm_threshold = 0.5
 temp_min = -40
 temp_max = 95
 step = 1
+temp_min_previous = -40
+temp_max_previous = 95
+step_previous = 1
+interpol = 1
 
 
 
@@ -481,8 +485,8 @@ def test3_result():
     global ppm_threshold
     global result_test3_full
     global result_fvt_single_3
+    global interpol
 
-    interpol = 1
 
     result_fvt_single_3 = pd.DataFrame()
     solver_output = pd.DataFrame()
@@ -500,7 +504,6 @@ def test3_result():
                 interpol = 1
 
     message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
-    print(message_text)
 
     if message_success:
         poses = result_test3_full['pos'].unique().tolist()
@@ -580,6 +583,9 @@ def test4():
     global temp_max
     global temp_min
     global step
+    global temp_min_previous
+    global temp_max_previous
+    global step_previous
 
     config_file = ""
     script_file = ""
@@ -588,7 +594,6 @@ def test4():
     message_text = ""
     entered_card1 = ""
     entered_card2 = ""
-    entered_set_point = ""
     card11_available = []
     card12_available = []
     interpol = 1
@@ -599,10 +604,26 @@ def test4():
 
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
-        #print(folder)
+
+    print(folder)
 
     success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
         folder, interpol)
+
+    print(message_test3)
+
+    # try:
+    #     if int(temp_max) < int(temp_min):
+    #         temp_temp = temp_max
+    #         temp_max = temp_min
+    #         temp_min = temp_temp
+    #     if int(step) < 1:
+    #         step = 1
+    #     temp_range = str(int(temp_max)) + ' ' + str(int(temp_min)) + ' ' + str(int(step))
+    # except:
+    #     message_text = message_text + " *** Temperature range is incorrect!"
+    #     message_success = False
+
 
     if success_test3:
         card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
@@ -610,6 +631,7 @@ def test4():
     else:
         message_text = message_text + message_test3
         message_success = False
+
 
     if request.method == 'POST':
 
@@ -643,9 +665,15 @@ def test4():
             if int(step) < 1:
                 step = 1
             temp_range = str(int(temp_max)) + ' ' + str(int(temp_min)) + ' ' + str(int(step))
+            temp_min_previous = temp_min
+            temp_max_previous = temp_max
+            step_previous = step
         except:
             message_text = message_text + " *** Temperature range is incorrect!"
             message_success = False
+            temp_max = temp_max_previous
+            temp_min = temp_min_previous
+            step = step_previous
 
 
         success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
@@ -667,20 +695,20 @@ def test4():
                 message_success = False
                 message_text = message_text + message_test3
         else:
-            card11_available = []
-            card12_available = []
+            # card11_available = []
+            # card12_available = []
             file = ""
             entered_card1 = ""
             entered_card2 = ""
             duts_number_string = ""
-            cards11 = {1: False, 2: False, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False, 9: False, 10: False,
-                       11: False, 12: False, 13: False, 14: False, 15: False, 16: False}
-            cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False,
-                       25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
-            cards21 = {1: False, 2: False, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False, 9: False,
-                       10: False, 11: False, 12: False, 13: False, 14: False, 15: False, 16: False}
-            cards22 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False,
-                       25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
+            # cards11 = {1: False, 2: False, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False, 9: False, 10: False,
+            #            11: False, 12: False, 13: False, 14: False, 15: False, 16: False}
+            # cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False,
+            #            25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
+            # cards21 = {1: False, 2: False, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False, 9: False,
+            #            10: False, 11: False, 12: False, 13: False, 14: False, 15: False, 16: False}
+            # cards22 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False,
+            #            25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
 
 
     else:

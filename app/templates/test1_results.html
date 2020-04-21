@@ -50,31 +50,21 @@
         <form class="form-inline">
           <div class="form-group">
             <label for="exampleInputName2">File: </label>
-        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
             <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
           </div>
 
-{#          <div class="form-group" style="padding-left: 20px;">#}
-{#            <label for="exampleInputName2">File modified: </label>#}
-{#        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->#}
-{#            <p class="form-control-static">{{ time }}</p>#}
-{#          </div>#}
-
           <div class="form-group" style="padding-left: 20px;">
             <label for="exampleInputName2">Folder: </label>
-        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
             <p class="form-control-static">{{ folder }}</p>
           </div>
 
           <div class="form-group" style="padding-left: 20px;">
             <label for="exampleInputName2">VReg: </label>
-        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
             <p class="form-control-static">{{ vreg }} +/- {{ vreg_threshold }}</p>
           </div>
 
           <div class="form-group" style="padding-left: 20px;">
             <label for="exampleInputName2">ppm: </label>
-        <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
             <p class="form-control-static">{{ ppm }} +/- {{ ppm_threshold }}</p>
           </div>
 
@@ -148,20 +138,13 @@
           <input type="text" class="form-control" id="ppm_threshold" name="ppm_threshold" value="{{ ppm_threshold }}" placeholder="Working folder">
         </div>
         <div class="col-sm-3"></div>
-<!--        <div class="col-sm-1">-->
-<!--          <button type="submit" class="btn btn-success">Re-check</button>-->
-<!--        </div>-->
         <div class="col-sm-3"></div>
       </div>
 
 
-<!--      <div class="form-group"></div>-->
-<!--      <hr class="style1">-->
-
-
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success">Re-check</button>
+          <button type="submit" class="btn btn-success">Re-Check</button>
         </div>
       </div>
     </form>
