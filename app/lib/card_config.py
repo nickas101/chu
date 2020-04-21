@@ -1,5 +1,3 @@
-
-
 def create_card(card, card_number):
 
     define_cards = ""
