@@ -60,12 +60,9 @@
 
         </form>
 
-{#<div style="padding-top: 10px;"></div>#}
       <hr class="style1">
 
 {% if message_success %}
-
-{#<div style="padding-top: 10px;"></div>#}
 
     <h4> VReg calculation results</h4>
         <div style="padding-top: 10px;"></div>
@@ -112,43 +109,26 @@
 <div style="padding-top: 5px;"></div>
       <hr class="style1">
 
-{#<div style="padding-top: 10px;"></div>#}
     <h4>Test-2 output</h4>
-
 
     <form class="form-inline">
       <div class="form-group">
         <label for="exampleInputName2">File: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
         <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
       </div>
 
-{#      <div class="form-group" style="padding-left: 20px;">#}
-{#        <label for="exampleInputName2">File modified: </label>#}
-{#    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->#}
-{#        <p class="form-control-static">{{ time }}</p>#}
-{#      </div>#}
-
       <div class="form-group" style="padding-left: 20px;">
         <label for="exampleInputName2">Folder: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
         <p class="form-control-static">{{ folder }}</p>
       </div>
 
       <div class="form-group" style="padding-left: 20px;">
         <label for="exampleInputName2">Frequency: </label>
-    <!--    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">-->
         <p class="form-control-static">{{ freq }}MHz</p>
       </div>
-
-
 </form>
 
-
 <div style="padding-top: 10px;"></div>
-
-
-
 
 
     <table class="table table-bordered table-hover table-condensed text-center">
@@ -194,14 +174,7 @@
 
 
 
-
-
-
-
   </div>
-
-
-
 
 {% endblock %}
 

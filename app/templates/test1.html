@@ -9,7 +9,6 @@
 
 {% block content %}
 
-
   <ul class="nav nav-tabs">
     <li class="active"><a href="{{ url_for('test1') }}">Test-1</a></li>
     <li><a href="{{ url_for('test1_result') }}">Test-1-Result</a></li>
@@ -20,8 +19,6 @@
     <li><a href="{{ url_for('test4') }}">Test-4</a></li>
     <li><a href="{{ url_for('test4_result') }}">Test-4-Result</a></li>
   </ul>
-
-
 
 
   <div class="container-fluid">
@@ -53,15 +50,13 @@
         <label for="freq" class="col-sm-1 control-label">Frequency</label>
         <div class="col-sm-2">
           <div class="input-group">
-          <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">
-          <span class="input-group-addon">MHz</span>
-            </div>
+            <input type="text" class="form-control" id="freq" name="freq" value="{{entered_frequency}}" placeholder="Nominal frequency MHz">
+            <span class="input-group-addon">MHz</span>
+          </div>
         </div>
 
         <div class="col-sm-1"></div>
-
       </div>
-
 
       <div class="form-group">
         <label for="card11" class="col-sm-1 control-label">Card-1</label>
@@ -69,7 +64,6 @@
           {% for card11 in cards11 %}
             <label class="checkbox-inline"><input type="checkbox" class="card11" name="card11" value="{{ card11 }}" {% if cards11[card11] %} checked {% endif %}>{% if card11 < 10 %}0{% endif %}{{ card11 }}</label>
           {% endfor %}
-
         </div>
         <div class="col-sm-1">
           <button type="button" class="btn btn-default btn-sm card11-uncheck pull-right" aria-label="Left Align">
@@ -78,7 +72,7 @@
           <button type="button" class="btn btn-default btn-sm card11-check pull-right" aria-label="Left Align">
             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
           </button>
-          </div>
+        </div>
         <div class="col-sm-1"></div>
       </div>
 
@@ -99,7 +93,6 @@
         </div>
         <div class="col-sm-1"></div>
       </div>
-
 
       <div class="form-group">
         <label for="card21" class="col-sm-1 control-label">Card-2</label>
