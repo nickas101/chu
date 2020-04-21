@@ -22,11 +22,10 @@ def read(folder, limit):
     table = {}
     card_0 = []
     card_1 = []
-    i = 1
+    index = 1
 
     data_folder = Path(folder)
     full_path = data_folder / test_results_file
-    # print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** Input file not found!"
@@ -55,13 +54,13 @@ def read(folder, limit):
                     temperature_temp = float(line_splitted[1])
                     residual_temp = line_splitted[2]
                 elif line_splitted[0] == dut_temp and round(float(line_splitted[1]), 0) == round(temperature_temp, 0):
-                    table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(residual_temp), int(round(float(line_splitted[1]),0)), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
-                    i = i + 1
+                    table[index] = [line_splitted[0], int(line_splitted[0]) + 1, float(residual_temp), int(round(float(line_splitted[1]),0)), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
+                    index = index + 1
                 else:
-                    table[i] = [line_splitted[0], int(line_splitted[0]) + 1, None,
+                    table[index] = [line_splitted[0], int(line_splitted[0]) + 1, None,
                                 float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]),
                                 float(line_splitted[4])]
-                    i = i + 1
+                    index = index + 1
 
 
             if "DUT" in line and "Temp" in line and "CoeffB" in line and "CoeffC" in line and "ppm" in line and "_fPrint" not in line:
@@ -106,21 +105,15 @@ def read(folder, limit):
                 table_1.pop(0)
 
 
-
         poses = list(map(int, card_0 + card_1))
         table_0 = list(map(int, table_0))
         table_1 = list(map(int, table_1))
-        # print(poses)
-        # print(table_0)
-        # print(table_1)
 
         vreg_table_from_test3['pos'] = poses
         vreg_table_from_test3['Table-0'] = table_0
         vreg_table_from_test3['Table-1'] = table_1
         vreg_table_from_test3['DUT'] = (vreg_table_from_test3['pos'] - 1).astype(str)
         vreg_table_from_test3 = vreg_table_from_test3[['DUT', 'pos', 'Table-0', 'Table-1']]
-
-        # print(vreg_table_from_test3)
 
 
         columns = ['DUT', 'pos', 'residual', 'Temp', 'CoeffB', 'CoeffC', 'ppm']
@@ -153,17 +146,10 @@ def read(folder, limit):
         result_cutted = result_full[~result_full['pos'].isin(bad_units_list)]
         #rslt_df = dataframe.loc[~dataframe['Stream'].isin(options)]
 
-        # print(bad_units)
-        # print(result_full)
-        # print(result_cutted)
-        # print(result_full.info())
 
-        result_full.to_pickle("app/scripts/read_test_3.pkl")
+        # result_full.to_pickle("app/scripts/read_test_3.pkl")
         #unpickled_df = pd.read_pickle("app/scripts/read_test_3.pkl")
         #print(unpickled_df)
-
-        message_success = True
-        message_text = ""
 
 
     return message_success, message_text, test_results_file, freq, time, bad_units, result_full, result_cutted, vreg_table_from_test3

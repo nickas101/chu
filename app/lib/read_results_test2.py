@@ -12,15 +12,14 @@ def read(folder):
 
     message_text = ""
     message_success = True
-    result = ""
+    result = pd.DataFrame()
     time = ""
     freq = ""
     table = {}
-    i = 1
+    index = 1
 
     data_folder = Path(folder)
     full_path = data_folder / test_results_file
-    #print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** Input file not found!"
@@ -41,9 +40,8 @@ def read(folder):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
-                i = i + 1
-                #print(line_splitted)
+                table[index] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), int(line_splitted[2]), int(line_splitted[3]), float(line_splitted[4])]
+                index = index + 1
 
             if "DUT" in line and "Temp" in line and "VReg_Trim" in line and "TcVReg_Trim" in line and "_fPrint" not in line:
                 start = True
@@ -52,7 +50,6 @@ def read(folder):
                 freq_splitted = line.split("\t")
                 freq = freq_splitted[1].replace("_define nominalFreq-", "")
                 freq = freq.replace(";", "")
-                #freq = float(freq)
 
 
         columns = ['DUT', 'pos', 'Temp', 'VReg_Trim', 'TcVReg_Trim', 'V']
@@ -60,16 +57,10 @@ def read(folder):
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
 
-        # print(result.info())
 
         result['temp_rounded'] = round(result['Temp'], 0)
-
         result.sort_values(['pos', 'temp_rounded', 'VReg_Trim', 'TcVReg_Trim'], ascending=[True, True, True, True], inplace=True)
-
         result.drop('temp_rounded', 1, inplace=True)
-
-        message_success = True
-        message_text = ""
 
 
     return message_success, message_text, test_results_file, freq, time, result

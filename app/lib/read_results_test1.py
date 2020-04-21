@@ -12,14 +12,13 @@ def read(folder):
 
     message_text = ""
     message_success = True
-    result = ""
+    result = pd.DataFrame()
     time = ""
     table = {}
-    i = 1
+    index = 1
 
     data_folder = Path(folder)
     full_path = data_folder / test_results_file
-    #print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** Input file not found!"
@@ -40,9 +39,8 @@ def read(folder):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
-                i = i + 1
-                #print(line_splitted)
+                table[index] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
+                index = index + 1
 
             if "DUT" in line and "VReg" in line and "ppm" in line and "_fPrint" not in line:
                 start = True
@@ -51,11 +49,6 @@ def read(folder):
 
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = columns
-
-        #print(result.info())
-
-        message_success = True
-        message_text = ""
 
 
     return message_success, message_text, test_results_file, time, result

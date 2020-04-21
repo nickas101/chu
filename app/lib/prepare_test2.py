@@ -1,32 +1,17 @@
-import os
-from datetime import datetime
-from pathlib import Path
-
 from . import prepare_config_file
+from . import file_renamer
 from . import card_config
 
 script_file = "2- SetUpVreg.uscript"
 
 def prepare(folder, card1, card2, frequency):
 
+    success = True
+    message = "OK"
+
     config_file = prepare_config_file.create_config(folder)
 
-    current_time = datetime.now()
-    file_time = str(current_time)
-    file_time = file_time.replace(" ", "_")
-    file_time = file_time.replace(":", "-")
-    file_time = file_time.split(".")
-
-    data_folder = Path(folder)
-    file_actual = data_folder / script_file
-    file_old = data_folder / script_file.replace(".uscript", '_' + str(file_time[0]) + '.uscript')
-    print(file_actual)
-    print(file_old)
-
-    try:
-        os.rename(file_actual, file_old)
-    except:
-        pass
+    rename_success, file_actual = file_renamer.rename(folder, script_file)
 
     duts_number = '_define nDUTs-' + str(len(card1) + len(card2)) + ";\t\t\t\t\t\t// N number of DUTs\n"
 
@@ -69,9 +54,6 @@ def prepare(folder, card1, card2, frequency):
         output_file.write(frequency_string)
         output_file.write(data_body)
 
-
-    success = True
-    message = "OK"
 
 
     return success, message, config_file, script_file

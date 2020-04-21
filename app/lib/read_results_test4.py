@@ -11,8 +11,8 @@ test_results_file = "4-Soft Vfy with comp numbers.txt"
 
 def read(folder, limit):
 
-    message_text = ""
     message_success = True
+    message_text = ""
     time = ""
     freq = ""
     bad_units = ""
@@ -22,11 +22,10 @@ def read(folder, limit):
     result_min = pd.DataFrame()
     result_mean = pd.DataFrame()
     table = {}
-    i = 1
+    index = 1
 
     data_folder = Path(folder)
     full_path = data_folder / test_results_file
-    print(full_path)
 
     if not path.os.path.isfile(full_path):
         message_text = message_text + " *** Input file not found!"
@@ -48,9 +47,8 @@ def read(folder, limit):
 
             if start and not stop and line != "" and line != "\n":
                 line_splitted = line.split("\t")
-                # print(line_splitted)
-                table[i] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
-                i = i + 1
+                table[index] = [line_splitted[0], int(line_splitted[0]) + 1, float(line_splitted[1]), float(line_splitted[2])]
+                index = index + 1
 
 
             if "DUT" in line and "Temp" in line and "ppm" in line and "_fPrint" not in line:
@@ -60,7 +58,6 @@ def read(folder, limit):
                 freq_splitted = line.split("\t")
                 freq = freq_splitted[1].replace("_define nominalFreq-", "")
                 freq = freq.replace(";", "")
-                #freq = float(freq)
 
 
         columns = ['DUT', 'pos', 'Temp', 'ppm']
@@ -72,10 +69,6 @@ def read(folder, limit):
         result_fvt.reset_index(inplace=True, drop=True)
         result_calculated['DUT'] =  result_fvt['DUT'].unique()
         result_calculated['pos'] = result_fvt['pos'].unique()
-
-        print(result_calculated)
-
-        # print(result_fvt)
 
         result_fvt.loc[result_fvt['ppm'] < -10000, 'ppm'] = None
 
@@ -94,10 +87,6 @@ def read(folder, limit):
         result_cutted = result_fvt[~result_fvt['DUT'].isin(bad_units_list)]
         #rslt_df = dataframe.loc[~dataframe['Stream'].isin(options)]
 
-        # print(bad_units)
-        # print(result_full)
-        # print(result_cutted)
-        # print(result_full.info())
 
         result_max['max'] = result_fvt.groupby(['pos'])['ppm'].max()
         result_min['min'] = result_fvt.groupby(['pos'])['ppm'].min()
@@ -107,15 +96,9 @@ def read(folder, limit):
         result_calculated = pd.merge(result_calculated, result_min, on='pos', how='left')
         result_calculated = pd.merge(result_calculated, result_mean, on='pos', how='left')
 
-        # print(result_calculated)
-        # print(result_calculated.info())
-
-        result_fvt.to_pickle("app/scripts/read_test_3.pkl")
+        # result_fvt.to_pickle("app/scripts/read_test_3.pkl")
         #unpickled_df = pd.read_pickle("app/scripts/read_test_3.pkl")
         #print(unpickled_df)
-
-        message_success = True
-        message_text = ""
 
 
     return message_success, message_text, test_results_file, freq, time, bad_units, result_fvt, result_calculated

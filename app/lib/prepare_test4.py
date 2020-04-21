@@ -1,10 +1,8 @@
-import os
-from datetime import datetime
-from pathlib import Path
 import pandas as pd
 
 from . import prepare_config_file
 from . import solver_table_converter
+from . import file_renamer
 from . import card_config
 
 coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
@@ -47,26 +45,13 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
 
     config_file = prepare_config_file.create_config(folder)
 
+    rename_success, file_actual = file_renamer.rename(folder, script_file)
+
     try:
         solver_table_converted = solver_table_converter.convert(solver_table)
     except:
         success = False
         message = " *** Problem with converting Solver Table!"
-
-    current_time = datetime.now()
-    file_time = str(current_time)
-    file_time = file_time.replace(" ", "_")
-    file_time = file_time.replace(":", "-")
-    file_time = file_time.split(".")
-
-    data_folder = Path(folder)
-    file_actual = data_folder / script_file
-    file_old = data_folder / script_file.replace(".uscript", '_' + str(file_time[0]) + '.uscript')
-
-    try:
-        os.rename(file_actual, file_old)
-    except:
-        pass
 
     duts_number = '_define nDUTs-' + str(len(card1) + len(card2)) + ";\t\t\t\t\t\t// N number of DUTs\n"
 

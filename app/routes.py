@@ -601,29 +601,11 @@ def test4():
 
 
 
-
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
 
-    print(folder)
-
     success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
         folder, interpol)
-
-    print(message_test3)
-
-    # try:
-    #     if int(temp_max) < int(temp_min):
-    #         temp_temp = temp_max
-    #         temp_max = temp_min
-    #         temp_min = temp_temp
-    #     if int(step) < 1:
-    #         step = 1
-    #     temp_range = str(int(temp_max)) + ' ' + str(int(temp_min)) + ' ' + str(int(step))
-    # except:
-    #     message_text = message_text + " *** Temperature range is incorrect!"
-    #     message_success = False
-
 
     if success_test3:
         card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
