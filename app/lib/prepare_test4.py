@@ -68,15 +68,8 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
 
     define_cards = ""
 
-    if len(card1) > 0:
-        define_cards = define_cards + '_define TableForCrd-0 [' + str(len(card1)) + ']'
-        define_cards = define_cards + " " + " ".join(str(int(x)) for x in card1)
-        define_cards = define_cards + ";\t\t\t\t\t\t// Card-0 Using these Duts\n"
-
-    if len(card2) > 0:
-        define_cards = define_cards + '_define TableForCrd-1 [' + str(len(card2)) + ']'
-        define_cards = define_cards + " " + " ".join(str(int(x)) for x in card2)
-        define_cards = define_cards + ";\t\t\t\t\t\t// Card-1 Using these Duts\n"
+    define_cards = define_cards + card_config.create_card(card1, 0)
+    define_cards = define_cards + card_config.create_card(card2, 1)
 
     define_cards = define_cards + "// Note:- numbers are card position numbers starting at 1 (not 0)\n"
 
