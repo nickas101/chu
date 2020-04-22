@@ -1,6 +1,7 @@
 from app import app
 from flask import abort, redirect, url_for, render_template, Flask, request, flash, make_response, session, send_file, send_from_directory, Response
 from os import path
+from pathlib import Path
 import pandas as pd
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -27,6 +28,10 @@ from .lib.kepler import comp_solver
 folder = '/Users/nickas/Documents/_to_upload/dorsum'
 #folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
+
+temporary_plot_file = 'plot.png'
+temporary_folder_local = 'app/temp_files/'
+temporary_plot_folder = Path.cwd() / temporary_folder_local
 card1 = ""
 card2 = ""
 frequency = ""
@@ -563,6 +568,8 @@ def test3_plot_png():
     title = "Test-3 results (frequency = " + str(freq) + "MHz)"
     fig = plotter.plot(result_fvt_single_3, title)
 
+    fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
+
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
 
@@ -822,7 +829,14 @@ def test4_plot_png():
     title = "Test-4 results (frequency = " + str(freq) + "MHz)"
     fig = plotter.plot(result_fvt_single, title)
 
+    fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
+
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
 
     return Response(output.getvalue(), mimetype='image/png')
+
+
+@app.route('/chu/result/plot/download', methods=['GET', 'POST'])
+def download_plot():
+    return send_from_directory(temporary_plot_folder, filename=temporary_plot_file, as_attachment=True)

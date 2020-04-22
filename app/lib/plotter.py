@@ -3,7 +3,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
-
 def plot(df, title):
 
     fig = Figure(figsize=(16, 8))
