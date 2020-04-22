@@ -10,7 +10,7 @@ from .lib import prepare_test1
 from .lib import prepare_test2
 from .lib import prepare_test3
 from .lib import prepare_test4
-from .lib import processing
+from .lib import card_processing
 from .lib import plotter
 from .lib import read_results_test1
 from .lib import read_results_test2
@@ -99,13 +99,13 @@ def test1():
 
         card_total = card1 + card2
 
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
-        cards21 = processing.update_card(cards21, card21)
-        cards22 = processing.update_card(cards22, card22)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
+        cards21 = card_processing.update_card(cards21, card21)
+        cards22 = card_processing.update_card(cards22, card22)
 
-        entered_card1 = processing.join_entered_cards(card11, card12)
-        entered_card2 = processing.join_entered_cards(card21, card22)
+        entered_card1 = card_processing.join_entered_cards(card11, card12)
+        entered_card2 = card_processing.join_entered_cards(card21, card22)
 
         folder = request.form.get('folder')
         frequency = request.form.get('freq')
@@ -236,13 +236,13 @@ def test2():
 
         card_total = card1 + card2
 
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
-        cards21 = processing.update_card(cards21, card21)
-        cards22 = processing.update_card(cards22, card22)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
+        cards21 = card_processing.update_card(cards21, card21)
+        cards22 = card_processing.update_card(cards22, card22)
 
-        entered_card1 = processing.join_entered_cards(card11, card12)
-        entered_card2 = processing.join_entered_cards(card21, card22)
+        entered_card1 = card_processing.join_entered_cards(card11, card12)
+        entered_card2 = card_processing.join_entered_cards(card21, card22)
 
         folder = request.form.get('folder')
         frequency = request.form.get('freq')
@@ -390,13 +390,13 @@ def test3():
 
         card_total = card1 + card2
 
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
-        cards21 = processing.update_card(cards21, card21)
-        cards22 = processing.update_card(cards22, card22)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
+        cards21 = card_processing.update_card(cards21, card21)
+        cards22 = card_processing.update_card(cards22, card22)
 
-        entered_card1 = processing.join_entered_cards(card11, card12)
-        entered_card2 = processing.join_entered_cards(card21, card22)
+        entered_card1 = card_processing.join_entered_cards(card11, card12)
+        entered_card2 = card_processing.join_entered_cards(card21, card22)
 
         #folder = request.form.get('folder')
         entered_set_point = request.form.get('setpoint')
@@ -440,8 +440,8 @@ def test3():
     else:
         card11 = card11_available
         card12 = card12_available
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
 
 
 
@@ -627,13 +627,13 @@ def test4():
 
         card_total = card1 + card2
 
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
-        cards21 = processing.update_card(cards21, card21)
-        cards22 = processing.update_card(cards22, card22)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
+        cards21 = card_processing.update_card(cards21, card21)
+        cards22 = card_processing.update_card(cards22, card22)
 
-        entered_card1 = processing.join_entered_cards(card11, card12)
-        entered_card2 = processing.join_entered_cards(card21, card22)
+        entered_card1 = card_processing.join_entered_cards(card11, card12)
+        entered_card2 = card_processing.join_entered_cards(card21, card22)
 
         temp_max = request.form.get('temp_max')
         temp_min = request.form.get('temp_min')
@@ -696,8 +696,8 @@ def test4():
     else:
         card11 = card11_available
         card12 = card12_available
-        cards11 = processing.update_card(cards11, card11)
-        cards12 = processing.update_card(cards12, card12)
+        cards11 = card_processing.update_card(cards11, card11)
+        cards12 = card_processing.update_card(cards12, card12)
 
 
 
