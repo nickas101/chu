@@ -16,7 +16,6 @@ from .lib import read_results_test1
 from .lib import read_results_test2
 from .lib import read_results_test3
 from .lib import read_results_test4
-from .lib import vreg_calculator_old
 from .lib import vreg_calculator
 from .lib import solver_table_converter
 from .lib.kepler import comp_solver
