@@ -513,15 +513,16 @@ def test3_result():
         else:
             result_fvt_single_3 = result_test3_full[result_test3_full['pos'] == entered_pos]
 
+        try:
+            solver = comp_solver.solve(result_cutted)
+            solver_output = solver_table_converter.convert_short(solver)
+        except:
+            message_text = message_text + " *** Problem with solver calculations"
+            message_success = False
+
     else:
         poses = []
 
-    try:
-        solver = comp_solver.solve(result_cutted)
-        solver_output = solver_table_converter.convert_short(solver)
-    except:
-        message_text = message_text + " *** Problem with solver calculations"
-        message_success = False
 
     if len(bad_units) > 1:
         bad_units_exist = True
