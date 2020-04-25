@@ -44,57 +44,60 @@
 
 
 
-<div class="container-fluid">
+    <div class="container-fluid">
         <form class="form-horizontal" id="form1" action="/chu/test4/result" method="POST" enctype="multipart/form-data">
 
           <div class="form-group">
             <label for="folder" class="col-sm-2 control-label">Folder</label>
             <div class="col-sm-6">
               <input type="text" class="form-control" id="folder" name="folder" value="{{ entered_folder }}" placeholder="Working folder">
-
             </div>
 
           <label for="folder" class="col-sm-1 control-label">Interpolation</label>
             <div class="col-sm-1">
               <input type="text" class="form-control" id="inter" name="inter" value="{{ entered_interpol }}" placeholder="Interpolation">
-
             </div>
             <div class="col-sm-2">
                 <button type="submit" class="btn btn-success">Re-Check</button>
             </div>
           </div>
 
-{% if message_success %}
+            {% if message_success %}
 
-            {% if bad_units_exist %}
-        <div class="form-group">
-        <label class="col-sm-2 control-label">Bad units (pos)</label>
-        <div class="col-sm-8">
-          <p class="form-control-static">{{ bad_units }}</p>
-        </div>
-        <div class="col-sm-2"></div>
-      </div>
-            {% endif %}
-
+                {% if bad_units_exist %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Bad units (pos)</label>
+                        <div class="col-sm-8">
+                          <p class="form-control-static">{{ bad_units }}</p>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                {% endif %}
 
                 <div class="form-group">
-        <label class="col-sm-2 control-label">File</label>
-        <div class="col-sm-8">
-          <p class="form-control-static">{{ file }}  <i>(modified: {{time}})</i></p>
-        </div>
-        <div class="col-sm-2"></div>
-      </div>
+                    <label class="col-sm-2 control-label">Files</label>
+                    <div class="col-sm-6">
+                      <p class="form-control-static">{{ file3 }}  <i>(mod: {{time3}})</i> and {{ file4 }}  <i>(mod: {{time4}})</i></p>
+                    </div>
+<!--                    <div class="col-sm-1"></div>-->
 
+                    <label for="ppb_threshold" class="col-sm-1 control-label">ppb(+/-) </label>
+                    <div class="col-sm-1">
+                      <input type="text" class="form-control" id="ppb_threshold" name="ppb_threshold" value="{{ ppb_threshold }}" placeholder="+/-ppb">
+                    </div>
+<!--                    <div class="col-sm-3"></div>-->
+<!--                    <div class="col-sm-3"></div>-->
+                </div>
 
-{% endif %}
+            {% endif %}
 
         </form>
-</div>
+    </div>
 
 
       <hr class="style1">
 
-{% if message_success %}
+    {% if message_success %}
 
       <div class="container">
 
@@ -111,24 +114,25 @@
         <tr>
             {% for col, row_ in zip(column_names_1, row) %}
 
-<!--            {% if col == 'ppm' %}-->
-<!--              {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}-->
-<!--                <td class="danger">{{row_}}</td>-->
-<!--              {% else %}-->
-<!--                <td class="success">{{row_}}</td>-->
-<!--              {% endif %}-->
+            {% if col == 'min_ppb_norm' %}
 
-<!--            {% elif col == 'VReg' %}-->
-<!--              {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}-->
-<!--                <td class="danger">{{row_}}</td>-->
-<!--              {% else %}-->
-<!--                <td class="success">{{row_}}</td>-->
-<!--              {% endif %}-->
+              {% if row_ < (-ppb_threshold) %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
 
+            {% elif col == 'max_ppb_norm' %}
 
-<!--            {% else %}-->
+              {% if row_ > ppb_threshold %}
+                <td class="danger">{{row_}}</td>
+              {% else %}
+                <td class="success">{{row_}}</td>
+              {% endif %}
+
+            {% else %}
           <td>{{row_}}</td>
-<!--           {% endif %}-->
+           {% endif %}
 
 
             {% endfor %}
