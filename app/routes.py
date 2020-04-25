@@ -26,8 +26,8 @@ from .lib.kepler import comp_solver
 
 
 #folder = 'C:\Temp\dorsum'
-# folder = '/Users/nickas/Documents/_to_upload/dorsum'
-folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
+folder = '/Users/nickas/Documents/_to_upload/dorsum'
+# folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
 
 temporary_plot_file = 'plot.png'
@@ -751,6 +751,8 @@ def test4_result():
     result_fvt_single = pd.DataFrame()
     result_fvt_single_4_3 = pd.DataFrame()
     message_text = ''
+    file3 = ''
+    time3 = ''
 
     if request.method == 'GET' and request.args.get('pos') and request.args.get('pos') != 'ALL':
         entered_pos = int(request.args.get('pos'))
