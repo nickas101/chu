@@ -15,6 +15,7 @@ def read(folder, limit):
     result_full = pd.DataFrame()
     result_cutted = pd.DataFrame()
     vreg_table_from_test3 = pd.DataFrame()
+    res_temp = pd.DataFrame()
     table = {}
     card_0 = []
     card_1 = []
@@ -99,15 +100,32 @@ def read(folder, limit):
         bad_units_list = natsorted(bad_units_append['pos'].unique().tolist())
         bad_units = bad_units + " " + ", ".join(str(int(x)) for x in bad_units_list)
 
-        result_cutted = result_full[~result_full['pos'].isin(bad_units_list)]
+        poses_result = result_full['pos'].unique().tolist()
+
+        for pos_result in poses_result:
+            result_full_single = result_full[result_full['pos'] == pos_result]
+            residual_average = result_full_single['residual'].mean()
+            #result_full_single['residual_norm_ppb'] = 1000 * (result_full_single['residual'] - residual_average)
+            result_full_single['residual_norm_ppb'] = 1000 * (
+                        result_full.loc[result_full['pos'] == pos_result, ['residual']] - residual_average)
+            res_temp = pd.concat([res_temp, result_full_single])
+
+        #print(res_temp)
+
+        res_temp = res_temp[['DUT', 'pos', 'residual', 'residual_norm_ppb', 'Temp', 'CoeffB', 'CoeffC', 'ppm']]
+
+        result_cutted = res_temp[~res_temp['pos'].isin(bad_units_list)]
 
         # to serilise a dataframe
         # result_full.to_pickle('app/scripts/read_test_3.pkl')
         # unpickled_df = pd.read_pickle('app/scripts/read_test_3.pkl')
         # print(unpickled_df)
 
+    else:
+        message_text = message_text + '(' + test_results_file + ')  '
 
-    return message_success, message_text, test_results_file, freq, time, bad_units, result_full, result_cutted, vreg_table_from_test3
+
+    return message_success, message_text, test_results_file, freq, time, bad_units, res_temp, result_cutted, vreg_table_from_test3
 
 
 def line_to_list(line, input_string):

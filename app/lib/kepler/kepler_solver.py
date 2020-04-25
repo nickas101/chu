@@ -109,9 +109,9 @@ def peak_finder(normFreq):
         while len(peaks) != 9:
             peaks = peaks[:-1]
                        
-    #     print("It happens!")
-    #
-    # print(peaks)
+        #print("It happens!")
+        
+    #print(peaks)
     
     return peaks
            
