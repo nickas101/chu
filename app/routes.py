@@ -12,7 +12,8 @@ from .lib import prepare_test2
 from .lib import prepare_test3
 from .lib import prepare_test4
 from .lib import card_processing
-from .lib import plotter
+from .lib import plotter_test3
+from .lib import plotter_test4
 from .lib import read_results_test1
 from .lib import read_results_test2
 from .lib import read_results_test3
@@ -24,9 +25,9 @@ from .lib.kepler import comp_solver
 
 
 
-# folder = 'C:\Temp\dorsum'
-folder = '/Users/nickas/Documents/_to_upload/dorsum'
-#folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
+#folder = 'C:\Temp\dorsum'
+# folder = '/Users/nickas/Documents/_to_upload/dorsum'
+folder = r'\\akl-file-02\Share\Harshad\dorsum_test'
 #folder = ""
 
 temporary_plot_file = 'plot.png'
@@ -40,6 +41,7 @@ result_test3_full = pd.DataFrame()
 result_fvt = pd.DataFrame()
 result_fvt_single = pd.DataFrame()
 result_fvt_single_3 = pd.DataFrame()
+result_fvt_single_4_3 = pd.DataFrame()
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -360,8 +362,6 @@ def test3():
     config_file = ""
     script_file = ""
     duts_number_string = ""
-    message_success = True
-    message_text = ""
     entered_card1 = ""
     entered_card2 = ""
     entered_set_point = ""
@@ -373,8 +373,6 @@ def test3():
 
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
-        #print(folder)
-
 
     message_success, message_text, file, freq, time, result = read_results_test2.read(folder)
     print(message_text)
@@ -403,10 +401,8 @@ def test3():
         entered_card1 = card_processing.join_entered_cards(card11, card12)
         entered_card2 = card_processing.join_entered_cards(card21, card22)
 
-        #folder = request.form.get('folder')
         entered_set_point = request.form.get('setpoint')
-        # frequency = request.form.get('freq')
-        #
+
         message_success, message_text, file, freq, time, result = read_results_test2.read(folder)
         print(message_text)
 
@@ -566,7 +562,7 @@ def test3_plot_png():
 
 
     title = "Test-3 results (frequency = " + str(freq) + "MHz)"
-    fig = plotter.plot(result_fvt_single_3, title)
+    fig = plotter_test3.plot(result_fvt_single_3, title)
 
     fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
 
@@ -748,9 +744,13 @@ def test4_result():
     global ppm_threshold
     global result_fvt
     global result_fvt_single
+    global result_fvt_single_4_3
 
     interpol = 1
+    ppb_threshold = 50
     result_fvt_single = pd.DataFrame()
+    result_fvt_single_4_3 = pd.DataFrame()
+    message_text = ''
 
     if request.method == 'GET' and request.args.get('pos') and request.args.get('pos') != 'ALL':
         entered_pos = int(request.args.get('pos'))
@@ -763,30 +763,36 @@ def test4_result():
             interpol = int(request.form.get('inter'))
             if interpol < 1:
                 interpol = 1
+        if request.form.get('ppb_threshold'):
+            try:
+                ppb_threshold = int(request.form.get('ppb_threshold'))
+            except:
+                ppb_threshold = 50
 
-    message_success, message_text, file, freq, time, bad_units, result_fvt, result_calculated = read_results_test4.read(folder, interpol)
-    print(message_text)
+    message_success, message, file4, freq, time4, bad_units, result_fvt, result_calculated = read_results_test4.read(folder, interpol)
+    print(message)
 
     if message_success:
-        poses = result_fvt['pos'].unique().tolist()
-        poses.insert(0, 'ALL')
-        if entered_pos == 'ALL':
-            result_fvt_single = result_fvt
+        message_success, message, file3, freq, time3, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+            folder, interpol)
+        if message_success:
+            poses = result_fvt['pos'].unique().tolist()
+            poses.insert(0, 'ALL')
+            if entered_pos == 'ALL':
+                result_fvt_single = result_fvt
+                result_fvt_single_4_3 = result_test3_full
+            else:
+                result_fvt_single = result_fvt[result_fvt['pos'] == entered_pos]
+                result_fvt_single_4_3 = result_test3_full[result_test3_full['pos'] == entered_pos]
         else:
-            result_fvt_single = result_fvt[result_fvt['pos'] == entered_pos]
+            poses = []
+            message_text = message_text + message
 
     else:
         poses = []
+        message_text = message_text + message
 
-    # try:
-    #     solver_output = comp_solver.solve(result_cutted)
-    #     print(solver_output)
-    #     print(solver_output.info())
-    # except:
-    #     message_text = message_text + " *** Problem with solver calculations"
-    #     message_success = False
 
-    vregs_table = pd.DataFrame()
 
     if len(bad_units) > 1:
         bad_units_exist = True
@@ -808,14 +814,17 @@ def test4_result():
                            entered_folder=folder,
                            message_success=message_success,
                            message_text=message_text,
-                           file=file,
-                           time=time,
+                           file3=file3,
+                           time3=time3,
+                           file4=file4,
+                           time4=time4,
                            freq=freq,
                            bad_units=bad_units,
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
                            poses=poses,
                            entered_pos=entered_pos,
+                           ppb_threshold=ppb_threshold,
                            frequency=frequency)
 
 
@@ -824,10 +833,11 @@ def test4_plot_png():
     global result_fvt
     global result_fvt_single
     global freq
+    global result_fvt_single_4_3
 
 
     title = "Test-4 results (frequency = " + str(freq) + "MHz)"
-    fig = plotter.plot(result_fvt_single, title)
+    fig = plotter_test4.plot(result_fvt_single, result_fvt_single_4_3, title)
 
     fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
 
