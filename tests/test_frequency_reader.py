@@ -1,6 +1,6 @@
 import pytest
 
-from ..lib import frequency_reader
+from app.lib import frequency_reader
 
 
 def test_frequency_reader():
