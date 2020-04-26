@@ -4,3 +4,4 @@ app/lib/__pycache__/
 app/lib/kepler/__pycache__/
 plot.png
 requests.log
+.pytest_cache
