@@ -3,8 +3,8 @@ from datetime import datetime
 from pathlib import Path
 
 
-
 config_file = "chamber-U config.hwc"
+
 
 def create_config(folder):
 
@@ -17,8 +17,6 @@ def create_config(folder):
     data_folder = Path(folder)
     file_actual = data_folder / config_file
     file_old = data_folder / config_file.replace(".hwc", '_' + str(file_time[0]) + '.hwc')
-    #print(file_actual)
-    #print(file_old)
 
     try:
         os.rename(file_actual, file_old)
@@ -30,6 +28,5 @@ def create_config(folder):
 
     with open(file_actual, 'w') as output_file:
         output_file.write(data)
-
 
     return config_file

@@ -24,5 +24,4 @@ def open_file(folder, test_results_file):
         with open(full_path, 'r') as file:
             lines = file.readlines()
 
-
     return message_success, message_text, time, lines

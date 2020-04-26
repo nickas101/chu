@@ -8,8 +8,6 @@ import pandas as pd
 import numpy as np
 
 
-
-
 def calculate(df):
 
     t1 = 25
@@ -65,7 +63,6 @@ def calculate(df):
 
         output_dict[index] = [dut, df_dt['pos'].tolist()[0], int(Vreg_Trim), int(TcVreg_Trim)]
         index = index + 1
-
 
     columns = ['DUT', 'pos', 'Table-0', 'Table-1']
     result_df = pd.DataFrame.from_dict(output_dict, orient='index')
