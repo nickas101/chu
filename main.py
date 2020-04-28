@@ -14,6 +14,8 @@ logging.info("*** The application started: " + str(datetime.now()))
 
 if __name__ == "__main__":
     # app.run(debug=True)
+    # app.config['SERVER_NAME'] = "localhost:5000"
+
     serve(TransLogger(app, logger_name='chu', setup_console_handler=False), host='127.0.0.1', port=5000)
 
     # serve(app, host='127.0.0.1', port=5000)
