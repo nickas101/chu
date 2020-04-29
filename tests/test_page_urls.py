@@ -1,9 +1,13 @@
+import pytest
 from flask import url_for
 
 
-def test_page_urls(client):
-    # response = test_client.get(url_for('test1'), follow_redirects=True)
-    response = client.get(url_for('test2'), follow_redirects=True)
-    # response = client.get('http://localhost:5000/chu/test1')
-    # response = client.get('/chu/test2')
+# def idparametrize(name, values, fixture=False):
+#     return pytest.mark.parametrize(name, values, ids=map(repr, values), indirect=fixture)
+
+
+@pytest.mark.parametrize('urls', ['test1', 'test2'])
+# @idparametrize('urls', ['test1', 'test2'])
+def test_page_urls(urls, client):
+    response = client.get(url_for(urls), follow_redirects=True)
     assert response.status_code==200
