@@ -49,7 +49,8 @@ def plot(df, df3, title):
     axis.legend()
     #ax2.legend()
 
-    fig.tight_layout()
+    # fig.tight_layout()
+    fig.set_tight_layout(True)
 
     return fig
 
