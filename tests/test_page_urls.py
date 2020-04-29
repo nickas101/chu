@@ -6,7 +6,7 @@ from flask import url_for
 #     return pytest.mark.parametrize(name, values, ids=map(repr, values), indirect=fixture)
 
 
-@pytest.mark.parametrize('urls', ['test1', 'test2'])
+@pytest.mark.parametrize('urls', ['index', 'chu', 'test1', 'test2', 'test3', 'test4'])
 # @idparametrize('urls', ['test1', 'test2'])
 def test_page_urls(urls, client):
     response = client.get(url_for(urls), follow_redirects=True)
