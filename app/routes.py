@@ -775,7 +775,7 @@ def test4_result():
     print(message)
 
     if message_success:
-        message_success, message, file3, freq, time3, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+        message_success, message, file3, freq, time3, bad_units3, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
             folder, interpol)
         if message_success:
             poses = result_fvt['pos'].unique().tolist()
