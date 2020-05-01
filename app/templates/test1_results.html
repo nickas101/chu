@@ -75,7 +75,7 @@
 <div style="padding-top: 10px;"></div>
 
 
-    <table class="table table-bordered table-hover table-condensed text-center">
+    <table class="table table-hover table-condensed text-center">
         <tr>
             {% for col in column_names %}
                 <th class="text-center">{{col}}</th>
@@ -90,14 +90,16 @@
               {% if row_ > (ppm + ppm_threshold) or row_ < (ppm - ppm_threshold) %}
                 <td class="danger">{{row_}}</td>
               {% else %}
-                <td class="success">{{row_}}</td>
+<!--                <td class="success">{{row_}}</td>-->
+                <td>{{row_}}</td>
               {% endif %}
 
             {% elif col == 'VReg' %}
               {% if row_ > (vreg + vreg_threshold) or row_ < (vreg - vreg_threshold) %}
                 <td class="danger">{{row_}}</td>
               {% else %}
-                <td class="success">{{row_}}</td>
+<!--                <td class="success">{{row_}}</td>-->
+                <td>{{row_}}</td>
               {% endif %}
 
 
