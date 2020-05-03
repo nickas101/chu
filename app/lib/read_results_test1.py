@@ -33,5 +33,4 @@ def read(folder):
         result = pd.DataFrame.from_dict(table, orient='index')
         result.columns = ['DUT', 'pos', 'VReg', 'ppm']
 
-
     return message_success, message_text, test_results_file, time, result

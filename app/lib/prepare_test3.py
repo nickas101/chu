@@ -3,7 +3,9 @@ from . import file_renamer
 from . import card_config
 from . import cards_number
 
+
 script_file = "3-Comp.uscript"
+
 
 def prepare(folder, card1, card2, frequency, vregs_table, set_point):
 
@@ -41,14 +43,12 @@ def prepare(folder, card1, card2, frequency, vregs_table, set_point):
         define_tables = define_tables + " " + " ".join(str(int(x)) for x in table_1)
         define_tables = define_tables + ";\t\t\t\t\t\t// TcVReg_Trim from 2-SetUpVreg\n"
 
-
     if "Pluto+" in set_point:
         set_point_string = "_define Table-2 [5] 50 41 32 23 15;\t\t\t\t\t\t// SetPt_N for Pluto+\n"
     elif "AKM2156" in set_point:
         set_point_string = "_define Table-2 [5] 48 35 25 16 7;\t\t\t\t\t\t// SetPt_N for AKM2156\n"
     else:
         set_point_string = ""
-
 
     with open('app/scripts/3-Comp_head.uscript', 'r') as file:
         data_head = file.read()
@@ -66,7 +66,5 @@ def prepare(folder, card1, card2, frequency, vregs_table, set_point):
         output_file.write(define_tables)
         output_file.write(set_point_string)
         output_file.write(data_body)
-
-
 
     return success, message, config_file, script_file

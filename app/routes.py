@@ -114,7 +114,11 @@ def test1():
         entered_card1 = card_processing.join_entered_cards(card11, card12)
         entered_card2 = card_processing.join_entered_cards(card21, card22)
 
-        folder = request.form.get('folder')
+        if request.form.get('folder'):
+            folder = request.form.get('folder')
+        else:
+            folder = ''
+
         frequency = request.form.get('freq')
 
         print("Folder = " + str(folder))
@@ -251,7 +255,11 @@ def test2():
         entered_card1 = card_processing.join_entered_cards(card11, card12)
         entered_card2 = card_processing.join_entered_cards(card21, card22)
 
-        folder = request.form.get('folder')
+        if request.form.get('folder'):
+            folder = request.form.get('folder')
+        else:
+            folder = ''
+
         frequency = request.form.get('freq')
 
         print("Folder = " + str(folder))
@@ -368,9 +376,6 @@ def test3():
     card11_available = []
     card12_available = []
 
-
-
-
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
 
@@ -382,6 +387,8 @@ def test3():
         card12_available = result[result['pos'] > 16]['pos'].unique().tolist()
 
     if request.method == 'POST':
+
+        print('folder = ' + str(folder))
 
         card11 = request.form.getlist('card11')
         card12 = request.form.getlist('card12')
@@ -602,8 +609,6 @@ def test4():
     interpol = 1
     temp_range = ""
 
-
-
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
 
@@ -617,9 +622,7 @@ def test4():
         message_text = message_text + message_test3
         message_success = False
 
-
     if request.method == 'POST':
-
         card11 = request.form.getlist('card11')
         card12 = request.form.getlist('card12')
         card1 = card11 + card12

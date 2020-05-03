@@ -27,11 +27,9 @@ def plot(df, title):
         data_ppm = result_single['ppm']
         data_residual = result_single['residual_norm_ppb']
 
-
         axis.plot(bins, data_residual, alpha=1, label=label_ppm, linewidth=1)
 
         #ax2.plot(bins, data_residual, alpha=1, label=label_residual, color = 'tab:orange', linewidth=1)
-
 
     plotTitle = title
     axis.set_title(plotTitle)
@@ -49,7 +47,3 @@ def plot(df, title):
     fig.set_tight_layout(True)
 
     return fig
-
-
-
-

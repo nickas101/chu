@@ -6,6 +6,7 @@ from . import file_renamer
 from . import card_config
 from . import cards_number
 
+
 coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
                         'Table-1': 'TcVReg_Trim from 2-SetUpVreg',
                         'Table-2': 'CoeffA0',
@@ -37,6 +38,7 @@ coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
                       }
 
 script_file = "4-Soft Vfy with comp numbers.uscript"
+
 
 def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3, temp_range):
 
@@ -112,9 +114,7 @@ def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3
         output_file.write(temperature_range_string)
         output_file.write(data_body)
 
-
     return success, message, config_file, script_file
-
 
 
 def create_row_for_table(input_table, table_name):

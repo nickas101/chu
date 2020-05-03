@@ -3,7 +3,9 @@ from . import file_renamer
 from . import card_config
 from . import cards_number
 
+
 script_file = "2- SetUpVreg.uscript"
+
 
 def prepare(folder, card1, card2, frequency):
 
@@ -38,6 +40,5 @@ def prepare(folder, card1, card2, frequency):
         output_file.write(define_cards)
         output_file.write(frequency_string)
         output_file.write(data_body)
-
 
     return success, message, config_file, script_file

@@ -1,6 +1,6 @@
-def count(card1, card2):
 
-    ncards = 0
+
+def count(card1, card2):
 
     if len(card1) > 0 and len(card2) > 0:
         ncards = 2
