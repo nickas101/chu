@@ -608,6 +608,7 @@ def test4():
     card12_available = []
     interpol = 1
     temp_range = ""
+    solver_table = pd.DataFrame()
 
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
@@ -675,7 +676,15 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            solver_table = comp_solver.solve(result_cutted)
+            #solver_table = comp_solver.solve(result_cutted)
+
+            try:
+                solver = comp_solver.solve(result_cutted)
+                solver_table = solver_table_converter.convert_short(solver)
+            except:
+                message_text = message_text + " *** Problem with solver calculations"
+                message_success = False
+
             success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_table, vreg_table_from_test3, temp_range)
             if success:
                 message_text = " Now you can start Test-4"
