@@ -22,7 +22,6 @@ def read(folder, limit):
     table = {}
     index = 1
 
-
     message_success, message_text, time, lines = file_opener.open_file(folder, test_results_file)
 
     if message_success:
@@ -44,7 +43,6 @@ def read(folder, limit):
 
             if '_define nominalFreq-' in line:
                 freq = frequency_reader.read_frequency(line, '_define nominalFreq-')
-
 
         result_fvt = pd.DataFrame.from_dict(table, orient='index')
         result_fvt.columns = ['DUT', 'pos', 'Temp', 'ppm']
@@ -68,7 +66,7 @@ def read(folder, limit):
         result_calculated = result_calculated.reset_index(drop=True)
         result_calculated['mean_ppm'] = round(result_calculated['mean_ppm'], accur)
 
-        result_fvt.sort_values(['pos'], ascending=[True], inplace=True)
+        result_fvt.sort_values(['pos', 'Temp'], ascending=[True, False], inplace=True)
         bad_units_df = result_fvt.copy()
 
         bad_units_ppm = bad_units_df[bad_units_df['ppm'].isna()]
