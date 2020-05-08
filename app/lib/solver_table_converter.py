@@ -12,7 +12,8 @@ def convert(input_table):
     for column in input_table.columns:
         if column != 'DUT' and column != 'pos':
             column_name = 'Table-' + str(column)
-            output_table[column_name] = input_table[column].astype(int)
+            output_table[column_name] = input_table[column]
+            output_table[column_name] = output_table[output_table[column_name].notna()][column_name].astype(int)
 
     return output_table
 
