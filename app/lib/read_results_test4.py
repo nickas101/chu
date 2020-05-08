@@ -75,6 +75,8 @@ def read(folder, limit):
 
         # result_cutted = result_fvt[~result_fvt['DUT'].isin(bad_units_list)]
 
+        result_fvt.drop(['mean_ppm', 'min_ppb_norm', 'max_ppb_norm'], axis='columns', inplace=True)
+
     else:
         message_text = message_text + '(' + test_results_file + ')  '
 
