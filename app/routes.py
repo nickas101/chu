@@ -498,7 +498,10 @@ def test3_result():
             entered_pos = int(request.args.get('pos'))
 
         if request.args.get('high_temp_limit'):
-            high_temp_limit = int(request.args.get('high_temp_limit'))
+            try:
+                high_temp_limit = int(request.args.get('high_temp_limit'))
+            except:
+                pass
 
     if request.method == 'POST':
         folder = request.form.get('folder')
@@ -763,7 +766,10 @@ def test4_result():
             entered_pos = int(request.args.get('pos'))
 
         if request.args.get('high_temp_limit'):
-            high_temp_limit = int(request.args.get('high_temp_limit'))
+            try:
+                high_temp_limit = int(request.args.get('high_temp_limit'))
+            except:
+                pass
 
     if request.method == 'POST':
         folder = request.form.get('folder')
