@@ -51,7 +51,8 @@ def read(folder, limit):
                                 float(line_splitted[4])]
                     index = index + 1
 
-            if 'DUT' in line and 'Temp' in line and 'CoeffB' in line and 'CoeffC' in line and 'ppm' in line and '_fPrint' not in line:
+            if ('DUT' in line and 'Temp' in line and 'CoeffB' in line and 'CoeffC' in line and 'ppm' in line and '_fPrint' not in line) \
+                    or ('DUT' in line and 'Temp' in line and 'HaveToComp' in line and '_fPrint' not in line):
                 start = True
 
             if '_define nominalFreq-' in line:
@@ -69,7 +70,6 @@ def read(folder, limit):
             if '_define Table-1 [' in line:
                 table_1 = line_to_list(line, '_define Table-1 ')
 
-
         poses = list(map(int, card_0 + card_1))
 
         vreg_table_from_test3['pos'] = poses
@@ -78,35 +78,41 @@ def read(folder, limit):
         vreg_table_from_test3['DUT'] = (vreg_table_from_test3['pos'] - 1).astype(str)
         vreg_table_from_test3 = vreg_table_from_test3[['DUT', 'pos', 'Table-0', 'Table-1']]
 
+        try:
+            result_full = pd.DataFrame.from_dict(table, orient='index')
+            result_full.columns = ['DUT', 'pos', 'residual', 'Temp', 'CoeffB', 'CoeffC', 'ppm']
 
-        result_full = pd.DataFrame.from_dict(table, orient='index')
-        result_full.columns = ['DUT', 'pos', 'residual', 'Temp', 'CoeffB', 'CoeffC', 'ppm']
+            result_full.sort_values(['pos', 'Temp'], ascending=[True, False], inplace=True)
+            result_full.reset_index(inplace=True, drop=True)
 
-        result_full.sort_values(['pos', 'Temp'], ascending=[True, False], inplace=True)
-        result_full.reset_index(inplace=True, drop=True)
+            result_full.loc[result_full['residual'] < -10000, 'residual'] = None
+            result_full.loc[result_full['ppm'] < -10000, 'ppm'] = None
 
-        result_full.loc[result_full['residual'] < -10000, 'residual'] = None
-        result_full.loc[result_full['ppm'] < -10000, 'ppm'] = None
+            result_full['ppm'] = result_full['ppm'].interpolate(limit=limit)
+            result_full['residual'] = result_full['residual'].interpolate(limit=limit)
 
-        result_full['ppm'] = result_full['ppm'].interpolate(limit=limit)
-        result_full['residual'] = result_full['residual'].interpolate(limit=limit)
+            bad_units_df = result_full.copy()
 
-        bad_units_df = result_full.copy()
+            bad_units_residual = bad_units_df[bad_units_df['residual'].isna()]
+            bad_units_ppm = bad_units_df[bad_units_df['ppm'].isna()]
+            bad_units_append = bad_units_residual.append(bad_units_ppm)
 
-        bad_units_residual = bad_units_df[bad_units_df['residual'].isna()]
-        bad_units_ppm = bad_units_df[bad_units_df['ppm'].isna()]
-        bad_units_append = bad_units_residual.append(bad_units_ppm)
+            bad_units_append.sort_values(['pos'], ascending=[True], inplace=True)
+            bad_units_list = natsorted(bad_units_append['pos'].unique().tolist())
+            bad_units = bad_units + " " + ", ".join(str(int(x)) for x in bad_units_list)
 
-        bad_units_append.sort_values(['pos'], ascending=[True], inplace=True)
-        bad_units_list = natsorted(bad_units_append['pos'].unique().tolist())
-        bad_units = bad_units + " " + ", ".join(str(int(x)) for x in bad_units_list)
+            result_full['mean'] = result_full.groupby('pos')['residual'].transform('mean')
+            result_full['residual_norm_ppb'] = 1000 * (result_full['residual'] - result_full['mean'])
+            result_full.drop(['mean'], axis='columns', inplace=True)
+            result_full = result_full[['DUT', 'pos', 'residual', 'residual_norm_ppb', 'Temp', 'CoeffB', 'CoeffC', 'ppm']]
 
-        result_full['mean'] = result_full.groupby('pos')['residual'].transform('mean')
-        result_full['residual_norm_ppb'] = 1000 * (result_full['residual'] - result_full['mean'])
-        result_full.drop(['mean'], axis='columns', inplace=True)
-        result_full = result_full[['DUT', 'pos', 'residual', 'residual_norm_ppb', 'Temp', 'CoeffB', 'CoeffC', 'ppm']]
+            result_cutted = result_full[~result_full['pos'].isin(bad_units_list)]
 
-        result_cutted = result_full[~result_full['pos'].isin(bad_units_list)]
+        except:
+            message_success = False
+            message_text = message_text + '  *** Cannot read data from the file!'
+
+
 
         # to serilise a dataframe
         # result_full.to_pickle('app/scripts/read_test_3.pkl')
