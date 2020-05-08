@@ -147,14 +147,18 @@
                     <div class="col-sm-1"></div>
              <div class="col-sm-9">
             <div class="form-group">
-                <label for="pos">Unit pos: </label>
-                <select class="form-control input-sm" id="pos" name = "pos">
-                    {% for pos in poses %}
-                        <option value="{{pos}}" {% if pos == entered_pos %} selected {% endif %}>{{pos}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default btn-sm">Filter</button>
+                    <label for="pos">Unit pos: </label>
+                    <select class="form-control input-sm" id="pos" name = "pos">
+                        {% for pos in poses %}
+                            <option value="{{pos}}" {% if pos == entered_pos %} selected {% endif %}>{{pos}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="padding-left: 10px">
+                    <label for="high_temp_limit">High temp limit: </label>
+                    <input type="text" class="form-control input-sm" id="high_temp_limit" name="high_temp_limit" size="4" value="{{ entered_high_temp_limit }}" placeholder="Temp">
+                </div>
+                <button type="submit" class="btn btn-default btn-sm" style="margin-left: 10px">Filter</button>
              </div>
 
         </form>
