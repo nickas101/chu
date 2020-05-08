@@ -21,6 +21,7 @@ from .lib import read_results_test4
 from .lib import vreg_calculator
 from .lib import solver_table_converter
 from .lib.kepler import comp_solver
+from .lib import solver_wrapper
 
 
 
@@ -140,7 +141,7 @@ def test1():
             frequency = ""
             message_success = False
 
-        if not path.os.path.isdir(folder):
+        if not path.isdir(folder):
             message_text = message_text + " *** Wrong folder!"
             folder = ""
             message_success = False
@@ -281,7 +282,7 @@ def test2():
             frequency = ""
             message_success = False
 
-        if not path.os.path.isdir(folder):
+        if not path.isdir(folder):
             message_text = message_text + " *** Wrong folder!"
             folder = ""
             message_success = False
@@ -520,11 +521,9 @@ def test3_result():
         else:
             result_fvt_single_3 = result_test3_full[result_test3_full['pos'] == entered_pos]
 
-        try:
-            solver = comp_solver.solve(result_cutted)
-            solver_output = solver_table_converter.convert_short(solver)
-        except:
-            message_text = message_text + " *** Problem with solver calculations"
+        success_solver, message_solver, solver_output = solver_wrapper.wrap(result_cutted)
+        if not success_solver:
+            message_text = message_text + message_solver
             message_success = False
 
     else:
@@ -657,6 +656,7 @@ def test4():
             temp_min_previous = temp_min
             temp_max_previous = temp_max
             step_previous = step
+
         except:
             message_text = message_text + " *** Temperature range is incorrect!"
             message_success = False
@@ -676,16 +676,12 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            #solver_table = comp_solver.solve(result_cutted)
-
-            try:
-                solver = comp_solver.solve(result_cutted)
-                solver_table = solver_table_converter.convert_short(solver)
-            except:
-                message_text = message_text + " *** Problem with solver calculations"
+            success_solver, message_solver, solver_output = solver_wrapper.wrap(result_cutted)
+            if not success_solver:
+                message_text = message_text + message_solver
                 message_success = False
 
-            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_table, vreg_table_from_test3, temp_range)
+            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_output, vreg_table_from_test3, temp_range)
             if success:
                 message_text = " Now you can start Test-4"
             else:
