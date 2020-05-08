@@ -1,4 +1,5 @@
 import pandas as pd
+from natsort import natsorted, ns
 
 
 def convert(input_table):
@@ -15,7 +16,9 @@ def convert(input_table):
             output_table[column_name] = input_table[column]
             output_table[column_name] = output_table[output_table[column_name].notna()][column_name].astype(int)
 
-    return output_table
+    bad_units = find_bad_units(output_table)
+
+    return output_table, bad_units
 
 
 def convert_short(input_table):
@@ -32,4 +35,20 @@ def convert_short(input_table):
             output_table[column_name] = input_table[column]
             output_table[column_name] = output_table[output_table[column_name].notna()][column_name].astype(int)
 
-    return output_table
+    bad_units = find_bad_units(output_table)
+
+    return output_table, bad_units
+
+
+def find_bad_units(table):
+    bad_units = ''
+    # print(table)
+
+    # bad_units_df = table[table.isna().any(axis='columns')]['pos']
+    # # bad_units_df.sort_values(['pos'], ascending=[True], inplace=True)
+    # print(bad_units_df)
+    #
+    # bad_units_list = natsorted(bad_units_df['pos'].unique().tolist())
+    # bad_units = bad_units + " " + ", ".join(str(int(x)) for x in bad_units_list)
+
+    return bad_units

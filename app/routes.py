@@ -491,6 +491,7 @@ def test3_result():
     result_fvt_single_3 = pd.DataFrame()
     solver_output = pd.DataFrame()
     entered_pos = 'ALL'
+    bad_units_solver = ''
 
     if request.method == 'GET':
         if request.args.get('pos') and request.args.get('pos') != 'ALL':
@@ -517,13 +518,18 @@ def test3_result():
             result_fvt_single_3 = result_test3_full[
                 (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
-        success_solver, message_solver, solver_output = solver_wrapper.wrap(result_cutted)
+        success_solver, message_solver, solver_output, bad_units_solver = solver_wrapper.wrap(result_cutted)
         if not success_solver:
             message_text = message_text + message_solver
             message_success = False
 
     else:
         poses = []
+
+    if len(bad_units) > 1 and len(bad_units_solver) > 1:
+        bad_units = bad_units + ', ' + bad_units_solver
+    elif len(bad_units_solver) > 1:
+        bad_units = bad_units_solver
 
     if len(bad_units) > 1:
         bad_units_exist = True
@@ -667,7 +673,7 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            success_solver, message_solver, solver_output = solver_wrapper.wrap(result_cutted)
+            success_solver, message_solver, solver_output, bad_units_solver = solver_wrapper.wrap(result_cutted)
             if not success_solver:
                 message_text = message_text + message_solver
                 message_success = False
