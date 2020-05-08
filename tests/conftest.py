@@ -1,4 +1,6 @@
 import pytest
+import pandas as pd
+
 from app import app
 
 
@@ -13,3 +15,11 @@ def client():
         yield client
 
     ctx.pop()
+
+
+@pytest.fixture(scope='session')
+def dataframe_for_solver():
+    df = pd.read_pickle('app/scripts/result_cutted_for_solver_testing.pkl')
+
+    return df
+
