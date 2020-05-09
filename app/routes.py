@@ -63,6 +63,7 @@ temp_max_previous = 95
 step_previous = 1
 interpol = 1
 high_temp_limit = 95
+solver_cut_number = 7
 
 
 @app.route('/')
@@ -521,7 +522,7 @@ def test3_result():
             result_fvt_single_3 = result_test3_full[
                 (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
-        success_solver, message_solver, solver_output, bad_units_solver = solver_wrapper.wrap(result_cutted)
+        success_solver, message_solver, solver_output, prediction, bad_units_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
         if not success_solver:
             message_text = message_text + message_solver
             message_success = False
@@ -676,7 +677,7 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            success_solver, message_solver, solver_output, bad_units_solver = solver_wrapper.wrap(result_cutted)
+            success_solver, message_solver, solver_output, prediction, bad_units_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
             if not success_solver:
                 message_text = message_text + message_solver
                 message_success = False

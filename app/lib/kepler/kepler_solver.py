@@ -11,12 +11,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from scipy.signal import savgol_filter, argrelextrema
-import csv
 import datetime
 
 
 
 #%%
+
+def single_tanh_func(x,a=1.5,b=1,c=85,d=0):
+    return a*np.tanh(b*(x - c)) + d
+
 
 
 def make_tanh_funcs(tanhNum):
@@ -25,23 +28,136 @@ def make_tanh_funcs(tanhNum):
     return tanh_funcs
 
 
+def pol1(x,a=1,b=0):
+    return a*x + b
+
+
+def pol2(x,a=1,b=1,c=0):
+    return a*(x**2) + b*x + c
+
+
+def ratio(x, m=1, c=1, rVal=31):
+    return 1/(m*x + c/((0.0625 + 0.00336 * rVal) / (1 - 0.0269 * rVal)))
 
 
 
-def single_tanh_func(x,a=1.5,b=1,c=85,d=0):
-    return a*np.tanh(b*(x - c)) + d
+def reg_val_predict(originTemp, originFreq, finalABCD, pol2forA, ratioForB, pol2forC, pol2forCbase):
+    
+    DUTregVal = np.zeros(25)
+    predictABCD = np.zeros(25)
+    
+    for i in range(0,24,3):  
+        tempPoint = originTemp[-1] + finalABCD[i+2]
+        
+        DUTregVal[i] = np.around(31*finalABCD[i]/pol2(tempPoint, *pol2forA))
+        if DUTregVal[i] > 31:    DUTregVal[i] = 31
+        if DUTregVal[i] < -31:    DUTregVal[i] = -31
+        
+        DUTregVal[i+1] = np.around(31*(finalABCD[i+1] - ratio(tempPoint, *ratioForB, 0))/(ratio(tempPoint, *ratioForB) - ratio(tempPoint, *ratioForB, 0)))
+        if DUTregVal[i+1] > 31:    DUTregVal[i+1] = 31
+        if DUTregVal[i+1] < 0:    DUTregVal[i+1] = 0
+        
+        DUTregVal[i+2] = np.around(pol2(tempPoint, *pol2forC))
+        if DUTregVal[i+2] > 63:    DUTregVal[i+2] = 63
+        if DUTregVal[i+2] < 0:    DUTregVal[i+2] = 0
+        
+        
+        predTempPoint = pol2(DUTregVal[i+2], *pol2forCbase)
+        predictABCD[i+2] = predTempPoint# - tempMin
+        predictABCD[i+1] = (DUTregVal[i+1]/31)*(ratio(predTempPoint, *ratioForB) - ratio(predTempPoint, *ratioForB, 0)) + ratio(predTempPoint, *ratioForB, 0)
+        predictABCD[i] = (DUTregVal[i]/31)*pol2(predTempPoint, *pol2forA)
+    
+
+    f = make_tanh_funcs(8)
+    cur = []
+    for k in originTemp:
+        cur.append(f(k, *predictABCD))
+        
+    res = originFreq + cur
+    m = -np.mean(res)
+    
+    DUTregVal[24] = np.around(31*m/pol2(25, *pol2forA))
+    if DUTregVal[i] > 31:    DUTregVal[i] = 31
+    if DUTregVal[i] < -31:    DUTregVal[i] = -31
+
+    predictABCD[24] = m
+    
+    cur = []
+    for k in originTemp:
+        cur.append(f(k, *predictABCD))
+    
+    DUTpredCurve = originFreq + cur
+    
+    
+    # plt.figure()
+    # plt.plot(originTemp, originFreq)
+    # plt.plot(originTemp, cur)
+    # plt.plot(originTemp, originFreq + cur)
+    # plt.show()
+
+    return DUTregVal, DUTpredCurve
 
 
 
 
-def final_comp_coeff_cal(initCoeff, normFreq):
+def tanh_gen_characterisation(unit):
+    # a = 1.6
+    b0 = 0.5
+    # c = [-38,-6,26,56,85]
+    d0 = 0 
+    
+    c = unit['CoeffC'].unique()  
+    chCoeff = np.zeros([len(c),4])
+    
+    for i, regC in enumerate(c):
+        test = unit.loc[unit['CoeffC'] == regC]
+        
+        a0 = test['ppm'].iloc[1]
+        c0 = test['Temp'].iloc[int(len(test)/2)]
+        try:   
+            chCoeff[i,:], _ = curve_fit(single_tanh_func, test['Temp'], test['ppm'], p0=[a0,b0,c0,d0])
+        except:
+            chCoeff[i,:] = np.zeros(4)*np.nan
+    
+    chCoeff[:,0] *= 1/8  
+    
+    p0 = [1,1,0]
+    try:
+        pol2forA, _ = curve_fit(pol2, chCoeff[:,2],chCoeff[:,0], p0=p0)
+        ratioForB, _ = curve_fit(lambda x, a, b: ratio(x, a, b, 31), chCoeff[:,2],chCoeff[:,1], p0=(0.01,2))
+        pol2forC, _ = curve_fit(pol2, chCoeff[:,2],c, p0=p0)
+        pol2forCbase, _ = curve_fit(pol2, c, chCoeff[:,2], p0=p0)
+    except:
+        pol2forA = np.zeros(3)*np.nan
+        ratioForB = np.zeros(2)*np.nan
+        pol2forC = np.zeros(3)*np.nan
+        pol2forCbase = np.zeros(3)*np.nan
+    
+    lb = [-min(chCoeff[:,0]), ratio(min(chCoeff[:,2]), *ratioForB, 0), -50] * 8
+    lb.append(-0.5)
+    ub = [min(chCoeff[:,0]), min(chCoeff[:,1]), 200] * 8 
+    ub.append(0.5)
+
+    bounds = (lb, ub)    
+    
+    return bounds, pol2forA, ratioForB, pol2forC, pol2forCbase, chCoeff
+
+
+
+
+
+
+def final_comp_coeff_cal(normFreq, initCoeff, bounds):
 #    finalCoeff = np.zeros(((len(peaks)+1)*3)+1)
     
     x = np.arange(len(normFreq))
     
     f = make_tanh_funcs(8)
     
-    finalCoeffVector, pcov = curve_fit(f, x, normFreq, p0=initCoeff, maxfev=500000, ftol=1.49012e-04, xtol=1.49012e-04)
+    try:
+        finalCoeffVector, pcov = curve_fit(f, x, normFreq, p0=initCoeff, maxfev=500000, ftol=1e-10, xtol=1e-10, bounds=bounds)
+    except:
+        finalCoeffVector = np.zeros(25)*np.nan
 
     return finalCoeffVector
 
@@ -51,13 +167,13 @@ def final_comp_coeff_cal(initCoeff, normFreq):
 
 
 
-def init_comp_coeff_cal(peaks, normFreq):
+def init_comp_coeff_cal(normFreq, peaks, bounds):
     
     initCoeffABCD = np.zeros((len(peaks)-1, 4))     
     
     for i in range(len(peaks)-1):
-        initCoeffABCD[i,0] = abs(normFreq[peaks[i]] - normFreq[peaks[i+1]])/2
-        initCoeffABCD[i,1] = 25 * (normFreq[peaks[i+1]] - normFreq[peaks[i]])/(peaks[i+1] - peaks[i])
+        initCoeffABCD[i,0] = (normFreq[peaks[i+1]] - normFreq[peaks[i]])/2
+        initCoeffABCD[i,1] = 25 * abs(normFreq[peaks[i+1]] - normFreq[peaks[i]])/(peaks[i+1] - peaks[i])
         initCoeffABCD[i,2] = peaks[i] + (peaks[i+1] - peaks[i])/2
         initCoeffABCD[i,3] = normFreq[int(initCoeffABCD[i,2])]
         
@@ -74,6 +190,8 @@ def init_comp_coeff_cal(peaks, normFreq):
         cur.append(f(k, *initCoeffABCD))
     
     initCoeffABCD[-1] = initCoeffABCD[-1] + (np.mean(normFreq) - np.mean(cur))
+    
+    initCoeffABCD = np.clip(initCoeffABCD, bounds[0], bounds[1])
     
     return initCoeffABCD
     
