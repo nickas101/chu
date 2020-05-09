@@ -43,6 +43,7 @@ result_fvt = pd.DataFrame()
 result_fvt_single = pd.DataFrame()
 result_fvt_single_3 = pd.DataFrame()
 result_fvt_single_4_3 = pd.DataFrame()
+prediction = pd.DataFrame()
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -488,6 +489,7 @@ def test3_result():
     global result_fvt_single_3
     global interpol
     global high_temp_limit
+    global prediction
 
     result_fvt_single_3 = pd.DataFrame()
     solver_output = pd.DataFrame()
@@ -569,9 +571,10 @@ def test3_plot_png():
     global result_test3_full
     global result_fvt_single_3
     global freq
+    global prediction
 
     title = "Test-3 results (frequency = " + str(freq) + "MHz)"
-    fig = plotter_test3.plot(result_fvt_single_3, title)
+    fig = plotter_test3.plot(result_fvt_single_3, prediction, title)
 
     fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
 

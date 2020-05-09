@@ -112,8 +112,6 @@ def read(folder, limit):
             message_success = False
             message_text = message_text + '  *** Cannot read data from the file!'
 
-
-
         # to serilise a dataframe
         # result_full.to_pickle('app/scripts/read_test_3.pkl')
         # unpickled_df = pd.read_pickle('app/scripts/read_test_3.pkl')
@@ -121,7 +119,6 @@ def read(folder, limit):
 
     else:
         message_text = message_text + '(' + test_results_file + ')  '
-
 
     return message_success, message_text, test_results_file, freq, time, bad_units, result_full, result_cutted, vreg_table_from_test3
 
