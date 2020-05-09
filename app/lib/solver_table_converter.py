@@ -23,4 +23,4 @@ def convert(input_table):
     bad_units_list = natsorted(bad_units_df['pos'].unique().tolist())
     bad_units = ', '.join(str(int(x)) for x in bad_units_list)
 
-    return output_table_short, output_table, bad_units
+    return output_table_short, output_table, bad_units, bad_units_list

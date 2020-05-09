@@ -17,10 +17,10 @@ def wrap(result_cutted, cut_number):
 
     try:
         solver, prediction = comp_solver.solve(result_cutted, cut_number)
-        solver_output_short, solver_output, bad_units = solver_table_converter.convert(solver)
+        solver_output_short, solver_output, bad_units, bad_units_list = solver_table_converter.convert(solver)
         prediction.sort_values(['Temp'], ascending=[True], inplace=True)
     except:
         message = " *** Problem with solver calculations"
         success = False
 
-    return success, message, solver_output_short, prediction, bad_units
+    return success, message, solver_output_short, prediction, bad_units, bad_units_list

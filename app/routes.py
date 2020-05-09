@@ -524,7 +524,7 @@ def test3_result():
             result_fvt_single_3 = result_test3_full[
                 (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
-        success_solver, message_solver, solver_output, prediction, bad_units_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
+        success_solver, message_solver, solver_output, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
         if not success_solver:
             message_text = message_text + message_solver
             message_success = False
@@ -617,10 +617,19 @@ def test4():
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
 
-    success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+    success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted3, vreg_table_from_test3 = read_results_test3.read(
         folder, interpol)
 
     if success_test3:
+        success_solver, message_solver, solver_output, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
+        if success_solver:
+            result_cutted = result_cutted3[~result_cutted3['pos'].isin(bad_units_list_solver)]
+
+        else:
+            result_cutted = result_cutted3
+            message_text = message_text + message_solver
+            message_success = False
+
         card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
         card12_available = result_cutted[result_cutted['pos'] > 16]['pos'].unique().tolist()
     else:
@@ -680,11 +689,6 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            success_solver, message_solver, solver_output, prediction, bad_units_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
-            if not success_solver:
-                message_text = message_text + message_solver
-                message_success = False
-
             success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_output, vreg_table_from_test3, temp_range)
             if success:
                 message_text = " Now you can start Test-4"
