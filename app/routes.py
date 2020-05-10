@@ -34,6 +34,8 @@ folder = '/Users/nickas/Documents/_to_upload/dorsum'
 temporary_plot_file = 'plot.png'
 temporary_folder_local = 'app/temp_files/'
 temporary_plot_folder = Path.cwd() / temporary_folder_local
+templates_folder_local = 'app/templates'
+templates_folder = Path.cwd() / templates_folder_local
 card1 = ""
 card2 = ""
 frequency = ""
@@ -70,6 +72,11 @@ solver_cut_number = 7
 @app.route('/')
 def index():
     return redirect(url_for('test1'))
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(templates_folder, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/chu', methods=['post', 'get'])
