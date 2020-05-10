@@ -1,6 +1,8 @@
 import pandas as pd
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from cycler import cycler
 from matplotlib.figure import Figure
+import matplotlib as plt
 
 
 def plot(df, prediction, title):
@@ -14,6 +16,9 @@ def plot(df, prediction, title):
     ax2 = axis.twinx()
 
     ax2.set_ylabel('Frequency, ppb')
+
+    custom_cycler = (cycler(color=['b','g','r','c','m','y','k']))
+    ax2.set_prop_cycle(custom_cycler)
 
     units = df['pos'].unique().tolist()
 
@@ -55,8 +60,15 @@ def plot(df, prediction, title):
     # Show the minor grid lines with very faint and almost transparent grey lines
     axis.minorticks_on()
     axis.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.2)
-    axis.legend()
-    ax2.legend()
+    # axis.legend()
+    # ax2.legend()
+
+    # plt.figlegend(lines, labels, loc='lower center', ncol=5, labelspacing=0.)
+
+    # handles, labels = axis.get_legend_handles_labels()
+    handles, labels = [(a + b) for a, b in zip(axis.get_legend_handles_labels(), ax2.get_legend_handles_labels())]
+    axis.legend(handles, labels, loc='upper left')
+    # # fig.legend(handles, labels, loc='upper center')
 
     # fig.tight_layout()
     fig.set_tight_layout(True)
