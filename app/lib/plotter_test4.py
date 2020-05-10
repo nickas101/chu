@@ -31,8 +31,8 @@ def plot(df, df3, title):
         data_comp = result_single_3['residual_norm_ppb']
 
 
-        axis.plot(bins, data_ppb, alpha=1, label=label_ppm, linewidth=1.5)
-        axis.plot(bins_comp, data_comp, alpha=1, label=label_comp, linewidth=0.75)
+        axis.plot(bins, data_ppb, alpha=1, label=label_ppm, linewidth=1.0)
+        axis.plot(bins_comp, data_comp, alpha=1, label=label_comp, linestyle='--', linewidth=0.75)
 
         #ax2.plot(bins, data_residual, alpha=1, label=label_residual, color = 'tab:orange', linewidth=1)
 

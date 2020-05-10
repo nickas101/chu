@@ -49,7 +49,7 @@ def plot(df, prediction, title):
         axis.plot(bins, data_residual, alpha=1, label=label_ppm, linewidth=1)
         # axis.plot(bins_prediction, data_prediction, alpha=1, label=label_prediction, linewidth=1.5)
 
-        ax2.plot(bins_prediction, data_prediction, alpha=1, label=label_prediction, linestyle='--', linewidth=1)
+        ax2.plot(bins_prediction, data_prediction, alpha=1, label=label_prediction, linestyle='--', linewidth=.75)
 
     plotTitle = title
     axis.set_title(plotTitle)
