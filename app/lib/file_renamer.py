@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 def rename(folder, script_file):
+    """Rename an old file."""
 
     current_time = datetime.now()
     file_time = str(current_time)
@@ -20,6 +21,5 @@ def rename(folder, script_file):
         success = True
     except:
         success = False
-
 
     return success, file_actual

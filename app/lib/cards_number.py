@@ -1,6 +1,7 @@
 
 
 def count(card1, card2):
+    """Calculate a number of non-empty cards."""
 
     if len(card1) > 0 and len(card2) > 0:
         ncards = 2

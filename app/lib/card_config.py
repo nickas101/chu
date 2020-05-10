@@ -1,4 +1,5 @@
 def create_card(card, card_number):
+    """Create a string for a card."""
 
     define_cards = ""
 

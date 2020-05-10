@@ -5,6 +5,8 @@ from .kepler import comp_solver
 
 
 def wrap(result_cutted, cut_number):
+    """Wrap solver to catch exceptions."""
+
     success = True
     message = ''
     solver_output = pd.DataFrame()

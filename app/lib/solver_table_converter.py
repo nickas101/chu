@@ -1,8 +1,29 @@
+"""Converts table from a solver to the right format
+
+Parameters
+----------
+input_table : Pandas DataFrame
+    DataFrame from solver
+
+Returns
+-------
+output_table_short: Pandas DataFrame
+    converted table with column names as table numbers
+output_table: Pandas DataFrame
+    converted table with column names as a string
+bad_units: str
+    string line of bad units positions
+bad_units_list: list
+    a list of bad units
+"""
+
 import pandas as pd
-from natsort import natsorted, ns
+from natsort import natsorted
 
 
 def convert(input_table):
+    """Converts solver output into the right format."""
+
     output_table = pd.DataFrame()
 
     output_table['DUT'] = input_table['DUT'].astype(int)

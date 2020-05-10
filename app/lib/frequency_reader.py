@@ -1,6 +1,7 @@
 
 
 def read_frequency(line, input_string):
+    """Read frequency from line."""
 
     freq_splitted = line.split("\t")
     freq = freq_splitted[1].replace(input_string, '')

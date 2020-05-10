@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 def open_file(folder, test_results_file):
+    """Try to open a file."""
 
     message_text = ""
     message_success = True

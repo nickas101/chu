@@ -1,6 +1,7 @@
 
 
 def update_card(cards, card):
+    """Update availability for card positions."""
     for key in cards:
         if key in card or str(int(key)) in card or int(key) in card:
             cards[key] = True
@@ -11,6 +12,7 @@ def update_card(cards, card):
 
 
 def join_entered_cards(card1, card2):
+    """Create a string with units of two cards."""
 
     entered_card1 = ", ".join(str(int(x)) for x in card1)
     entered_card2 = ", ".join(str(int(x)) for x in card2)

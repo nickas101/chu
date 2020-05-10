@@ -7,6 +7,7 @@ config_file = "chamber-U config.hwc"
 
 
 def create_config(folder):
+    """Create a config file from a template file."""
 
     current_time = datetime.now()
     file_time = str(current_time)
