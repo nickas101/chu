@@ -40,21 +40,14 @@ coefficients_names = {'Table-0': 'VReg_Trim from 2-SetUpVreg',
 script_file = "4-Soft Vfy with comp numbers.uscript"
 
 
-def prepare(folder, card1, card2, frequency, solver_table, vreg_table_from_test3, temp_range):
+def prepare(folder, card1, card2, frequency, solver_table_converted, vreg_table_from_test3, temp_range):
 
     success = True
     message = "OK"
-    solver_table_converted = pd.DataFrame()
 
     config_file = prepare_config_file.create_config(folder)
 
     rename_success, file_actual = file_renamer.rename(folder, script_file)
-
-    try:
-        solver_table_converted = solver_table_converter.convert(solver_table)
-    except:
-        success = False
-        message = " *** Problem with converting Solver Table!"
 
     duts_number = '_define nDUTs-' + str(len(card1) + len(card2)) + ";\t\t\t\t\t\t// N number of DUTs\n"
     cards_number_str = '_define nCARDs-' + str(cards_number.count(card1, card2)) + ";\t\t\t\t\t\t// N number of Cards\n"

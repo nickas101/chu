@@ -11,6 +11,7 @@ def wrap(result_cutted, cut_number):
     solver_output_short = pd.DataFrame()
     prediction = pd.DataFrame()
     bad_units = ''
+    bad_units_list = []
 
     # to serilise a dataframe
     # result_cutted.to_pickle('app/scripts/result_cutted_for_solver_testing.pkl')
@@ -23,4 +24,4 @@ def wrap(result_cutted, cut_number):
         message = " *** Problem with solver calculations"
         success = False
 
-    return success, message, solver_output_short, prediction, bad_units, bad_units_list
+    return success, message, solver_output, solver_output_short, prediction, bad_units, bad_units_list

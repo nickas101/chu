@@ -493,6 +493,7 @@ def test3_result():
 
     result_fvt_single_3 = pd.DataFrame()
     solver_output = pd.DataFrame()
+    solver_output_short = pd.DataFrame()
     entered_pos = 'ALL'
     bad_units_solver = ''
 
@@ -524,7 +525,7 @@ def test3_result():
             result_fvt_single_3 = result_test3_full[
                 (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
-        success_solver, message_solver, solver_output, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
+        success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
         if not success_solver:
             message_text = message_text + message_solver
             message_success = False
@@ -548,8 +549,8 @@ def test3_result():
                            card2=card2,
                            column_names=result_fvt_single_3.columns.values,
                            row_data=list(result_fvt_single_3.values.tolist()),
-                           column_names_1=solver_output.columns.values,
-                           row_data_1=list(solver_output.values.tolist()),
+                           column_names_1=solver_output_short.columns.values,
+                           row_data_1=list(solver_output_short.values.tolist()),
                            zip=zip,
                            entered_folder=folder,
                            message_success=message_success,
@@ -621,7 +622,7 @@ def test4():
         folder, interpol)
 
     if success_test3:
-        success_solver, message_solver, solver_output, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
+        success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
         if success_solver:
             result_cutted = result_cutted3[~result_cutted3['pos'].isin(bad_units_list_solver)]
 
