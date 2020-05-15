@@ -22,6 +22,8 @@ from . import kepler_solver as ks
 def solve(data, cut):
     
     
+    profile = ks.test_profiler(data)
+    
     n = data['pos'].unique()
     
     #regVal = np.zeros((len(n), 28)).astype(int)
@@ -40,8 +42,8 @@ def solve(data, cut):
     
         bounds, pol2forA, ratioForB, pol2forC, pol2forCbase, chCoeff = ks.tanh_gen_characterisation(unit)
         
-        originTemp = np.array(unit.iloc[cut:, 3])
-        originFreq = np.array(unit.iloc[cut:, 2])
+        originTemp = np.array(unit.iloc[cut:, 2])
+        originFreq = np.array(unit.iloc[cut:, 3])
         resFreq = np.flip(originFreq)
         
         normFreq = -1*(resFreq - np.mean(resFreq))

@@ -52,7 +52,7 @@ cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23:
 cards21 = {1: False, 2: False, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False, 9: False, 10: False, 11: False, 12: False, 13: False, 14: False, 15: False, 16: False}
 cards22 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
 
-set_points = {0:'Pluto+', 1:'AKM2156'}
+set_points = {0: 'Pluto+', 1: 'AKM2156'}
 
 vreg = 1.9
 vreg_threshold = 0.2
@@ -81,6 +81,10 @@ def favicon():
 
 @app.route('/chu', methods=['post', 'get'])
 def chu():
+    return redirect(url_for('test1'))
+
+@app.route('/chu/', methods=['post', 'get'])
+def chu2():
     return redirect(url_for('test1'))
 
 

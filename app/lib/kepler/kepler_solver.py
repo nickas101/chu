@@ -40,6 +40,24 @@ def ratio(x, m=1, c=1, rVal=31):
     return 1/(m*x + c/((0.0625 + 0.00336 * rVal) / (1 - 0.0269 * rVal)))
 
 
+def test_profiler(data):
+    
+    profile = {}
+    
+    profile['positionsList'] = data['pos'].unique()
+    profile['amountDUTs'] = len(profile['positionsList'])
+    profile['tempVector'] = data['temp'].unique()
+    profile['tempMax'] = profile['tempVector'].max()
+    profile['tempMin'] = profile['tempVector'].min()
+    profile['chCoeffCset'] = data['coeffC'].unique()
+    profile['tanhAmpMax'] = data['chppm'].max()
+    profile['tanhAmpMin'] = data['chppm'].min()
+    
+    return profile
+    
+    
+
+
 
 def reg_val_predict(originTemp, originFreq, finalABCD, pol2forA, ratioForB, pol2forC, pol2forCbase):
     
@@ -77,8 +95,8 @@ def reg_val_predict(originTemp, originFreq, finalABCD, pol2forA, ratioForB, pol2
     m = -np.mean(res)
     
     DUTregVal[24] = np.around(31*m/pol2(25, *pol2forA))
-    if DUTregVal[i] > 31:    DUTregVal[i] = 31
-    if DUTregVal[i] < -31:    DUTregVal[i] = -31
+    if DUTregVal[24] > 31:    DUTregVal[24] = 31
+    if DUTregVal[24] < -31:    DUTregVal[24] = -31
 
     predictABCD[24] = m
     
@@ -106,16 +124,16 @@ def tanh_gen_characterisation(unit):
     # c = [-38,-6,26,56,85]
     d0 = 0 
     
-    c = unit['CoeffC'].unique()  
+    c = unit['coeffC'].unique()  
     chCoeff = np.zeros([len(c),4])
     
     for i, regC in enumerate(c):
-        test = unit.loc[unit['CoeffC'] == regC]
+        test = unit.loc[unit['coeffC'] == regC]
         
-        a0 = test['ppm'].iloc[1]
-        c0 = test['Temp'].iloc[int(len(test)/2)]
+        a0 = test['chppm'].iloc[1]
+        c0 = test['temp'].iloc[int(len(test)/2)]
         try:   
-            chCoeff[i,:], _ = curve_fit(single_tanh_func, test['Temp'], test['ppm'], p0=[a0,b0,c0,d0])
+            chCoeff[i,:], _ = curve_fit(single_tanh_func, test['temp'], test['chppm'], p0=[a0,b0,c0,d0])
         except:
             chCoeff[i,:] = np.zeros(4)*np.nan
     
