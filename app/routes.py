@@ -32,6 +32,8 @@ folder = '/Users/nickas/Documents/_to_upload/dorsum'
 #folder = ""
 
 temporary_plot_file = 'plot.png'
+temporary_plot_file1 = 'plot1.png'
+temporary_plot_file2 = 'plot2.png'
 temporary_folder_local = 'app/temp_files/'
 temporary_plot_folder = Path.cwd() / temporary_folder_local
 templates_folder_local = 'app/templates'
@@ -578,17 +580,35 @@ def test3_result():
                            frequency=frequency)
 
 
-@app.route('/chu/test3/result/plot.png', methods=['post', 'get'])
-def test3_plot_png():
+@app.route('/chu/test3/result/plot1.png', methods=['post', 'get'])
+def test3_plot1_png():
     global result_test3_full
     global result_fvt_single_3
     global freq
     global prediction
 
     title = "Test-3 results (frequency = " + str(freq) + "MHz)"
-    fig = plotter_test3.plot(result_fvt_single_3, prediction, title)
+    fig = plotter_test3.plot1(result_fvt_single_3, prediction, title)
 
-    fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
+    fig.savefig(Path(temporary_folder_local) / temporary_plot_file1, bbox_inches='tight')
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+
+    return Response(output.getvalue(), mimetype='image/png')
+
+
+@app.route('/chu/test3/result/plot2.png', methods=['post', 'get'])
+def test3_plot2_png():
+    global result_test3_full
+    global result_fvt_single_3
+    global freq
+    global prediction
+
+    title = "Test-3 prediction (frequency = " + str(freq) + "MHz)"
+    fig = plotter_test3.plot2(result_fvt_single_3, prediction, title)
+
+    fig.savefig(Path(temporary_folder_local) / temporary_plot_file2, bbox_inches='tight')
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
@@ -882,3 +902,13 @@ def test4_plot_png():
 @app.route('/chu/result/plot/download', methods=['GET', 'POST'])
 def download_plot():
     return send_from_directory(temporary_plot_folder, filename=temporary_plot_file, as_attachment=True)
+
+
+@app.route('/chu/result/plot1/download', methods=['GET', 'POST'])
+def download_plot1():
+    return send_from_directory(temporary_plot_folder, filename=temporary_plot_file1, as_attachment=True)
+
+
+@app.route('/chu/result/plot2/download', methods=['GET', 'POST'])
+def download_plot2():
+    return send_from_directory(temporary_plot_folder, filename=temporary_plot_file2, as_attachment=True)
