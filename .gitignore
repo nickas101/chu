@@ -4,5 +4,7 @@ app/lib/__pycache__/
 tests/__pycache__/
 app/lib/kepler/__pycache__/
 plot.png
+plot1.png
+plot2.png
 requests.log
 .pytest_cache
