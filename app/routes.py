@@ -49,12 +49,17 @@ result_fvt_single = pd.DataFrame()
 result_fvt_single_3 = pd.DataFrame()
 result_fvt_single_4_3 = pd.DataFrame()
 prediction = pd.DataFrame()
+solver_output_short = pd.DataFrame()
+solver_output_short4 = pd.DataFrame()
+solver_output4 = pd.DataFrame()
 poses3 = []
 time3 = ''
 file3 = ''
 time4 = ''
 file4 = ''
 bad_units4 = ''
+bad_units3 = ''
+bad_units_solver3 = ''
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -506,30 +511,33 @@ def test3_result():
     global interpol
     global high_temp_limit
     global prediction
+    global poses3
+    global solver_output_short
+    global file3
+    global time3
+    global bad_units3
+    global bad_units_solver3
 
-    result_fvt_single_3 = pd.DataFrame()
-    solver_output = pd.DataFrame()
-    solver_output_short = pd.DataFrame()
     entered_pos = 'ALL'
-    bad_units_solver = ''
     message_success = True
     message_text = ''
-    file = ''
-    time = ''
-    bad_units = ''
-    bad_units_exist = False
-    poses = []
     loaded = False
 
     if request.method == 'GET':
-        if request.args.get('pos') and request.args.get('pos') != 'ALL':
-            entered_pos = int(request.args.get('pos'))
-
         if request.args.get('high_temp_limit'):
             try:
                 high_temp_limit = int(request.args.get('high_temp_limit'))
             except:
                 pass
+
+        if request.args.get('pos') and request.args.get('pos') != 'ALL':
+            entered_pos = int(request.args.get('pos'))
+            loaded = True
+            if entered_pos == 'ALL':
+                result_fvt_single_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
+            else:
+                result_fvt_single_3 = result_test3_full[
+                    (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
     if request.method == 'POST':
         folder = request.form.get('folder')
@@ -538,18 +546,18 @@ def test3_result():
             if interpol < 1:
                 interpol = 1
 
-        message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
+        message_success, message_text, file3, freq, time3, bad_units3, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
 
         if message_success:
-            poses = result_test3_full['pos'].unique().tolist()
-            poses.insert(0, 'ALL')
+            poses3 = result_test3_full['pos'].unique().tolist()
+            poses3.insert(0, 'ALL')
             if entered_pos == 'ALL':
                 result_fvt_single_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
             else:
                 result_fvt_single_3 = result_test3_full[
                     (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
 
-            success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
+            success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver3, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
             if not success_solver:
                 message_text = message_text + message_solver
                 message_success = False
@@ -557,17 +565,17 @@ def test3_result():
                 loaded = True
 
         else:
-            poses = []
+            poses3 = []
 
-        if len(bad_units) > 1 and len(bad_units_solver) > 1:
-            bad_units = bad_units + ', ' + bad_units_solver
-        elif len(bad_units_solver) > 1:
-            bad_units = bad_units_solver
+    if len(bad_units3) > 1 and len(bad_units_solver3) > 1:
+        bad_units3 = bad_units3 + ', ' + bad_units_solver3
+    elif len(bad_units_solver3) > 1:
+        bad_units3 = bad_units_solver3
 
-        if len(bad_units) > 1:
-            bad_units_exist = True
-        else:
-            bad_units_exist = False
+    if len(bad_units3) > 1:
+        bad_units_exist = True
+    else:
+        bad_units_exist = False
 
     return render_template('test3_results.html',
                            folder=folder,
@@ -581,13 +589,13 @@ def test3_result():
                            entered_folder=folder,
                            message_success=message_success,
                            message_text=message_text,
-                           file=file,
-                           time=time,
+                           file=file3,
+                           time=time3,
                            freq=freq,
-                           bad_units=bad_units,
+                           bad_units=bad_units3,
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
-                           poses=poses,
+                           poses=poses3,
                            loaded=loaded,
                            entered_pos=entered_pos,
                            entered_high_temp_limit=high_temp_limit,
@@ -648,6 +656,8 @@ def test4():
     global step_previous
     global ppb_threshold
     global result_test3_full
+    global solver_output4
+    global solver_output_short4
 
     config_file = ""
     script_file = ""
@@ -660,7 +670,6 @@ def test4():
     card12_available = []
     interpol = 1
     temp_range = ""
-    solver_output = pd.DataFrame()
     loaded = False
     file = ''
     freq = ''
@@ -672,7 +681,7 @@ def test4():
             folder, interpol)
 
         if success_test3:
-            success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
+            success_solver, message_solver, solver_output4, solver_output_short4, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
             if success_solver:
                 result_cutted = result_cutted3[~result_cutted3['pos'].isin(bad_units_list_solver)]
                 loaded = True
@@ -689,6 +698,7 @@ def test4():
             message_success = False
 
     if request.method == 'POST':
+        loaded = True
         card11 = request.form.getlist('card11')
         card12 = request.form.getlist('card12')
         card1 = card11 + card12
@@ -741,7 +751,7 @@ def test4():
             duts_number_string = str(duts_number)
 
         if success_test3 and message_success:
-            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_output, vreg_table_from_test3, temp_range)
+            success, message, config_file, script_file = prepare_test4.prepare(folder, card1, card2, freq, solver_output4, vreg_table_from_test3, temp_range)
             if success:
                 message_text = " Now you can start Test-4"
             else:
@@ -823,8 +833,6 @@ def test4_result():
     global bad_units4
 
     interpol = 1
-    result_fvt_single = pd.DataFrame()
-    result_fvt_single_4_3 = pd.DataFrame()
     message_text = ''
     entered_pos = 'ALL'
     initial = True
