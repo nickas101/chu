@@ -26,6 +26,8 @@
 
   <div class="container-fluid">
 
+      <div class="loader" style="display: none;"></div>
+
     <div style="padding-top: 30px;"></div>
 
     {% if message_text %}
@@ -40,10 +42,12 @@
       {% endif %}
     {% endif %}
 
+
     <div style="padding-top: 10px;"></div>
 
+      </div>
 
-<div class="container-fluid">
+<div class="container-fluid semihidden">
         <form class="form-horizontal" id="form11" action="/chu/test3/result" method="POST" enctype="multipart/form-data">
 
           <div class="form-group">
@@ -59,7 +63,7 @@
 
             </div>
             <div class="col-sm-2">
-                <button type="submit" class="btn btn-success">Calculate</button>
+                <button type="submit" class="btn btn-success spin" id="spin">Calculate</button>
             </div>
           </div>
 
@@ -87,7 +91,7 @@
 
 {% endif %}
         </form>
-</div>
+<!--</div>-->
 
 
 {% if loaded %}
@@ -99,7 +103,7 @@
 
 {#<div style="padding-top: 10px;"></div>#}
 
-      <div class="container-fluid">
+<!--      <div class="container-fluid ss">-->
 
     <h4> Solver calculation result tables</h4>
         <div style="padding-top: 10px;"></div>
@@ -141,12 +145,12 @@
         {% endfor %}
 
     </table>
-          </div>
+<!--          </div>-->
 
         <div style="padding-top: 10px;"></div>
       <hr class="style1">
 
-            <div class="container-fluid">
+<!--            <div class="container-fluid">-->
 
                  <form class="form-inline" id="form1" action="/chu/test3/result" method="GET" enctype="multipart/form-data">
                     <div class="col-sm-1"></div>
@@ -179,7 +183,7 @@
 
         <img class="img-responsive center-block" src="/chu/test3/result/plot2.png" alt="plot" align="centre">
 
-            </div>
+
 
 
 <div style="padding-top: 20px;"></div>
@@ -207,7 +211,9 @@
 
 {% endif %}
 {% endif %}
-    </div>
+
+                </div>
+<!--    </div>-->
 
 
 <!--  </div>-->

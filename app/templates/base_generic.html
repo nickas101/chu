@@ -16,6 +16,37 @@
 
 
     <title>Static Oven</title>
+
+            <style>
+
+
+      .loader {
+      border: 16px solid #f3f3f3; /* Light grey */
+      border-top: 16px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      left: 45%;
+      top: 40%;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .semiopacity {
+<!--    background: #0078c9; /* Цвет фона */-->
+    padding: 5px; /* Поля вокруг текста */
+    opacity: 0.3; /* Полупрозрачный фон */
+    filter: alpha(Opacity=30); /* Прозрачность в IE */
+<!--    color: #fff; /* Цвет текста */-->
+
+
+    </style>
+
   </head>
 
   <body>
@@ -56,6 +87,8 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
 
       $(document).ready(function(){
@@ -91,6 +124,13 @@
               $(".card22").prop("checked", false);
           });
 
+
+          $(".spin").click(function(){
+              $(".loader").fadeIn(1000);
+              $( ".semihidden" ).addClass( "semiopacity" );
+              $( ".spin" ).prop( "disabled", true );
+
+          });
       });
 
     </script>
