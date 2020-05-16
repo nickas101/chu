@@ -3,7 +3,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
-def plot(df, df3, title):
+def plot(df, df3, title, limit):
 
     fig = Figure(figsize=(16, 8))
     axis = fig.add_subplot(1, 1, 1)
@@ -39,6 +39,9 @@ def plot(df, df3, title):
 
     plotTitle = title
     axis.set_title(plotTitle)
+
+    axis.axhline(y=limit, color = 'r', linestyle='--')
+    axis.axhline(y=-limit, color = 'r', linestyle='--')
 
     # Show the major grid lines with dark grey lines
     axis.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)

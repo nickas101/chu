@@ -60,6 +60,7 @@ vreg = 1.9
 vreg_threshold = 0.2
 ppm = 0
 ppm_threshold = 0.5
+ppb_threshold = 50
 temp_min = -40
 temp_max = 95
 step = 1
@@ -632,6 +633,7 @@ def test4():
     global temp_min_previous
     global temp_max_previous
     global step_previous
+    global ppb_threshold
 
     config_file = ""
     script_file = ""
@@ -791,9 +793,9 @@ def test4_result():
     global result_fvt_single
     global result_fvt_single_4_3
     global high_temp_limit
+    global ppb_threshold
 
     interpol = 1
-    ppb_threshold = 50
     result_fvt_single = pd.DataFrame()
     result_fvt_single_4_3 = pd.DataFrame()
     message_text = ''
@@ -886,10 +888,11 @@ def test4_plot_png():
     global result_fvt_single
     global freq
     global result_fvt_single_4_3
+    global ppb_threshold
 
 
     title = "Test-4 results (frequency = " + str(freq) + "MHz)"
-    fig = plotter_test4.plot(result_fvt_single, result_fvt_single_4_3, title)
+    fig = plotter_test4.plot(result_fvt_single, result_fvt_single_4_3, title, ppb_threshold)
 
     fig.savefig(Path(temporary_folder_local) / temporary_plot_file, bbox_inches='tight')
 
