@@ -54,6 +54,8 @@
           <button type="submit" class='btn btn-success'>Re-Check</button>
         </div>
 
+        {% if loaded %}
+
         <label for="freq" class="col-sm-1 control-label">Frequency</label>
         <div class="col-sm-2">
           <div class="input-group">
@@ -62,12 +64,17 @@
             </div>
         </div>
 
+        {% else %}
+          <div class="col-sm-3"></div>
+        {% endif %}
+
         <div class="col-sm-1"></div>
 
       </div>
 
     </form>
 
+{% if loaded %}
 
       <form class="form-horizontal" id="form2" action="/chu/test4" method="POST" enctype="multipart/form-data">
 
@@ -232,6 +239,7 @@
       </div>
     </form>
 
+  {% endif %}
 
   </div>
 

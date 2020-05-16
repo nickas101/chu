@@ -657,29 +657,33 @@ def test4():
     card12_available = []
     interpol = 1
     temp_range = ""
-    solver_table = pd.DataFrame()
+    solver_output = pd.DataFrame()
+    loaded = False
+    file = ''
+    freq = ''
 
     if request.method == 'GET' and request.args.get('folder'):
         folder = request.args.get('folder')
 
-    success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted3, vreg_table_from_test3 = read_results_test3.read(
-        folder, interpol)
+        success_test3, message_test3, file, freq, time, bad_units, result_test3_full, result_cutted3, vreg_table_from_test3 = read_results_test3.read(
+            folder, interpol)
 
-    if success_test3:
-        success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
-        if success_solver:
-            result_cutted = result_cutted3[~result_cutted3['pos'].isin(bad_units_list_solver)]
+        if success_test3:
+            success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted3, solver_cut_number)
+            if success_solver:
+                result_cutted = result_cutted3[~result_cutted3['pos'].isin(bad_units_list_solver)]
+                loaded = True
 
+            else:
+                result_cutted = result_cutted3
+                message_text = message_text + message_solver
+                message_success = False
+
+            card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
+            card12_available = result_cutted[result_cutted['pos'] > 16]['pos'].unique().tolist()
         else:
-            result_cutted = result_cutted3
-            message_text = message_text + message_solver
+            message_text = message_text + message_test3
             message_success = False
-
-        card11_available = result_cutted[result_cutted['pos'] < 17]['pos'].unique().tolist()
-        card12_available = result_cutted[result_cutted['pos'] > 16]['pos'].unique().tolist()
-    else:
-        message_text = message_text + message_test3
-        message_success = False
 
     if request.method == 'POST':
         card11 = request.form.getlist('card11')
@@ -786,6 +790,7 @@ def test4():
                            entered_temp_min=temp_min,
                            entered_temp_max=temp_max,
                            entered_step=step,
+                           loaded=loaded,
                            duts_number=duts_number_string)
 
 
