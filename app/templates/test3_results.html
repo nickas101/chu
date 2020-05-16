@@ -44,7 +44,7 @@
 
 
 <div class="container-fluid">
-        <form class="form-horizontal" id="form1" action="/chu/test3/result" method="POST" enctype="multipart/form-data">
+        <form class="form-horizontal" id="form11" action="/chu/test3/result" method="POST" enctype="multipart/form-data">
 
           <div class="form-group">
             <label for="folder" class="col-sm-2 control-label">Folder</label>
@@ -59,7 +59,7 @@
 
             </div>
             <div class="col-sm-2">
-                <button type="submit" class="btn btn-success">Re-Check</button>
+                <button type="submit" class="btn btn-success">Calculate</button>
             </div>
           </div>
 
@@ -75,7 +75,7 @@
       </div>
             {% endif %}
 
-
+        {% if file %}
                 <div class="form-group">
         <label class="col-sm-2 control-label">File</label>
         <div class="col-sm-8">
@@ -83,10 +83,15 @@
         </div>
         <div class="col-sm-2"></div>
       </div>
+            {% endif %}
 
 {% endif %}
         </form>
 </div>
+
+
+{% if loaded %}
+
 
       <hr class="style1">
 
@@ -201,10 +206,11 @@
     </table>
 
 {% endif %}
+{% endif %}
     </div>
 
 
-  </div>
+<!--  </div>-->
 
 
 {% endblock %}

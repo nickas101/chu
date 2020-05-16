@@ -510,6 +510,14 @@ def test3_result():
     solver_output_short = pd.DataFrame()
     entered_pos = 'ALL'
     bad_units_solver = ''
+    message_success = True
+    message_text = ''
+    file = ''
+    time = ''
+    bad_units = ''
+    bad_units_exist = False
+    poses = []
+    loaded = False
 
     if request.method == 'GET':
         if request.args.get('pos') and request.args.get('pos') != 'ALL':
@@ -528,34 +536,36 @@ def test3_result():
             if interpol < 1:
                 interpol = 1
 
-    message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
+        message_success, message_text, file, freq, time, bad_units, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(folder, interpol)
 
-    if message_success:
-        poses = result_test3_full['pos'].unique().tolist()
-        poses.insert(0, 'ALL')
-        if entered_pos == 'ALL':
-            result_fvt_single_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
+        if message_success:
+            poses = result_test3_full['pos'].unique().tolist()
+            poses.insert(0, 'ALL')
+            if entered_pos == 'ALL':
+                result_fvt_single_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
+            else:
+                result_fvt_single_3 = result_test3_full[
+                    (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
+
+            success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
+            if not success_solver:
+                message_text = message_text + message_solver
+                message_success = False
+            else:
+                loaded = True
+
         else:
-            result_fvt_single_3 = result_test3_full[
-                (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
+            poses = []
 
-        success_solver, message_solver, solver_output, solver_output_short, prediction, bad_units_solver, bad_units_list_solver = solver_wrapper.wrap(result_cutted, solver_cut_number)
-        if not success_solver:
-            message_text = message_text + message_solver
-            message_success = False
+        if len(bad_units) > 1 and len(bad_units_solver) > 1:
+            bad_units = bad_units + ', ' + bad_units_solver
+        elif len(bad_units_solver) > 1:
+            bad_units = bad_units_solver
 
-    else:
-        poses = []
-
-    if len(bad_units) > 1 and len(bad_units_solver) > 1:
-        bad_units = bad_units + ', ' + bad_units_solver
-    elif len(bad_units_solver) > 1:
-        bad_units = bad_units_solver
-
-    if len(bad_units) > 1:
-        bad_units_exist = True
-    else:
-        bad_units_exist = False
+        if len(bad_units) > 1:
+            bad_units_exist = True
+        else:
+            bad_units_exist = False
 
     return render_template('test3_results.html',
                            folder=folder,
@@ -576,6 +586,7 @@ def test3_result():
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
                            poses=poses,
+                           loaded=loaded,
                            entered_pos=entered_pos,
                            entered_high_temp_limit=high_temp_limit,
                            frequency=frequency)
