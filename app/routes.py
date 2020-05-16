@@ -43,11 +43,18 @@ card2 = ""
 frequency = ""
 freq = ""
 result_test3_full = pd.DataFrame()
-result_fvt = pd.DataFrame()
+result_fvt_3 = pd.DataFrame()
+result_calculated_4 = pd.DataFrame()
 result_fvt_single = pd.DataFrame()
 result_fvt_single_3 = pd.DataFrame()
 result_fvt_single_4_3 = pd.DataFrame()
 prediction = pd.DataFrame()
+poses3 = []
+time3 = ''
+file3 = ''
+time4 = ''
+file4 = ''
+bad_units4 = ''
 
 cards11 = {1: True, 2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True, 9: True, 10: True, 11: True, 12: True, 13: True, 14: True, 15: True, 16: True}
 cards12 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False, 25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
@@ -86,6 +93,7 @@ def favicon():
 def chu():
     return redirect(url_for('test1'))
 
+
 @app.route('/chu/', methods=['post', 'get'])
 def chu2():
     return redirect(url_for('test1'))
@@ -109,7 +117,6 @@ def test1():
     message_text = ""
     entered_card1 = ""
     entered_card2 = ""
-
 
     if request.method == 'POST':
 
@@ -162,7 +169,6 @@ def test1():
             folder = ""
             message_success = False
 
-
         if message_success:
             success, message, config_file, script_file = prepare_test1.prepare(folder, card1, card2, frequency)
             if success:
@@ -170,7 +176,6 @@ def test1():
             else:
                 message_success = False
                 message_text = message
-
 
     return render_template('test1.html',
                            cards11=cards11,
@@ -200,7 +205,6 @@ def test1_result():
     global ppm
     global ppm_threshold
 
-
     if request.method == 'POST':
         vreg_threshold = float(request.form.get('vreg_threshold'))
         ppm_threshold = float(request.form.get('ppm_threshold'))
@@ -211,7 +215,6 @@ def test1_result():
 
     if not message_success:
         result = pd.DataFrame()
-
 
     return render_template('test1_results.html',
                            folder=folder,
@@ -456,7 +459,6 @@ def test3():
             cards22 = {17: False, 18: False, 19: False, 20: False, 21: False, 22: False, 23: False, 24: False,
                        25: False, 26: False, 27: False, 28: False, 29: False, 30: False, 31: False, 32: False}
 
-
     else:
         card11 = card11_available
         card12 = card12_available
@@ -645,6 +647,7 @@ def test4():
     global temp_max_previous
     global step_previous
     global ppb_threshold
+    global result_test3_full
 
     config_file = ""
     script_file = ""
@@ -805,29 +808,27 @@ def test4_result():
     global vreg_threshold
     global ppm
     global ppm_threshold
-    global result_fvt
+    global result_fvt_3
     global result_fvt_single
     global result_fvt_single_4_3
     global high_temp_limit
     global ppb_threshold
+    global result_calculated_4
+    global result_test3_full
+    global poses3
+    global time3
+    global time4
+    global file3
+    global file4
+    global bad_units4
 
     interpol = 1
     result_fvt_single = pd.DataFrame()
     result_fvt_single_4_3 = pd.DataFrame()
     message_text = ''
-    file3 = ''
-    time3 = ''
     entered_pos = 'ALL'
-
-    if request.method == 'GET':
-        if request.args.get('pos') and request.args.get('pos') != 'ALL':
-            entered_pos = int(request.args.get('pos'))
-
-        if request.args.get('high_temp_limit'):
-            try:
-                high_temp_limit = int(request.args.get('high_temp_limit'))
-            except:
-                pass
+    initial = True
+    message_success = True
 
     if request.method == 'POST':
         folder = request.form.get('folder')
@@ -841,35 +842,55 @@ def test4_result():
             except:
                 ppb_threshold = 50
 
-    message_success, message, file4, freq, time4, bad_units, result_fvt, result_calculated = read_results_test4.read(folder, interpol)
-    print(message)
+    if request.method == 'GET':
+        if request.args.get('high_temp_limit'):
+            try:
+                high_temp_limit = int(request.args.get('high_temp_limit'))
+            except:
+                pass
 
-    if message_success:
-        message_success, message, file3, freq, time3, bad_units3, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
-            folder, interpol)
-        if message_success:
-            poses = result_fvt['pos'].unique().tolist()
-            poses.insert(0, 'ALL')
+        if request.args.get('pos') and request.args.get('pos') != 'ALL':
+            entered_pos = int(request.args.get('pos'))
+            print("entered_pos = " + str(entered_pos))
+            initial = False
             if entered_pos == 'ALL':
-                result_fvt_single = result_fvt
+                result_fvt_single = result_fvt_3[(result_fvt_3['Temp'] < high_temp_limit)]
                 result_fvt_single_4_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
             else:
-                result_fvt_single = result_fvt[result_fvt['pos'] == entered_pos]
-                result_fvt_single_4_3 = result_test3_full[(result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
+                result_fvt_single = result_fvt_3[(result_fvt_3['pos'] == entered_pos) & (result_fvt_3['Temp'] < high_temp_limit)]
+                result_fvt_single_4_3 = result_test3_full[
+                    (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
+
+    if initial:
+        message_success, message, file4, freq, time4, bad_units4, result_fvt_3, result_calculated_4 = read_results_test4.read(folder, interpol)
+        print(message)
+
+        if message_success:
+            message_success, message, file3, freq, time3, bad_units3, result_test3_full, result_cutted, vreg_table_from_test3 = read_results_test3.read(
+                folder, interpol)
+            if message_success:
+                poses3 = result_fvt_3['pos'].unique().tolist()
+                poses3.insert(0, 'ALL')
+                if entered_pos == 'ALL':
+                    result_fvt_single = result_fvt_3[(result_fvt_3['Temp'] < high_temp_limit)]
+                    result_fvt_single_4_3 = result_test3_full[result_test3_full['Temp'] < high_temp_limit]
+                else:
+                    result_fvt_single = result_fvt_3[
+                        (result_fvt_3['pos'] == entered_pos) & (result_fvt_3['Temp'] < high_temp_limit)]
+                    result_fvt_single_4_3 = result_test3_full[
+                        (result_test3_full['pos'] == entered_pos) & (result_test3_full['Temp'] < high_temp_limit)]
+            else:
+                poses3 = []
+                message_text = message_text + message
+
         else:
-            poses = []
+            poses3 = []
             message_text = message_text + message
 
-    else:
-        poses = []
-        message_text = message_text + message
-
-    if len(bad_units) > 1:
+    if len(bad_units4) > 1:
         bad_units_exist = True
     else:
         bad_units_exist = False
-
-    print("entered_pos = " + str(entered_pos))
 
     return render_template('test4_results.html',
                            folder=folder,
@@ -877,8 +898,8 @@ def test4_result():
                            card2=card2,
                            column_names=result_fvt_single.columns.values,
                            row_data=list(result_fvt_single.values.tolist()),
-                           column_names_1=result_calculated.columns.values,
-                           row_data_1=list(result_calculated.values.tolist()),
+                           column_names_1=result_calculated_4.columns.values,
+                           row_data_1=list(result_calculated_4.values.tolist()),
                            zip=zip,
                            entered_folder=folder,
                            message_success=message_success,
@@ -888,24 +909,22 @@ def test4_result():
                            file4=file4,
                            time4=time4,
                            freq=freq,
-                           bad_units=bad_units,
+                           bad_units=bad_units4,
                            bad_units_exist=bad_units_exist,
                            entered_interpol=interpol,
-                           poses=poses,
+                           poses=poses3,
                            entered_pos=entered_pos,
                            ppb_threshold=ppb_threshold,
                            entered_high_temp_limit=high_temp_limit,
-                           frequency=frequency)
+                           frequency=freq)
 
 
 @app.route('/chu/test4/result/plot.png', methods=['post', 'get'])
 def test4_plot_png():
-    global result_fvt
     global result_fvt_single
     global freq
     global result_fvt_single_4_3
     global ppb_threshold
-
 
     title = "Test-4 results (frequency = " + str(freq) + "MHz)"
     fig = plotter_test4.plot(result_fvt_single, result_fvt_single_4_3, title, ppb_threshold)

@@ -158,7 +158,7 @@
             <div class="col-sm-9">
                 <div class="form-group">
                     <label for="pos">Unit pos: </label>
-                    <select class="form-control input-sm" id="pos" name = "pos">
+                    <select class="form-control input-sm" id="pos" name="pos">
                         {% for pos in poses %}
                             <option value="{{pos}}" {% if pos == entered_pos %} selected {% endif %}>{{pos}}</option>
                         {% endfor %}
