@@ -65,7 +65,7 @@
 
         {% if message_success %}
 
-            {% if bad_units_exist %}
+            {% if bad_units_exist and loaded %}
         <div class="form-group">
         <label class="col-sm-2 control-label">Bad units (pos)</label>
         <div class="col-sm-8">
@@ -75,7 +75,7 @@
       </div>
             {% endif %}
 
-        {% if file %}
+        {% if file and loaded %}
                 <div class="form-group">
         <label class="col-sm-2 control-label">File</label>
         <div class="col-sm-8">
