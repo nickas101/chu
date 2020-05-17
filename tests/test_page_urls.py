@@ -8,11 +8,12 @@ from flask import url_for
 
 @pytest.mark.parametrize('urls', ['index', 'chu', 'test1', 'test2', 'test3', 'test4',
                                   'test1_result', 'test2_result', 'test3_result', 'test4_result',
-                                  'test3_plot_png', 'test4_plot_png', 'download_plot'])
+                                  'test4_plot_png', 'download_plot'])
 # @idparametrize('urls', ['test1', 'test2'])
 def test_page_urls_get(urls, client):
     response = client.get(url_for(urls), follow_redirects=True)
     assert response.status_code == 200
+
 
 @pytest.mark.parametrize('urls', ['test1', 'test2', 'test3', 'test4'])
 def test_page_urls_post(urls, client):
