@@ -57,7 +57,7 @@
         </div>
 
         <div class="col-sm-1">
-          <button type="submit" class='btn btn-success spin'>Re-Check</button>
+          <button type="submit" class='btn btn-success spin'>{% if loaded %}Re-Check{% else %}Check{% endif %}</button>
         </div>
 
         {% if loaded %}
