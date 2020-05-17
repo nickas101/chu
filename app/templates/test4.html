@@ -26,6 +26,8 @@
 
   <div class="container-fluid">
 
+    <div class="loader" style="display: none; z-index: 289;"></div>
+
     <div style="padding-top: 30px;"></div>
 
     {% if message_text %}
@@ -42,6 +44,10 @@
 
     <div style="padding-top: 10px;"></div>
 
+          </div>
+
+<div class="container-fluid semihidden">
+
     <form class="form-horizontal" id="form1" action="/chu/test4" method="GET" enctype="multipart/form-data">
 
       <div class="form-group">
@@ -51,7 +57,7 @@
         </div>
 
         <div class="col-sm-1">
-          <button type="submit" class='btn btn-success'>Re-Check</button>
+          <button type="submit" class='btn btn-success spin'>Re-Check</button>
         </div>
 
         {% if loaded %}
